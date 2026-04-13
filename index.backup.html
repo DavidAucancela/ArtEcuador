@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArtEcuador — Catálogo de Artesanías</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #FAFAF8;
+      color: #2C2C2C;
+      line-height: 1.6;
+    }
+
+    /* ── Color tokens ───────────────────────────────────────────── */
+    :root {
+      --red:    #D7262E;
+      --yellow: #F4C430;
+      --green:  #4CAF50;
+      --blue:   #2D9CDB;
+      --purple: #6A1B9A;
+      --gray-d: #4F4F4F;
+      --gray-m: #BDBDBD;
+      --white:  #FFFFFF;
+      --bg:     #FAFAF8;
+      --shadow: 0 4px 24px rgba(0,0,0,0.08);
+      --shadow-hover: 0 12px 40px rgba(0,0,0,0.14);
+    }
+
+    /* ── SVG Andean Pattern ─────────────────────────────────────── */
+    .andean-pattern {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' fill='%23FFFFFF'/%3E%3Crect x='0'  y='0'  width='10' height='10' fill='%23D7262E' opacity='.9'/%3E%3Crect x='10' y='0'  width='10' height='10' fill='%23F4C430' opacity='.9'/%3E%3Crect x='20' y='0'  width='10' height='10' fill='%234CAF50' opacity='.9'/%3E%3Crect x='30' y='0'  width='10' height='10' fill='%232D9CDB' opacity='.9'/%3E%3Crect x='40' y='0'  width='10' height='10' fill='%236A1B9A' opacity='.9'/%3E%3Crect x='50' y='0'  width='10' height='10' fill='%23D7262E' opacity='.9'/%3E%3Crect x='60' y='0'  width='10' height='10' fill='%23F4C430' opacity='.9'/%3E%3Crect x='70' y='0'  width='10' height='10' fill='%234CAF50' opacity='.9'/%3E%3Crect x='0'  y='10' width='10' height='10' fill='%236A1B9A' opacity='.7'/%3E%3Crect x='10' y='10' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='20' y='10' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='30' y='10' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='40' y='10' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='50' y='10' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='60' y='10' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='70' y='10' width='10' height='10' fill='%232D9CDB' opacity='.7'/%3E%3Crect x='0'  y='20' width='10' height='10' fill='%232D9CDB' opacity='.7'/%3E%3Crect x='10' y='20' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='20' y='20' width='10' height='10' fill='%23D7262E' opacity='.6'/%3E%3Crect x='30' y='20' width='10' height='10' fill='%23F4C430' opacity='.6'/%3E%3Crect x='40' y='20' width='10' height='10' fill='%234CAF50' opacity='.6'/%3E%3Crect x='50' y='20' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='60' y='20' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='70' y='20' width='10' height='10' fill='%234CAF50' opacity='.7'/%3E%3Crect x='0'  y='30' width='10' height='10' fill='%23F4C430' opacity='.7'/%3E%3Crect x='10' y='30' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='20' y='30' width='10' height='10' fill='%23F4C430' opacity='.6'/%3E%3Crect x='30' y='30' width='10' height='10' fill='%23D7262E' opacity='.8'/%3E%3Crect x='40' y='30' width='10' height='10' fill='%23D7262E' opacity='.8'/%3E%3Crect x='50' y='30' width='10' height='10' fill='%23F4C430' opacity='.6'/%3E%3Crect x='60' y='30' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='70' y='30' width='10' height='10' fill='%23D7262E' opacity='.7'/%3E%3Crect x='0'  y='40' width='10' height='10' fill='%234CAF50' opacity='.7'/%3E%3Crect x='10' y='40' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='20' y='40' width='10' height='10' fill='%234CAF50' opacity='.6'/%3E%3Crect x='30' y='40' width='10' height='10' fill='%23D7262E' opacity='.8'/%3E%3Crect x='40' y='40' width='10' height='10' fill='%23D7262E' opacity='.8'/%3E%3Crect x='50' y='40' width='10' height='10' fill='%234CAF50' opacity='.6'/%3E%3Crect x='60' y='40' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='70' y='40' width='10' height='10' fill='%236A1B9A' opacity='.7'/%3E%3Crect x='0'  y='50' width='10' height='10' fill='%23D7262E' opacity='.7'/%3E%3Crect x='10' y='50' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='20' y='50' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='30' y='50' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='40' y='50' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='50' y='50' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='60' y='50' width='10' height='10' fill='%23FFFFFF'/%3E%3Crect x='70' y='50' width='10' height='10' fill='%23F4C430' opacity='.7'/%3E%3Crect x='0'  y='60' width='10' height='10' fill='%236A1B9A' opacity='.9'/%3E%3Crect x='10' y='60' width='10' height='10' fill='%232D9CDB' opacity='.9'/%3E%3Crect x='20' y='60' width='10' height='10' fill='%23D7262E' opacity='.9'/%3E%3Crect x='30' y='60' width='10' height='10' fill='%23F4C430' opacity='.9'/%3E%3Crect x='40' y='60' width='10' height='10' fill='%234CAF50' opacity='.9'/%3E%3Crect x='50' y='60' width='10' height='10' fill='%236A1B9A' opacity='.9'/%3E%3Crect x='60' y='60' width='10' height='10' fill='%232D9CDB' opacity='.9'/%3E%3Crect x='70' y='60' width='10' height='10' fill='%23D7262E' opacity='.9'/%3E%3Crect x='0'  y='70' width='10' height='10' fill='%23F4C430' opacity='.9'/%3E%3Crect x='10' y='70' width='10' height='10' fill='%234CAF50' opacity='.9'/%3E%3Crect x='20' y='70' width='10' height='10' fill='%236A1B9A' opacity='.9'/%3E%3Crect x='30' y='70' width='10' height='10' fill='%232D9CDB' opacity='.9'/%3E%3Crect x='40' y='70' width='10' height='10' fill='%23D7262E' opacity='.9'/%3E%3Crect x='50' y='70' width='10' height='10' fill='%23F4C430' opacity='.9'/%3E%3Crect x='60' y='70' width='10' height='10' fill='%234CAF50' opacity='.9'/%3E%3Crect x='70' y='70' width='10' height='10' fill='%236A1B9A' opacity='.9'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+
+    /* ── Nav ────────────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      padding: 0 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #1A1A1A;
+    }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; text-decoration: none;
+      color: var(--gray-d); transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--red); }
+    .nav-cta {
+      background: var(--red); color: #fff;
+      border: none; border-radius: 4px;
+      padding: 9px 22px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      text-decoration: none; display: inline-block;
+    }
+    .nav-cta:hover { background: #b81e25; transform: translateY(-1px); }
+
+    /* ── Cover / Hero ───────────────────────────────────────────── */
+    .cover {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative; overflow: hidden;
+    }
+    .cover-left {
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 80px 64px 80px 80px;
+      background: #FFFFFF;
+      position: relative; z-index: 2;
+    }
+    .cover-eyebrow {
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--red);
+      margin-bottom: 24px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .cover-eyebrow::before {
+      content: '';
+      display: block; width: 32px; height: 2px;
+      background: var(--red);
+    }
+    .cover-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 5vw, 5.5rem);
+      font-weight: 700; line-height: 1.08;
+      color: #1A1A1A; margin-bottom: 8px;
+    }
+    .cover-title em {
+      font-style: italic; color: var(--red);
+    }
+    .cover-subtitle {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 2.5vw, 2.8rem);
+      font-weight: 400; font-style: italic;
+      color: var(--gray-d); margin-bottom: 36px;
+    }
+    .cover-desc {
+      font-size: 0.9rem; font-weight: 400; line-height: 1.8;
+      color: var(--gray-d); max-width: 440px; margin-bottom: 48px;
+    }
+    .cover-actions { display: flex; gap: 16px; align-items: center; }
+    .btn-primary {
+      background: var(--red); color: #fff;
+      border: none; border-radius: 4px;
+      padding: 14px 32px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { background: #b81e25; transform: translateY(-2px); }
+    .btn-secondary {
+      background: transparent; color: #1A1A1A;
+      border: 1.5px solid #1A1A1A; border-radius: 4px;
+      padding: 13px 32px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; cursor: pointer;
+      transition: all 0.2s; text-decoration: none; display: inline-block;
+    }
+    .btn-secondary:hover { border-color: var(--red); color: var(--red); }
+
+    .cover-right {
+      position: relative; overflow: hidden;
+    }
+    .cover-mosaic {
+      width: 100%; height: 100%;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(14, 1fr);
+    }
+    .mosaic-cell {
+      transition: opacity 0.3s;
+    }
+
+    /* Mosaic color map */
+    .mc-r  { background: var(--red); }
+    .mc-y  { background: var(--yellow); }
+    .mc-g  { background: var(--green); }
+    .mc-b  { background: var(--blue); }
+    .mc-p  { background: var(--purple); }
+    .mc-w  { background: #FFFFFF; }
+    .mc-lg { background: #F0EDE8; }
+    .mc-mg { background: #E8E4DE; }
+
+    .cover-overlay-text {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 3; text-align: center;
+      padding: 40px;
+    }
+    .cover-logo-big {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 4vw, 4rem);
+      font-weight: 700; letter-spacing: 0.06em;
+      color: #FFFFFF;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+      margin-bottom: 12px;
+    }
+    .cover-logo-tag {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.22em;
+      text-transform: uppercase; color: rgba(255,255,255,0.85);
+      text-shadow: 0 1px 8px rgba(0,0,0,0.25);
+    }
+    .cover-mask-icon {
+      width: 90px; height: 90px; margin-bottom: 20px;
+      opacity: 0.92;
+    }
+
+    /* ── Color band ─────────────────────────────────────────────── */
+    .color-band {
+      height: 6px;
+      background: linear-gradient(90deg,
+        var(--red) 0%,
+        var(--red) 20%,
+        var(--yellow) 20%,
+        var(--yellow) 40%,
+        var(--green) 40%,
+        var(--green) 60%,
+        var(--blue) 60%,
+        var(--blue) 80%,
+        var(--purple) 80%,
+        var(--purple) 100%
+      );
+    }
+
+    /* ── Stats bar ──────────────────────────────────────────────── */
+    .stats-bar {
+      background: #F7F5F0;
+      border-bottom: 1px solid #E8E4DE;
+      padding: 28px 80px;
+      display: flex; align-items: center;
+      justify-content: space-around;
+      gap: 40px;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--red); line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--gray-d);
+    }
+    .stat-divider {
+      width: 1px; height: 40px; background: #D8D4CE;
+    }
+
+    /* ── Section header ─────────────────────────────────────────── */
+    .section {
+      padding: 80px 80px 90px;
+    }
+    .section-alt { background: #F7F5F0; }
+
+    .section-header {
+      display: flex; align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 64px;
+    }
+    .section-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--red);
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::before {
+      content: ''; display: block;
+      width: 24px; height: 2px; background: var(--red);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700; line-height: 1.15; color: #1A1A1A;
+    }
+    .section-title em { font-style: italic; color: var(--gray-d); }
+    .section-count {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gray-m);
+    }
+
+    /* ── Category accent strip ──────────────────────────────────── */
+    .cat-strip {
+      height: 3px; border-radius: 2px;
+      margin-bottom: 40px;
+    }
+    .cat-joyeria  { background: linear-gradient(90deg, var(--yellow), var(--red)); }
+    .cat-textiles { background: linear-gradient(90deg, var(--red), var(--purple)); }
+    .cat-ceramica { background: linear-gradient(90deg, var(--blue), var(--green)); }
+    .cat-deco     { background: linear-gradient(90deg, var(--green), var(--yellow)); }
+
+    /* ── Product grid ───────────────────────────────────────────── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+
+    /* ── Product card ───────────────────────────────────────────── */
+    /* ── Product card — image only, reveal on hover ─────────────── */
+    .product-card {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 3 / 4;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.35s ease;
+    }
+    .product-card:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    /* Image layer — fills entire card */
+    .product-img-wrap {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+    }
+    .product-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px;
+      transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .product-card:hover .product-img-placeholder {
+      transform: scale(1.07);
+    }
+    .product-img-placeholder svg {
+      width: 80px; height: 80px; opacity: 0.45;
+      transition: opacity 0.35s ease;
+    }
+    .product-card:hover .product-img-placeholder svg {
+      opacity: 0.2;
+    }
+    .product-img-placeholder span {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; opacity: 0.3;
+    }
+
+    /* Badge — always visible */
+    .product-badge {
+      position: absolute; top: 14px; left: 14px; z-index: 3;
+      background: var(--red); color: #fff;
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; padding: 4px 9px; border-radius: 3px;
+      backdrop-filter: blur(4px);
+    }
+    .product-badge.new    { background: var(--green); }
+    .product-badge.feat   { background: var(--blue); }
+    .product-badge.limit  { background: var(--purple); }
+
+    /* Quick-add button — top right, visible on hover */
+    .add-btn {
+      position: absolute; top: 14px; right: 14px; z-index: 4;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0;
+      transform: scale(0.7) rotate(-90deg);
+      transition: opacity 0.3s ease 0.05s,
+                  transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s,
+                  background 0.2s ease;
+    }
+    .product-card:hover .add-btn {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+    .add-btn:hover {
+      background: var(--red) !important;
+      border-color: var(--red);
+      transform: scale(1.12) rotate(0deg) !important;
+    }
+    .add-btn svg { width: 14px; height: 14px; fill: #fff; }
+
+    /* Overlay — slides up from bottom on hover */
+    .product-body {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+      padding: 28px 20px 22px;
+      background: linear-gradient(
+        to top,
+        rgba(10, 8, 6, 0.92) 0%,
+        rgba(10, 8, 6, 0.78) 55%,
+        rgba(10, 8, 6, 0) 100%
+      );
+      transform: translateY(100%);
+      opacity: 0;
+      transition: transform 0.42s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  opacity 0.35s ease;
+    }
+    .product-card:hover .product-body {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Subtle top gradient for badge readability */
+    .product-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 80px; z-index: 1;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.28) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .product-category {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 5px;
+      transform: translateY(8px);
+      opacity: 0;
+      transition: transform 0.35s ease 0.08s, opacity 0.35s ease 0.08s;
+    }
+    .product-card:hover .product-category {
+      transform: translateY(0); opacity: 1;
+    }
+
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; line-height: 1.25;
+      color: #FFFFFF;
+      margin-bottom: 7px;
+      transform: translateY(10px);
+      opacity: 0;
+      transition: transform 0.38s ease 0.12s, opacity 0.38s ease 0.12s;
+    }
+    .product-card:hover .product-name {
+      transform: translateY(0); opacity: 1;
+    }
+
+    .product-desc {
+      font-size: 0.72rem; font-weight: 400; line-height: 1.6;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 14px;
+      transform: translateY(10px);
+      opacity: 0;
+      transition: transform 0.38s ease 0.16s, opacity 0.38s ease 0.16s;
+    }
+    .product-card:hover .product-desc {
+      transform: translateY(0); opacity: 1;
+    }
+
+    .product-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      transform: translateY(10px);
+      opacity: 0;
+      transition: transform 0.38s ease 0.2s, opacity 0.38s ease 0.2s;
+    }
+    .product-card:hover .product-footer {
+      transform: translateY(0); opacity: 1;
+    }
+
+    .product-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; font-weight: 700; color: #FFFFFF;
+    }
+    .product-price .currency {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.68rem; font-weight: 600;
+      vertical-align: super; color: rgba(255,255,255,0.65); margin-right: 1px;
+    }
+
+    /* Ver detalle link */
+    .product-detail-link {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--yellow);
+      text-decoration: none; display: flex; align-items: center; gap: 5px;
+      transition: gap 0.2s ease;
+    }
+    .product-detail-link:hover { gap: 9px; }
+    .product-detail-link::after { content: '→'; }
+
+    /* ── Joyería image themes ────────────────────────────────────── */
+    .bg-joy-1 { background: linear-gradient(145deg, #FEF9EE 0%, #F7E8B0 100%); }
+    .bg-joy-2 { background: linear-gradient(145deg, #FFF0F0 0%, #FFD4D6 100%); }
+    .bg-joy-3 { background: linear-gradient(145deg, #F0FFF0 0%, #C8EDD0 100%); }
+    .bg-joy-4 { background: linear-gradient(145deg, #F0F8FF 0%, #C4DFEF 100%); }
+    .bg-tex-1 { background: linear-gradient(145deg, #FDF4FF 0%, #E8C8F0 100%); }
+    .bg-tex-2 { background: linear-gradient(145deg, #FFF8EE 0%, #FFDDB0 100%); }
+    .bg-tex-3 { background: linear-gradient(145deg, #FFF0F2 0%, #FFD0D8 100%); }
+    .bg-tex-4 { background: linear-gradient(145deg, #F0F4FF 0%, #C8D4F8 100%); }
+    .bg-cer-1 { background: linear-gradient(145deg, #FFF8F4 0%, #FFD8C0 100%); }
+    .bg-cer-2 { background: linear-gradient(145deg, #F5FFF0 0%, #C8ECBA 100%); }
+    .bg-cer-3 { background: linear-gradient(145deg, #FFF8EE 0%, #F4E0B0 100%); }
+    .bg-cer-4 { background: linear-gradient(145deg, #F8F8F8 0%, #E4E0D8 100%); }
+    .bg-dec-1 { background: linear-gradient(145deg, #FFF0F8 0%, #FFCCE8 100%); }
+    .bg-dec-2 { background: linear-gradient(145deg, #F4F0FF 0%, #D4C8F8 100%); }
+    .bg-dec-3 { background: linear-gradient(145deg, #FEFFEE 0%, #EAEFB0 100%); }
+    .bg-dec-4 { background: linear-gradient(145deg, #F0FFFC 0%, #B8EDE4 100%); }
+
+    /* ── Featured strip ─────────────────────────────────────────── */
+    .featured-strip {
+      padding: 90px 80px;
+      background: #1A1A1A;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      align-items: stretch;
+      position: relative; overflow: hidden;
+    }
+    .featured-strip::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Crect width='40' height='40' fill='none'/%3E%3Crect x='0' y='0' width='10' height='10' fill='%23ffffff' opacity='.03'/%3E%3Crect x='20' y='20' width='10' height='10' fill='%23ffffff' opacity='.03'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+    .featured-content {
+      padding: 40px 60px 40px 0;
+      display: flex; flex-direction: column;
+      justify-content: center; position: relative; z-index: 1;
+    }
+    .featured-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--yellow);
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .featured-label::before {
+      content: ''; display: block;
+      width: 24px; height: 2px; background: var(--yellow);
+    }
+    .featured-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 700; color: #FFFFFF;
+      line-height: 1.2; margin-bottom: 20px;
+    }
+    .featured-title em { font-style: italic; color: var(--yellow); }
+    .featured-desc {
+      font-size: 0.85rem; line-height: 1.8;
+      color: rgba(255,255,255,0.6); max-width: 480px;
+      margin-bottom: 40px;
+    }
+    .featured-img-area {
+      border-radius: 6px; overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 6px;
+      position: relative; z-index: 1;
+    }
+    .feat-cell {
+      aspect-ratio: 1/1;
+      border-radius: 3px;
+    }
+
+    /* ── Andean bar ─────────────────────────────────────────────── */
+    .andean-bar {
+      padding: 80px;
+      background: var(--bg);
+    }
+    .andean-bar-inner {
+      max-width: 1000px; margin: 0 auto; text-align: center;
+    }
+    .andean-icon-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 48px; margin-bottom: 56px;
+    }
+    .andean-icon {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 12px;
+    }
+    .andean-icon-shape {
+      width: 56px; height: 56px;
+    }
+    .andean-icon-label {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--gray-m);
+    }
+    .andean-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 2vw, 1.6rem);
+      font-style: italic; line-height: 1.6;
+      color: var(--gray-d); max-width: 700px; margin: 0 auto;
+    }
+    .andean-quote::before { content: '\201C'; }
+    .andean-quote::after  { content: '\201D'; }
+    .andean-attribution {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--gray-m);
+      margin-top: 20px;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    footer {
+      background: #111111;
+      padding: 72px 80px 0;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 700;
+      color: #FFFFFF; margin-bottom: 16px;
+      letter-spacing: 0.04em;
+    }
+    .footer-brand-name span { color: var(--red); }
+    .footer-brand-desc {
+      font-size: 0.8rem; line-height: 1.8;
+      color: rgba(255,255,255,0.45);
+      max-width: 300px; margin-bottom: 28px;
+    }
+    .footer-color-dots {
+      display: flex; gap: 8px;
+    }
+    .color-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+    }
+    .footer-col-title {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      margin-bottom: 20px;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 10px; }
+    .footer-links a {
+      font-size: 0.8rem; font-weight: 400;
+      color: rgba(255,255,255,0.55); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--yellow); }
+    .footer-bottom {
+      padding: 24px 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-copyright {
+      font-size: 0.72rem; color: rgba(255,255,255,0.25);
+    }
+    .footer-tagline {
+      font-size: 0.72rem; color: rgba(255,255,255,0.25);
+      font-style: italic;
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .product-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .cover { grid-template-columns: 1fr; min-height: auto; }
+      .cover-right { height: 380px; }
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      .section { padding: 72px 32px; }
+      .stats-bar { padding: 32px 24px; flex-wrap: wrap; gap: 24px; }
+      .stat-divider { display: none; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-strip { grid-template-columns: 1fr; padding: 60px 32px; }
+      .featured-content { padding: 0 0 40px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      footer { padding: 48px 32px 0; }
+      .andean-bar { padding: 60px 32px; }
+      .andean-icon-row { gap: 24px; flex-wrap: wrap; }
+    }
+    @media (max-width: 560px) {
+      .product-grid { grid-template-columns: 1fr; }
+      .cover-left { padding: 60px 24px; }
+      .section-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Print / PDF ────────────────────────────────────────────── */
+    @media print {
+      nav { position: static; }
+      .product-card:hover { transform: none; box-shadow: var(--shadow); }
+    }
+
+    /* ╔══════════════════════════════════════════════════════════════╗ */
+    /* ║  NOSOTROS STYLES                                             ║ */
+    /* ╚══════════════════════════════════════════════════════════════╝ */
+
+    /* ── About hero ─────────────────────────────────────────────── */
+    .about-hero {
+      padding: 80px 80px 90px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      background: #FFFFFF;
+    }
+    .about-hero-text {}
+    .about-hero-visual {
+      position: relative;
+    }
+    .about-hero-mosaic {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      gap: 4px;
+      border-radius: 6px;
+      overflow: hidden;
+      aspect-ratio: 1/1;
+    }
+    .about-mosaic-cell {
+      border-radius: 2px;
+      transition: opacity 0.4s;
+    }
+    .about-mosaic-cell:hover { opacity: 0.6; }
+    .about-badge-float {
+      position: absolute;
+      bottom: -20px;
+      left: -20px;
+      background: #1A1A1A;
+      border-radius: 6px;
+      padding: 20px 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .about-badge-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--yellow); line-height: 1;
+    }
+    .about-badge-label {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+    }
+    .about-hero-lead {
+      font-size: 1rem; line-height: 1.85;
+      color: var(--gray-d); margin-bottom: 32px;
+    }
+    .about-hero-lead strong { color: #1A1A1A; font-weight: 600; }
+
+    /* ── Values grid ─────────────────────────────────────────────── */
+    .values-section {
+      padding: 90px 80px;
+      background: #F7F5F0;
+    }
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 56px;
+    }
+    .value-card {
+      background: #FFFFFF;
+      border-radius: 6px;
+      padding: 36px 32px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .value-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .value-card:nth-child(1)::before { background: linear-gradient(90deg, var(--red), var(--yellow)); }
+    .value-card:nth-child(2)::before { background: linear-gradient(90deg, var(--green), var(--blue)); }
+    .value-card:nth-child(3)::before { background: linear-gradient(90deg, var(--purple), var(--red)); }
+    .value-icon {
+      width: 48px; height: 48px;
+      margin-bottom: 20px;
+    }
+    .value-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: #1A1A1A; margin-bottom: 12px;
+    }
+    .value-desc {
+      font-size: 0.82rem; line-height: 1.75;
+      color: var(--gray-d);
+    }
+
+    /* ── Impact numbers ──────────────────────────────────────────── */
+    .impact-section {
+      padding: 80px;
+      background: #FFFFFF;
+    }
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-top: 56px;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .impact-cell {
+      padding: 40px 32px;
+      text-align: center;
+      background: #FFFFFF;
+      position: relative;
+    }
+    .impact-cell:nth-child(1) { border-left: 4px solid var(--red); }
+    .impact-cell:nth-child(2) { border-left: 4px solid var(--yellow); }
+    .impact-cell:nth-child(3) { border-left: 4px solid var(--green); }
+    .impact-cell:nth-child(4) { border-left: 4px solid var(--blue); }
+    .impact-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem; font-weight: 700;
+      line-height: 1; margin-bottom: 8px;
+    }
+    .impact-cell:nth-child(1) .impact-num { color: var(--red); }
+    .impact-cell:nth-child(2) .impact-num { color: #B8920A; }
+    .impact-cell:nth-child(3) .impact-num { color: var(--green); }
+    .impact-cell:nth-child(4) .impact-num { color: var(--blue); }
+    .impact-label {
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em;
+      color: #1A1A1A; margin-bottom: 6px;
+    }
+    .impact-sub {
+      font-size: 0.7rem; color: var(--gray-m); line-height: 1.5;
+    }
+
+    /* ── Process timeline ────────────────────────────────────────── */
+    .process-section {
+      padding: 90px 80px;
+      background: #F7F5F0;
+    }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 56px;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px; left: 10%; right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red), var(--yellow), var(--green), var(--blue));
+      z-index: 0;
+    }
+    .process-step {
+      text-align: center;
+      padding: 0 16px;
+      position: relative; z-index: 1;
+    }
+    .process-dot {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 700;
+      color: #FFFFFF;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    .step-1 .process-dot { background: var(--red); }
+    .step-2 .process-dot { background: var(--yellow); }
+    .step-3 .process-dot { background: var(--green); }
+    .step-4 .process-dot { background: var(--blue); }
+    .step-2 .process-dot { color: #1A1A1A; }
+    .process-step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem; font-weight: 600;
+      color: #1A1A1A; margin-bottom: 8px;
+    }
+    .process-step-desc {
+      font-size: 0.75rem; line-height: 1.65;
+      color: var(--gray-d);
+    }
+
+    /* ── Team ────────────────────────────────────────────────────── */
+    .team-section {
+      padding: 90px 80px;
+      background: #FFFFFF;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 56px;
+    }
+    .team-card {
+      text-align: center;
+    }
+    .team-avatar {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 700;
+      color: #FFFFFF;
+    }
+    .team-card:nth-child(1) .team-avatar { background: linear-gradient(135deg, var(--red), #a01b21); }
+    .team-card:nth-child(2) .team-avatar { background: linear-gradient(135deg, var(--purple), #4a0a6a); }
+    .team-card:nth-child(3) .team-avatar { background: linear-gradient(135deg, var(--blue), #1a6a9a); }
+    .team-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700;
+      color: #1A1A1A; margin-bottom: 4px;
+    }
+    .team-role {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gray-m);
+      margin-bottom: 12px;
+    }
+    .team-bio {
+      font-size: 0.78rem; line-height: 1.7;
+      color: var(--gray-d);
+    }
+
+    /* ╔══════════════════════════════════════════════════════════════╗ */
+    /* ║  CONTACTAR STYLES                                            ║ */
+    /* ╚══════════════════════════════════════════════════════════════╝ */
+
+    .contact-section {
+      padding: 100px 80px;
+      background: #F7F5F0;
+    }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 64px;
+      margin-top: 56px;
+      align-items: start;
+    }
+
+    /* Left: contact info */
+    .contact-info {}
+    .contact-info-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 600;
+      color: #1A1A1A; margin-bottom: 24px;
+    }
+    .contact-cards { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
+    .contact-card {
+      background: #FFFFFF;
+      border-radius: 6px;
+      padding: 20px 22px;
+      display: flex; align-items: flex-start; gap: 16px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .contact-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+    .contact-card-icon {
+      width: 40px; height: 40px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-card-icon svg { width: 18px; height: 18px; }
+    .ci-email   { background: #FEF0F0; }
+    .ci-phone   { background: #F0FFF0; }
+    .ci-wa      { background: #F0FFF4; }
+    .ci-map     { background: #F0F8FF; }
+    .contact-card-label {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--gray-m); margin-bottom: 3px;
+    }
+    .contact-card-value {
+      font-size: 0.85rem; font-weight: 500; color: #1A1A1A; line-height: 1.4;
+    }
+
+    /* Social row */
+    .social-title {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--gray-m); margin-bottom: 14px;
+    }
+    .social-row { display: flex; gap: 10px; margin-bottom: 40px; }
+    .social-btn {
+      width: 40px; height: 40px; border-radius: 8px;
+      background: #FFFFFF; border: 1.5px solid #EBEBEB;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s; text-decoration: none;
+    }
+    .social-btn:hover { border-color: var(--red); background: #FEF0F0; }
+    .social-btn svg { width: 16px; height: 16px; fill: var(--gray-d); }
+    .social-btn:hover svg { fill: var(--red); }
+
+    /* Artisan CTA box */
+    .artisan-cta-box {
+      background: #1A1A1A;
+      border-radius: 6px; padding: 28px 24px;
+      position: relative; overflow: hidden;
+    }
+    .artisan-cta-box::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--yellow), var(--green));
+    }
+    .artisan-cta-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700;
+      color: #FFFFFF; margin-bottom: 8px;
+    }
+    .artisan-cta-desc {
+      font-size: 0.75rem; line-height: 1.7;
+      color: rgba(255,255,255,0.5); margin-bottom: 16px;
+    }
+    .artisan-cta-btn {
+      background: var(--yellow); color: #1A1A1A;
+      border: none; border-radius: 4px;
+      padding: 10px 20px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .artisan-cta-btn:hover { background: #ddb020; }
+
+    /* Right: contact form */
+    .contact-form-wrap {
+      background: #FFFFFF;
+      border-radius: 6px;
+      padding: 48px 44px;
+      box-shadow: var(--shadow);
+    }
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: #1A1A1A; margin-bottom: 6px;
+    }
+    .form-subtitle {
+      font-size: 0.8rem; color: var(--gray-m);
+      margin-bottom: 32px; line-height: 1.6;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex; flex-direction: column;
+      gap: 6px; margin-bottom: 20px;
+    }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gray-d);
+    }
+    .form-input, .form-select, .form-textarea {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.85rem; color: #1A1A1A;
+      background: #FAFAF8;
+      border: 1.5px solid #E8E4DE;
+      border-radius: 4px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(215,38,46,0.08);
+      background: #FFFFFF;
+    }
+    .form-input::placeholder, .form-textarea::placeholder {
+      color: var(--gray-m); font-size: 0.82rem;
+    }
+    .form-textarea {
+      resize: vertical;
+      min-height: 130px;
+    }
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%23BDBDBD'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px; cursor: pointer;
+    }
+    .form-check-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 28px;
+    }
+    .form-check-row input[type="checkbox"] {
+      margin-top: 2px; accent-color: var(--red);
+      width: 15px; height: 15px; cursor: pointer; flex-shrink: 0;
+    }
+    .form-check-label {
+      font-size: 0.75rem; color: var(--gray-d); line-height: 1.6;
+    }
+    .form-check-label a { color: var(--red); text-decoration: none; }
+    .form-check-label a:hover { text-decoration: underline; }
+    .form-submit {
+      width: 100%;
+      background: var(--red); color: #FFFFFF;
+      border: none; border-radius: 4px;
+      padding: 15px 32px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .form-submit:hover { background: #b81e25; transform: translateY(-2px); }
+    .form-submit svg { width: 16px; height: 16px; fill: #FFFFFF; flex-shrink: 0; }
+
+    /* ── Responsive extras ──────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .values-grid { grid-template-columns: 1fr 1fr; }
+      .impact-grid { grid-template-columns: repeat(2,1fr); }
+      .team-grid   { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 900px) {
+      .about-hero    { grid-template-columns: 1fr; padding: 72px 32px; gap: 48px; }
+      .values-section, .impact-section,
+      .process-section, .team-section,
+      .contact-section { padding: 64px 32px; }
+      .values-grid   { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: repeat(2, 1fr); }
+      .process-steps::before { display: none; }
+      .team-grid     { grid-template-columns: 1fr; }
+      .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+      .contact-form-wrap { padding: 32px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .impact-grid   { grid-template-columns: 1fr; }
+      .about-badge-float { left: 0; bottom: -16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  NAVIGATION                                                  ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<nav>
+  <a href="#portada" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <img src="media/icono.png" alt="ArtEcuador" style="height:40px;width:40px;object-fit:contain;flex-shrink:0;border-radius:8px;background:#111;padding:2px;" />
+    <span style="font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:#1A1A1A;letter-spacing:0.02em;">Art<span style="color:var(--red);">Ecuador</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#joyeria">Joyería</a></li>
+    <li><a href="#textiles">Textiles</a></li>
+    <li><a href="#ceramica">Cerámica</a></li>
+    <li><a href="#decoracion">Decoración</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+  </ul>
+  <a href="#contactar" class="nav-cta">Contactar</a>
+</nav>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  COVER / PORTADA                                             ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="cover" id="portada">
+  <div class="cover-left">
+    <p class="cover-eyebrow">Catálogo 2026</p>
+    <h1 class="cover-title"><span style="color:var(--red)">Art</span>Ecuador</h1>
+    <p class="cover-subtitle">Raíces vivas, manos maestras</p>
+    <p class="cover-desc">
+      Una selección curada de artesanías auténticas del Ecuador, elaboradas por
+      artesanos de comunidades andinas y costeras. Cada pieza lleva consigo siglos
+      de tradición y la identidad viva de nuestros pueblos.
+    </p>
+    <div class="cover-actions">
+      <a href="#joyeria" class="btn-primary">Ver Catálogo</a>
+      <a href="#nosotros" class="btn-secondary">Nuestra Historia</a>
+    </div>
+  </div>
+
+  <div class="cover-right">
+    <!-- Andean mosaic grid -->
+    <div class="cover-mosaic" id="mosaico"></div>
+    <!-- Overlay with logo -->
+    <div class="cover-overlay-text">
+      <img src="media/logoV1.png" alt="ArtEcuador"
+        style="width:clamp(200px,55%,320px);height:auto;
+               filter:drop-shadow(0 4px 24px rgba(0,0,0,0.35));
+               margin-bottom:12px;" />
+      <div class="cover-logo-tag">Artesanías Auténticas del Ecuador</div>
+    </div>
+  </div>
+</section>
+
+<!-- Color band -->
+<div class="color-band"></div>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  STATS BAR                                                   ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">200+</div>
+    <div class="stat-label">Artesanos</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">18</div>
+    <div class="stat-label">Provincias</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">500+</div>
+    <div class="stat-label">Productos</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">40</div>
+    <div class="stat-label">Años de tradición</div>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <div class="stat-num">30+</div>
+    <div class="stat-label">Países de envío</div>
+  </div>
+</div>
+
+
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  FEATURED STRIP                                              ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<div class="featured-strip">
+  <div class="featured-content">
+    <p class="featured-label">Artesanía de origen</p>
+    <h2 class="featured-title">Hecho a mano,<br><em>con alma andina</em></h2>
+    <p class="featured-desc">
+      Cada pieza de nuestra colección nace del conocimiento ancestral de comunidades indígenas
+      del Ecuador. Trabajamos directamente con más de 200 artesanos certificados, garantizando
+      comercio justo y preservación de técnicas milenarias.
+    </p>
+    <a href="#nosotros" class="btn-primary">Conocer más</a>
+  </div>
+  <div class="featured-img-area" id="featMosaic"></div>
+</div>
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SECCIÓN: JOYERÍA                                            ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="section" id="joyeria">
+  <div class="section-header">
+    <div>
+      <p class="section-label">01 — Colección</p>
+      <h2 class="section-title">Joyería <em>Artesanal</em></h2>
+    </div>
+    <span class="section-count">4 productos</span>
+  </div>
+  <div class="cat-strip cat-joyeria"></div>
+
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-joy-1">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="18" r="10" fill="none" stroke="#D7262E" stroke-width="2.5"/><path d="M14 22 Q8 36 16 46 Q24 58 32 58 Q40 58 48 46 Q56 36 50 22" fill="none" stroke="#D7262E" stroke-width="2.5" stroke-dasharray="4 3"/><circle cx="32" cy="58" r="5" fill="#F4C430"/><circle cx="16" cy="46" r="3" fill="#D7262E"/><circle cx="48" cy="46" r="3" fill="#D7262E"/></svg>
+        </div>
+        <span class="product-badge feat">Destacado</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Joyería · Collares</p>
+        <h3 class="product-name">Collar de Plata Andina</h3>
+        <p class="product-desc">Collar artesanal en plata 925 con incrustaciones de turquesa natural de los Andes ecuatorianos.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>45.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-joy-2">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="22" cy="32" rx="10" ry="16" fill="none" stroke="#D7262E" stroke-width="2"/><ellipse cx="42" cy="32" rx="10" ry="16" fill="none" stroke="#D7262E" stroke-width="2"/><line x1="22" y1="16" x2="32" y2="10" stroke="#4F4F4F" stroke-width="2"/><line x1="42" y1="16" x2="32" y2="10" stroke="#4F4F4F" stroke-width="2"/><circle cx="32" cy="9" r="3" fill="#F4C430"/><circle cx="22" cy="42" r="4" fill="#D7262E" opacity=".6"/><circle cx="42" cy="42" r="4" fill="#6A1B9A" opacity=".6"/></svg>
+        </div>
+        <span class="product-badge new">Nuevo</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Joyería · Aretes</p>
+        <h3 class="product-name">Aretes de Filigrana</h3>
+        <p class="product-desc">Delicados aretes elaborados con la técnica milenaria de filigrana, característica de Chordeleg.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>28.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-joy-3">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="22" fill="none" stroke="#4CAF50" stroke-width="2"/><circle cx="32" cy="32" r="14" fill="none" stroke="#D7262E" stroke-width="1.5" stroke-dasharray="5 3"/><circle cx="32" cy="10" r="4" fill="#F4C430"/><circle cx="10" cy="32" r="4" fill="#D7262E"/><circle cx="32" cy="54" r="4" fill="#2D9CDB"/><circle cx="54" cy="32" r="4" fill="#6A1B9A"/><circle cx="32" cy="32" r="5" fill="#4CAF50"/></svg>
+        </div>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Joyería · Pulseras</p>
+        <h3 class="product-name">Pulsera Tejida Multicolor</h3>
+        <p class="product-desc">Pulsera con hilo de seda natural teñido con pigmentos orgánicos y cuentas de semilla amazónica.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>18.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-joy-4">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="20" width="24" height="24" fill="none" stroke="#2D9CDB" stroke-width="2.5" transform="rotate(45 32 32)"/><rect x="24" y="24" width="16" height="16" fill="none" stroke="#2D9CDB" stroke-width="1.5" transform="rotate(45 32 32)"/><circle cx="32" cy="32" r="4" fill="#2D9CDB"/><line x1="32" y1="14" x2="32" y2="10" stroke="#4F4F4F" stroke-width="2"/><ellipse cx="32" cy="9" rx="4" ry="3" fill="none" stroke="#4F4F4F" stroke-width="1.5"/></svg>
+        </div>
+        <span class="product-badge limit">Limitado</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Joyería · Anillos</p>
+        <h3 class="product-name">Anillo Chakana</h3>
+        <p class="product-desc">Anillo de plata de ley con el símbolo andino Chakana (Cruz del Sur) grabado en relieve.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>35.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ║  SECCIÓN: TEXTILES                                           ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="section section-alt" id="textiles">
+  <div class="section-header">
+    <div>
+      <p class="section-label">02 — Colección</p>
+      <h2 class="section-title">Textiles <em>Andinos</em></h2>
+    </div>
+    <span class="section-count">4 productos</span>
+  </div>
+  <div class="cat-strip cat-textiles"></div>
+
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-tex-1">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="48" height="48" fill="none" stroke="#6A1B9A" stroke-width="2"/><line x1="8" y1="19" x2="56" y2="19" stroke="#D7262E" stroke-width="3"/><line x1="8" y1="30" x2="56" y2="30" stroke="#F4C430" stroke-width="3"/><line x1="8" y1="41" x2="56" y2="41" stroke="#4CAF50" stroke-width="3"/><line x1="19" y1="8" x2="19" y2="56" stroke="#2D9CDB" stroke-width="2" opacity=".5"/><line x1="32" y1="8" x2="32" y2="56" stroke="#6A1B9A" stroke-width="2" opacity=".5"/><line x1="45" y1="8" x2="45" y2="56" stroke="#D7262E" stroke-width="2" opacity=".5"/></svg>
+        </div>
+        <span class="product-badge feat">Destacado</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Textiles · Tapices</p>
+        <h3 class="product-name">Tapiz de Otavalo</h3>
+        <p class="product-desc">Tapiz tejido a mano en telar de pedal por artesanos de Otavalo con lana de oveja natural.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>120.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-tex-2">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M16 12 Q20 8 32 10 Q44 8 48 12 L52 52 Q44 56 32 54 Q20 56 12 52 Z" fill="none" stroke="#F4C430" stroke-width="2"/><path d="M20 18 Q32 22 44 18" fill="none" stroke="#D7262E" stroke-width="2"/><path d="M18 28 Q32 32 46 28" fill="none" stroke="#6A1B9A" stroke-width="2"/><path d="M19 38 Q32 42 45 38" fill="none" stroke="#4CAF50" stroke-width="2"/><circle cx="32" cy="10" r="4" fill="#F4C430"/></svg>
+        </div>
+        <span class="product-badge new">Nuevo</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Textiles · Chalinas</p>
+        <h3 class="product-name">Chalina de Alpaca Premium</h3>
+        <p class="product-desc">Chalina de fibra 100% alpaca en colores naturales, suave y cálida, ideal para cualquier estación.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>85.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-tex-3">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M18 10 L46 10 Q52 14 50 24 L50 52 Q44 58 32 56 Q20 58 14 52 L14 24 Q12 14 18 10 Z" fill="none" stroke="#D7262E" stroke-width="2"/><line x1="20" y1="10" x2="20" y2="56" stroke="#F4C430" stroke-width="1.5" opacity=".6"/><line x1="26" y1="10" x2="26" y2="56" stroke="#4CAF50" stroke-width="1.5" opacity=".6"/><line x1="32" y1="10" x2="32" y2="56" stroke="#2D9CDB" stroke-width="1.5" opacity=".6"/><line x1="38" y1="10" x2="38" y2="56" stroke="#6A1B9A" stroke-width="1.5" opacity=".6"/><line x1="44" y1="10" x2="44" y2="56" stroke="#D7262E" stroke-width="1.5" opacity=".6"/><path d="M14 22 Q32 18 50 22" fill="none" stroke="#D7262E" stroke-width="2"/><path d="M14 38 Q32 34 50 38" fill="none" stroke="#D7262E" stroke-width="2"/></svg>
+        </div>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Textiles · Bolsos</p>
+        <h3 class="product-name">Bolso Wayuu Tejido</h3>
+        <p class="product-desc">Bolso tejido a mano con diseños geométricos coloridos de inspiración indígena, resistente y único.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>65.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-tex-4">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M22 8 L42 8 L46 16 L46 52 Q40 58 32 56 Q24 58 18 52 L18 16 Z" fill="none" stroke="#2D9CDB" stroke-width="2"/><path d="M22 8 L18 16 M42 8 L46 16" stroke="#2D9CDB" stroke-width="2"/><path d="M28 8 L28 6 Q32 4 36 6 L36 8" fill="none" stroke="#2D9CDB" stroke-width="2"/><rect x="22" y="22" width="8" height="8" fill="#D7262E" opacity=".5"/><rect x="34" y="22" width="8" height="8" fill="#F4C430" opacity=".5"/><rect x="22" y="34" width="8" height="8" fill="#4CAF50" opacity=".5"/><rect x="34" y="34" width="8" height="8" fill="#6A1B9A" opacity=".5"/></svg>
+        </div>
+        <span class="product-badge limit">Limitado</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Textiles · Mochilas</p>
+        <h3 class="product-name">Mochila Andina</h3>
+        <p class="product-desc">Mochila de lana tejida con patrones geométricos tradicionales de las comunidades kichwa.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>75.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SECCIÓN: CERÁMICA                                           ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="section" id="ceramica">
+  <div class="section-header">
+    <div>
+      <p class="section-label">03 — Colección</p>
+      <h2 class="section-title">Cerámica <em>Ancestral</em></h2>
+    </div>
+    <span class="section-count">4 productos</span>
+  </div>
+  <div class="cat-strip cat-ceramica"></div>
+
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-cer-1">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M20 10 Q12 20 10 36 Q10 52 32 56 Q54 52 54 36 Q52 20 44 10 Z" fill="none" stroke="#2D9CDB" stroke-width="2"/><ellipse cx="32" cy="10" rx="12" ry="5" fill="none" stroke="#2D9CDB" stroke-width="2"/><path d="M14 28 Q32 23 50 28" fill="none" stroke="#D7262E" stroke-width="2"/><path d="M12 40 Q32 35 52 40" fill="none" stroke="#F4C430" stroke-width="2"/><circle cx="32" cy="48" r="3" fill="#2D9CDB" opacity=".5"/></svg>
+        </div>
+        <span class="product-badge feat">Destacado</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Cerámica · Vasijas</p>
+        <h3 class="product-name">Vasija Chordeleg</h3>
+        <p class="product-desc">Vasija decorativa pintada a mano con motivos de la cultura Cañari, arcilla local de Azuay.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>55.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-cer-2">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="46" rx="24" ry="10" fill="none" stroke="#4CAF50" stroke-width="2"/><ellipse cx="32" cy="20" rx="24" ry="10" fill="none" stroke="#4CAF50" stroke-width="2"/><line x1="8" y1="20" x2="8" y2="46" stroke="#4CAF50" stroke-width="2"/><line x1="56" y1="20" x2="56" y2="46" stroke="#4CAF50" stroke-width="2"/><path d="M14 30 Q22 26 32 28 Q42 26 50 30" fill="none" stroke="#D7262E" stroke-width="1.5"/><path d="M14 38 Q22 34 32 36 Q42 34 50 38" fill="none" stroke="#F4C430" stroke-width="1.5"/></svg>
+        </div>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Cerámica · Platos</p>
+        <h3 class="product-name">Plato Pujilí</h3>
+        <p class="product-desc">Plato artesanal con diseños de la cultura Panzaleo pintados con óxidos minerales naturales.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>40.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-cer-3">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M26 50 L22 58 L42 58 L38 50 Z" fill="#F4C430" opacity=".5"/><path d="M20 20 Q24 10 32 8 Q40 10 44 20 Q48 32 42 44 Q36 52 32 52 Q28 52 22 44 Q16 32 20 20Z" fill="none" stroke="#F4C430" stroke-width="2"/><circle cx="32" cy="28" r="6" fill="#F4C430" opacity=".4"/><path d="M26 22 Q32 18 38 22" fill="none" stroke="#D7262E" stroke-width="1.5"/><line x1="32" y1="8" x2="32" y2="4" stroke="#F4C430" stroke-width="2"/><circle cx="32" cy="3" r="2.5" fill="#F4C430"/></svg>
+        </div>
+        <span class="product-badge new">Nuevo</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Cerámica · Esculturas</p>
+        <h3 class="product-name">Figura Shamánica</h3>
+        <p class="product-desc">Escultura cerámica inspirada en las figuras shamánicas precolombinas de la cultura Tolita.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>90.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-cer-4">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><path d="M14 24 Q14 12 32 10 Q50 12 50 24 L50 48 Q50 58 32 58 Q14 58 14 48 Z" fill="none" stroke="#4F4F4F" stroke-width="2"/><path d="M14 30 Q32 26 50 30" fill="none" stroke="#4F4F4F" stroke-width="1.5" opacity=".5"/><path d="M14 40 Q32 36 50 40" fill="none" stroke="#4F4F4F" stroke-width="1.5" opacity=".5"/></svg>
+        </div>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Cerámica · Utilitaria</p>
+        <h3 class="product-name">Bol de Arcilla Negra</h3>
+        <p class="product-desc">Bol utilitario de arcilla negra cocida con acabado natural pulido a mano, estilo San Marcos.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>32.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SECCIÓN: DECORACIÓN                                         ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="section section-alt" id="decoracion">
+  <div class="section-header">
+    <div>
+      <p class="section-label">04 — Colección</p>
+      <h2 class="section-title">Decoración <em>del Hogar</em></h2>
+    </div>
+    <span class="section-count">4 productos</span>
+  </div>
+  <div class="cat-strip cat-deco"></div>
+
+  <div class="product-grid">
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-dec-1">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><ellipse cx="32" cy="34" rx="22" ry="26" fill="none" stroke="#D7262E" stroke-width="2"/><ellipse cx="24" cy="26" rx="4" ry="5" fill="white" opacity=".8"/><ellipse cx="40" cy="26" rx="4" ry="5" fill="white" opacity=".8"/><ellipse cx="24" cy="27" rx="2.5" ry="3.5" fill="#D7262E" opacity=".7"/><ellipse cx="40" cy="27" rx="2.5" ry="3.5" fill="#D7262E" opacity=".7"/><path d="M26 38 Q32 44 38 38" fill="none" stroke="#D7262E" stroke-width="2"/><path d="M24 18 L28 12 L32 10 L36 12 L40 18" fill="none" stroke="#F4C430" stroke-width="1.5"/><circle cx="32" cy="9" r="3" fill="#F4C430"/></svg>
+        </div>
+        <span class="product-badge feat">Destacado</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Decoración · Máscaras</p>
+        <h3 class="product-name">Máscara del Carnaval</h3>
+        <p class="product-desc">Máscara de papel maché pintada a mano, inspirada en el Carnaval de Guaranda, Patrimonio Inmaterial.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>110.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-dec-2">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="8" width="48" height="48" rx="2" fill="none" stroke="#6A1B9A" stroke-width="2"/><rect x="14" y="14" width="10" height="10" fill="#D7262E" opacity=".6"/><rect x="27" y="14" width="10" height="10" fill="#F4C430" opacity=".6"/><rect x="40" y="14" width="10" height="10" fill="#4CAF50" opacity=".6"/><rect x="14" y="27" width="10" height="10" fill="#2D9CDB" opacity=".6"/><rect x="27" y="27" width="10" height="10" fill="#6A1B9A" opacity=".6"/><rect x="40" y="27" width="10" height="10" fill="#D7262E" opacity=".6"/><rect x="14" y="40" width="10" height="10" fill="#F4C430" opacity=".6"/><rect x="27" y="40" width="10" height="10" fill="#4CAF50" opacity=".6"/><rect x="40" y="40" width="10" height="10" fill="#2D9CDB" opacity=".6"/></svg>
+        </div>
+        <span class="product-badge new">Nuevo</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Decoración · Arte</p>
+        <h3 class="product-name">Cuadro Abstracto Andino</h3>
+        <p class="product-desc">Obra de arte original técnica mixta sobre lienzo con motivos geométricos andinos contemporáneos.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>145.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-dec-3">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect x="26" y="52" width="12" height="8" fill="#4F4F4F" opacity=".4"/><path d="M30 52 L28 30 Q28 20 32 12 Q36 20 36 30 L34 52 Z" fill="#4CAF50" opacity=".4" stroke="#4CAF50" stroke-width="1.5"/><circle cx="32" cy="12" r="5" fill="#F4C430" opacity=".7"/><path d="M28 34 Q22 30 18 32" fill="none" stroke="#D7262E" stroke-width="2" opacity=".6"/><path d="M36 34 Q42 30 46 32" fill="none" stroke="#D7262E" stroke-width="2" opacity=".6"/></svg>
+        </div>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Decoración · Esculturas</p>
+        <h3 class="product-name">Tótem de Cedro</h3>
+        <p class="product-desc">Figura totémica tallada en madera de cedro nativo con herramientas artesanales y acabado natural.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>95.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <div class="product-img-placeholder bg-dec-4">
+          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect x="8" y="16" width="48" height="36" rx="3" fill="none" stroke="#4CAF50" stroke-width="2"/><rect x="14" y="22" width="10" height="8" rx="1" fill="#D7262E" opacity=".5"/><rect x="27" y="22" width="10" height="8" rx="1" fill="#F4C430" opacity=".5"/><rect x="40" y="22" width="10" height="8" rx="1" fill="#6A1B9A" opacity=".5"/><rect x="14" y="34" width="10" height="8" rx="1" fill="#2D9CDB" opacity=".5"/><rect x="27" y="34" width="10" height="8" rx="1" fill="#4CAF50" opacity=".5"/><rect x="40" y="34" width="10" height="8" rx="1" fill="#D7262E" opacity=".5"/></svg>
+        </div>
+        <span class="product-badge limit">Limitado</span>
+        <button class="add-btn" aria-label="Añadir al carrito">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="product-body">
+        <p class="product-category">Decoración · Textil hogar</p>
+        <h3 class="product-name">Cojín Bordado a Mano</h3>
+        <p class="product-desc">Cojín de lino con bordado artesanal a mano representando aves y flores endémicas del Ecuador.</p>
+        <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>48.00</div>
+          <a href="#" class="product-detail-link">Ver</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SECCIÓN: NOSOTROS                                           ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+
+<!-- About hero: historia -->
+<section class="about-hero" id="nosotros">
+  <div class="about-hero-text">
+    <p class="section-label">Nuestra historia</p>
+    <h2 class="section-title" style="margin-bottom:28px;">
+      Nacimos del <em>alma andina</em>
+    </h2>
+    <p class="about-hero-lead">
+      ArtEcuador nació en 1985 en la ciudad de Quito, impulsado por la visión de
+      <strong>preservar y proyectar</strong> el patrimonio artesanal ecuatoriano al mundo.
+      Todo comenzó con un pequeño taller en el barrio La Floresta y cinco artesanos
+      de la comunidad kichwa de Otavalo.
+    </p>
+    <p class="about-hero-lead">
+      Hoy somos un <strong>puente vivo</strong> entre las manos maestras de más de
+      200 artesanos de 18 provincias y personas en todo el mundo que buscan piezas
+      auténticas, sostenibles y culturalmente significativas.
+    </p>
+    <a href="#contactar" class="btn-primary" style="margin-top:8px;">Contáctanos</a>
+  </div>
+
+  <div class="about-hero-visual">
+    <div class="about-hero-mosaic" id="aboutMosaic"></div>
+    <div class="about-badge-float">
+      <div class="about-badge-num">1985</div>
+      <div class="about-badge-label">Fundación en Quito</div>
+    </div>
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SECCIÓN: CONTACTAR                                          ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<section class="contact-section" id="contactar">
+  <div class="section-header">
+    <div>
+      <p class="section-label">Hablemos</p>
+      <h2 class="section-title">Contáctanos</h2>
+    </div>
+  </div>
+
+  <div class="contact-layout">
+
+    <!-- Left: info + socials + artisan CTA -->
+    <div class="contact-info">
+      <h3 class="contact-info-title">Estamos aquí para ayudarte</h3>
+
+      <div class="contact-cards">
+
+        <div class="contact-card">
+          <div class="contact-card-icon ci-email">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1" y="3" width="16" height="12" rx="2" stroke="#D7262E" stroke-width="1.5"/>
+              <path d="M1 5l8 6 8-6" stroke="#D7262E" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div>
+            <p class="contact-card-label">Email</p>
+            <p class="contact-card-value">info@artecuador.ec<br>ventas@artecuador.ec</p>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-icon ci-phone">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 1h4l2 5-2.5 1.5A11 11 0 0 0 11.5 13.5L13 11l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 1 3a2 2 0 0 1 2-2z" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div>
+            <p class="contact-card-label">Teléfono</p>
+            <p class="contact-card-value">+593 2 123 4567<br>Lun–Vie, 9:00–18:00</p>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-icon ci-wa">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="9" cy="9" r="8" stroke="#25D366" stroke-width="1.5"/>
+              <path d="M5.5 5.5c.5 1 1.5 2.5 3 3.5s2.5 1.5 3.5 1.5" stroke="#25D366" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M5 13l1-3 2 1-1 2H5z" fill="#25D366" opacity=".5"/>
+            </svg>
+          </div>
+          <div>
+            <p class="contact-card-label">WhatsApp</p>
+            <p class="contact-card-value">+593 99 876 5432<br>Respuesta en &lt; 2 horas</p>
+          </div>
+        </div>
+
+        <div class="contact-card">
+          <div class="contact-card-icon ci-map">
+            <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 1a5 5 0 0 1 5 5c0 4-5 11-5 11S4 10 4 6a5 5 0 0 1 5-5z" stroke="#2D9CDB" stroke-width="1.5"/>
+              <circle cx="9" cy="6" r="2" stroke="#2D9CDB" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div>
+            <p class="contact-card-label">Dirección</p>
+            <p class="contact-card-value">La Floresta N24-12 y Orellana<br>Quito, Ecuador</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Social -->
+      <p class="social-title">Síguenos</p>
+      <div class="social-row">
+        <!-- Instagram -->
+        <a href="#" class="social-btn" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1.5"/></svg>
+        </a>
+        <!-- Facebook -->
+        <a href="#" class="social-btn" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <!-- Pinterest -->
+        <a href="#" class="social-btn" aria-label="Pinterest">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.18-.77 1.22-5.17 1.22-5.17s-.31-.63-.31-1.56c0-1.46.85-2.55 1.9-2.55.9 0 1.33.67 1.33 1.48 0 .9-.58 2.25-.87 3.5-.25 1.05.52 1.9 1.55 1.9 1.86 0 3.1-2.4 3.1-5.24 0-2.16-1.46-3.67-3.55-3.67-2.42 0-3.84 1.82-3.84 3.7 0 .73.28 1.52.63 1.95.07.08.08.15.06.24-.06.26-.21.84-.23.96-.04.15-.13.19-.3.11-1.1-.51-1.79-2.12-1.79-3.42 0-2.77 2.01-5.32 5.8-5.32 3.05 0 5.42 2.17 5.42 5.08 0 3.03-1.9 5.46-4.54 5.46-.89 0-1.72-.46-2-1l-.55 2.04c-.2.76-.73 1.72-1.09 2.3.82.25 1.69.39 2.59.39 5.52 0 10-4.48 10-10S17.52 2 12 2z"/></svg>
+        </a>
+        <!-- TikTok -->
+        <a href="#" class="social-btn" aria-label="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.28 6.28 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.78a4.85 4.85 0 0 1-1.01-.09z"/></svg>
+        </a>
+        <!-- YouTube -->
+        <a href="#" class="social-btn" aria-label="YouTube">
+          <svg viewBox="0 0 24 24"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Right: form -->
+    <div class="contact-form-wrap">
+      <h3 class="form-title">Envíanos un mensaje</h3>
+      <p class="form-subtitle">Te respondemos en menos de 24 horas hábiles. Para pedidos urgentes usa nuestro WhatsApp.</p>
+
+      <form>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-name">Nombre</label>
+            <input class="form-input" type="text" id="f-name" placeholder="Tu nombre completo" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-email">Email</label>
+            <input class="form-input" type="email" id="f-email" placeholder="tu@email.com" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="f-phone">Teléfono (opcional)</label>
+            <input class="form-input" type="tel" id="f-phone" placeholder="+593 ..." />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="f-country">País</label>
+            <select class="form-select" id="f-country">
+              <option value="">Selecciona tu país</option>
+              <option>Ecuador</option>
+              <option>Estados Unidos</option>
+              <option>España</option>
+              <option>Colombia</option>
+              <option>México</option>
+              <option>Otro</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="f-tipo">Tipo de consulta</label>
+          <select class="form-select" id="f-tipo">
+            <option value="">¿En qué te podemos ayudar?</option>
+            <option>Consulta sobre un producto</option>
+            <option>Pedido personalizado / mayoreo</option>
+            <option>Envíos internacionales</option>
+            <option>Quiero ser artesano asociado</option>
+            <option>Prensa y medios</option>
+            <option>Otro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="f-msg">Mensaje</label>
+          <textarea class="form-textarea" id="f-msg" placeholder="Cuéntanos cómo te podemos ayudar..."></textarea>
+        </div>
+
+        <div class="form-check-row">
+          <input type="checkbox" id="f-privacy" />
+          <label class="form-check-label" for="f-privacy">
+            He leído y acepto la <a href="#">política de privacidad</a> y el tratamiento de mis datos para recibir respuesta a esta consulta.
+          </label>
+        </div>
+
+        <button type="submit" class="form-submit">
+          Enviar mensaje
+          <svg viewBox="0 0 16 16"><path d="M1 8l14-6-6 14-2-6z"/></svg>
+        </button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  FOOTER                                                      ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <img src="media/logoV1.png" alt="ArtEcuador"
+        style="height:56px;width:auto;margin-bottom:16px;
+               filter:brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.3));" />
+      <p class="footer-brand-desc">
+        Llevamos la riqueza artesanal del Ecuador al mundo, conectando artesanos
+        con personas que valoran lo auténtico, lo hecho a mano y lo culturalmente significativo.
+      </p>
+      <div class="footer-color-dots">
+        <div class="color-dot" style="background:var(--red)"></div>
+        <div class="color-dot" style="background:var(--yellow)"></div>
+        <div class="color-dot" style="background:var(--green)"></div>
+        <div class="color-dot" style="background:var(--blue)"></div>
+        <div class="color-dot" style="background:var(--purple)"></div>
+      </div>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Colecciones</p>
+      <ul class="footer-links">
+        <li><a href="#joyeria">Joyería Artesanal</a></li>
+        <li><a href="#textiles">Textiles Andinos</a></li>
+        <li><a href="#ceramica">Cerámica Ancestral</a></li>
+        <li><a href="#decoracion">Decoración del Hogar</a></li>
+        <li><a href="#">Novedades</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Nosotros</p>
+      <ul class="footer-links">
+        <li><a href="#">Nuestra historia</a></li>
+        <li><a href="#">Artesanos</a></li>
+        <li><a href="#">Comercio justo</a></li>
+        <li><a href="#">Sostenibilidad</a></li>
+        <li><a href="#">Prensa</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="footer-col-title">Contacto</p>
+      <ul class="footer-links">
+        <li><a href="#">info@artecuador.ec</a></li>
+        <li><a href="#">+593 2 123 4567</a></li>
+        <li><a href="#">Quito, Ecuador</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p class="footer-copyright">© 2026 ArtEcuador. Todos los derechos reservados.</p>
+    <p class="footer-tagline">Hecho con orgullo en el Ecuador</p>
+  </div>
+</footer>
+
+<!-- ╔══════════════════════════════════════════════════════════════╗ -->
+<!-- ║  SCRIPTS                                                     ║ -->
+<!-- ╚══════════════════════════════════════════════════════════════╝ -->
+<script>
+  /* ── Generate cover mosaic ─────────────────────────────────── */
+  (function() {
+    const colors = [
+      'mc-r','mc-y','mc-g','mc-b','mc-p',
+      'mc-w','mc-w','mc-w','mc-lg','mc-mg'
+    ];
+    // Andean-inspired pattern — rows 14 × cols 12
+    const pattern = [
+      'r,y,g,b,p,r,y,g,b,p,r,y',
+      'y,w,w,w,w,w,w,w,w,w,w,g',
+      'g,w,r,y,w,b,b,w,y,r,w,b',
+      'b,w,y,r,r,w,w,r,r,y,w,p',
+      'p,w,w,r,y,g,g,y,r,w,w,r',
+      'r,w,w,w,g,r,r,g,w,w,w,y',
+      'y,w,w,w,g,r,r,g,w,w,w,g',
+      'g,w,w,r,y,g,g,y,r,w,w,b',
+      'b,w,y,r,r,w,w,r,r,y,w,p',
+      'p,w,r,y,w,b,b,w,y,r,w,r',
+      'r,w,w,w,w,w,w,w,w,w,w,y',
+      'y,g,b,p,r,y,g,b,p,r,y,g',
+      'g,b,p,r,y,g,b,p,r,y,g,b',
+      'b,p,r,y,g,b,p,r,y,g,b,p',
+    ];
+    const map = { r:'mc-r', y:'mc-y', g:'mc-g', b:'mc-b', p:'mc-p', w:'mc-w', l:'mc-lg', m:'mc-mg' };
+    const grid = document.getElementById('mosaico');
+    pattern.forEach(row => {
+      row.split(',').forEach(key => {
+        const cell = document.createElement('div');
+        cell.className = 'mosaic-cell ' + (map[key] || 'mc-w');
+        grid.appendChild(cell);
+      });
+    });
+  })();
+
+  /* ── Generate featured mosaic ──────────────────────────────── */
+  (function() {
+    const colors = [
+      '#D7262E','#F4C430','#4CAF50','#2D9CDB','#6A1B9A',
+      '#1A1A1A','#333333','#D7262E','#F4C430','#4CAF50'
+    ];
+    const feat = document.getElementById('featMosaic');
+    for (let i = 0; i < 9; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'feat-cell';
+      cell.style.background = colors[i % colors.length];
+      cell.style.opacity = (0.6 + (i % 4) * 0.1).toString();
+      feat.appendChild(cell);
+    }
+  })();
+
+  /* ── Generate About mosaic ─────────────────────────────────── */
+  (function() {
+    const about = document.getElementById('aboutMosaic');
+    if (!about) return;
+    const palette = [
+      '#D7262E','#F4C430','#4CAF50','#2D9CDB','#6A1B9A',
+      '#FFFFFF','#F7F5F0','#E8E4DE','#1A1A1A','#D7262E',
+      '#F4C430','#4CAF50','#2D9CDB','#FFFFFF','#FFFFFF',
+      '#6A1B9A','#D7262E','#F4C430','#FFFFFF','#F7F5F0',
+      '#4CAF50','#FFFFFF','#E8E4DE','#2D9CDB','#FFFFFF',
+      '#FFFFFF','#F4C430','#D7262E','#6A1B9A','#4CAF50',
+      '#F7F5F0','#2D9CDB','#FFFFFF','#D7262E','#F4C430','#4CAF50'
+    ];
+    for (let i = 0; i < 36; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'about-mosaic-cell';
+      cell.style.background = palette[i];
+      cell.style.aspectRatio = '1/1';
+      about.appendChild(cell);
+    }
+  })();
+
+  /* ── Subtle hover effect on mosaic cells ───────────────────── */
+  document.querySelectorAll('.mosaic-cell').forEach(cell => {
+    cell.addEventListener('mouseenter', () => { cell.style.opacity = '0.7'; });
+    cell.addEventListener('mouseleave', () => { cell.style.opacity = ''; });
+  });
+</script>
+
+</body>
+</html>
