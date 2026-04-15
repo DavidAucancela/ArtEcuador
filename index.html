@@ -943,11 +943,32 @@
       .hamburger { display: flex; }
     }
 
-    /* ── Cover logo en fondo blanco ─────────────────────────────── */
-    .cover-logo {
-      width: clamp(140px, 38%, 240px);
-      height: auto;
+    /* ── Cover brand title ──────────────────────────────────────── */
+    .cover-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 6vw, 5.5rem);
+      font-weight: 700;
+      color: #1A1A1A;
+      line-height: 1;
       margin-bottom: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── Cover logo sobre el mosaico ────────────────────────────── */
+    .cover-logo-overlay {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.88);
+      border-radius: 20px;
+      padding: 28px 36px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.18);
+    }
+    .cover-logo-big {
+      width: clamp(200px, 30vw, 340px);
+      height: auto;
       display: block;
     }
 
@@ -1069,8 +1090,7 @@
 <!-- ╚══════════════════════════════════════════════════════════════╝ -->
 <section class="cover" id="portada">
   <div class="cover-left">
-    <img src="media/logoFinal.png" alt="ArtEcuador" class="cover-logo" />
-    <h1 class="sr-only">ArtEcuador — Catálogo de Artesanías Ecuatorianas</h1>
+    <h1 class="cover-brand">ArtEcuador</h1>
     <p class="cover-subtitle">Raíces vivas, manos maestras</p>
     <p class="cover-desc">
       Una selección curada de artesanías auténticas del Ecuador, elaboradas por
@@ -1084,8 +1104,10 @@
   </div>
 
   <div class="cover-right">
-    <!-- Andean mosaic grid -->
     <div class="cover-mosaic" id="mosaico"></div>
+    <div class="cover-logo-overlay">
+      <img src="media/logoFinal.png" alt="ArtEcuador" class="cover-logo-big" />
+    </div>
   </div>
 </section>
 
