@@ -285,6 +285,7 @@
     .product-img-wrap {
       position: absolute; inset: 0;
       width: 100%; height: 100%;
+      background: #fdf6ec;
     }
     .product-img-placeholder {
       width: 100%; height: 100%;
@@ -350,11 +351,11 @@
     /* Overlay — slides up from bottom on hover */
     .product-body {
       position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
-      padding: 28px 20px 22px;
+      padding: 40px 18px 18px;
       background: linear-gradient(
         to top,
-        rgba(10, 8, 6, 0.92) 0%,
-        rgba(10, 8, 6, 0.78) 55%,
+        rgba(10, 8, 6, 0.88) 0%,
+        rgba(10, 8, 6, 0.6) 60%,
         rgba(10, 8, 6, 0) 100%
       );
       transform: translateY(100%);
@@ -376,49 +377,27 @@
       pointer-events: none;
     }
 
-    .product-category {
-      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
-      margin-bottom: 5px;
-      transform: translateY(8px);
-      opacity: 0;
-      transition: transform 0.35s ease 0.08s, opacity 0.35s ease 0.08s;
-    }
-    .product-card:hover .product-category {
-      transform: translateY(0); opacity: 1;
-    }
+    .product-category { display: none; }
+    .product-desc     { display: none; }
 
     .product-name {
       font-family: 'Playfair Display', serif;
-      font-size: 1rem; font-weight: 700; line-height: 1.25;
+      font-size: 0.95rem; font-weight: 700; line-height: 1.3;
       color: #FFFFFF;
-      margin-bottom: 7px;
+      margin-bottom: 10px;
       transform: translateY(10px);
       opacity: 0;
-      transition: transform 0.38s ease 0.12s, opacity 0.38s ease 0.12s;
+      transition: transform 0.38s ease 0.08s, opacity 0.38s ease 0.08s;
     }
     .product-card:hover .product-name {
       transform: translateY(0); opacity: 1;
     }
 
-    .product-desc {
-      font-size: 0.72rem; font-weight: 400; line-height: 1.6;
-      color: rgba(255,255,255,0.65);
-      margin-bottom: 14px;
-      transform: translateY(10px);
+    .product-footer {
+      display: flex; align-items: center; justify-content: flex-start;
+      transform: translateY(8px);
       opacity: 0;
       transition: transform 0.38s ease 0.16s, opacity 0.38s ease 0.16s;
-    }
-    .product-card:hover .product-desc {
-      transform: translateY(0); opacity: 1;
-    }
-
-    .product-footer {
-      display: flex; align-items: center; justify-content: flex-end;
-      transform: translateY(10px);
-      opacity: 0;
-      transition: transform 0.38s ease 0.2s, opacity 0.38s ease 0.2s;
     }
     .product-card:hover .product-footer {
       transform: translateY(0); opacity: 1;
@@ -454,10 +433,10 @@
 
     /* ── Featured strip ─────────────────────────────────────────── */
     .featured-strip {
-      padding: 90px 80px;
+      padding: 80px 80px;
       background: #1A1A1A;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1.6fr;
       gap: 0;
       align-items: stretch;
       position: relative; overflow: hidden;
@@ -509,6 +488,14 @@
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       gap: 4px; overflow: hidden;
+    }
+    .feat-img-cell { position: relative; }
+    .feat-img-cell img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.7s ease;
     }
     .feat-stat-num {
       font-family: 'Playfair Display', serif;
@@ -601,7 +588,8 @@
       footer { padding: 48px 32px 0; }
     }
     @media (max-width: 560px) {
-      .product-grid { grid-template-columns: 1fr; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .product-card { aspect-ratio: 3 / 5; }
       .cover-left { padding: 60px 24px; }
       .section-header { flex-direction: column; align-items: flex-start; gap: 16px; }
       .footer-grid { grid-template-columns: 1fr; }
@@ -618,168 +606,212 @@
     /* ║  CONTACTAR STYLES                                            ║ */
     /* ╚══════════════════════════════════════════════════════════════╝ */
 
+    /* ╔═ CONTACT SECTION ══════════════════════════════════════════╗ */
     .contact-section {
-      padding: 100px 80px;
-      background: #F7F5F0;
+      padding: 0; background: #FFFFFF; overflow: hidden;
     }
+    .contact-section > .section-header { display: none; }
+
     .contact-layout {
       display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 64px;
-      margin-top: 56px;
-      align-items: start;
+      grid-template-columns: 420px 1fr;
+      min-height: 780px;
+      align-items: stretch;
     }
 
-    /* Left: contact info */
-    .contact-info {}
-    .contact-info-title {
+    /* ── Left dark panel ─────────────────────────────────────────── */
+    .contact-panel {
+      background: #111111;
+      padding: 80px 52px 72px;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .contact-panel::before {
+      content: '';
+      position: absolute; bottom: -100px; right: -100px;
+      width: 380px; height: 380px;
+      background: radial-gradient(circle at center, rgba(215,38,46,0.15) 0%, transparent 66%);
+      border-radius: 50%; pointer-events: none;
+    }
+    .contact-panel::after {
+      content: '';
+      position: absolute; top: -70px; left: -70px;
+      width: 230px; height: 230px;
+      background: radial-gradient(circle at center, rgba(244,196,48,0.09) 0%, transparent 70%);
+      border-radius: 50%; pointer-events: none;
+    }
+    .contact-panel-stripe {
+      position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%;
+      background: linear-gradient(180deg, var(--red) 0%, var(--yellow) 55%, transparent 100%);
+    }
+    .contact-panel-inner { position: relative; z-index: 1; }
+
+    .contact-panel-eyebrow {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--yellow);
+      display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+    }
+    .contact-panel-eyebrow::before {
+      content: ''; display: block;
+      width: 20px; height: 1.5px; background: var(--yellow); flex-shrink: 0;
+    }
+    .contact-panel-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.1rem; font-weight: 600;
-      color: #1A1A1A; margin-bottom: 24px;
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      font-weight: 700; color: #FFFFFF;
+      line-height: 1.15; margin-bottom: 14px; letter-spacing: -0.01em;
     }
-    .contact-cards { display: flex; flex-direction: column; gap: 16px; margin-bottom: 40px; }
-    .contact-card {
-      background: #FFFFFF;
-      border-radius: 6px;
-      padding: 20px 22px;
+    .contact-panel-title em { font-style: italic; color: var(--yellow); }
+    .contact-panel-sub {
+      font-size: 0.79rem; color: rgba(255,255,255,0.4);
+      line-height: 1.8; margin-bottom: 48px; max-width: 300px;
+    }
+
+    /* Contact items — row style, no cards */
+    .contact-items { display: flex; flex-direction: column; margin-bottom: 44px; }
+    .contact-item {
       display: flex; align-items: flex-start; gap: 16px;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s, box-shadow 0.2s;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.15s;
     }
-    .contact-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-    .contact-card-icon {
-      width: 40px; height: 40px; border-radius: 8px;
+    .contact-item:first-child { border-top: 1px solid rgba(255,255,255,0.06); }
+    .contact-item-icon {
+      width: 38px; height: 38px; border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+      flex-shrink: 0; transition: transform 0.2s;
     }
-    .contact-card-icon svg { width: 18px; height: 18px; }
-    .ci-email   { background: #FEF0F0; }
-    .ci-phone   { background: #F0FFF0; }
-    .ci-wa      { background: #F0FFF4; }
-    .ci-map     { background: #F0F8FF; }
-    .contact-card-label {
-      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--gray-m); margin-bottom: 3px;
+    .contact-item:hover .contact-item-icon { transform: scale(1.12); }
+    .contact-item-icon svg { width: 16px; height: 16px; }
+    .cii-email { background: rgba(215,38,46,0.2); }
+    .cii-phone { background: rgba(76,175,80,0.2); }
+    .cii-wa    { background: rgba(37,211,102,0.2); }
+    .cii-map   { background: rgba(45,156,219,0.2); }
+    .contact-item-label {
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.16em;
+      text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 3px;
     }
-    .contact-card-value {
-      font-size: 0.85rem; font-weight: 500; color: #1A1A1A; line-height: 1.4;
+    .contact-item-value {
+      font-size: 0.82rem; font-weight: 500; color: rgba(255,255,255,0.82); line-height: 1.5;
     }
 
-    /* Social row */
-    .social-title {
-      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em;
-      text-transform: uppercase; color: var(--gray-m); margin-bottom: 14px;
+    /* Social */
+    .contact-social-label {
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 14px;
     }
-    .social-row { display: flex; gap: 10px; margin-bottom: 40px; }
+    .contact-social-row { display: flex; gap: 10px; }
     .social-btn {
-      width: 46px; height: 46px; border-radius: 10px;
-      background: #FFFFFF; border: 1.5px solid #E8E4DE;
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.1);
       display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: all 0.22s; text-decoration: none;
-      color: var(--gray-d);
+      cursor: pointer; transition: all 0.25s ease; text-decoration: none;
+      color: rgba(255,255,255,0.5); position: relative; overflow: hidden;
     }
-    .social-btn:hover { border-color: var(--red); background: #FEF0F0; color: var(--red); }
-    .social-btn svg { width: 18px; height: 18px; }
+    .social-btn::before {
+      content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.25s;
+    }
+    .social-btn-ig::before {
+      background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    }
+    .social-btn-fb::before { background: #1877F2; }
+    .social-btn:hover { border-color: transparent; color: #FFFFFF; transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0,0,0,0.35); }
+    .social-btn:hover::before { opacity: 1; }
+    .social-btn svg { width: 18px; height: 18px; position: relative; z-index: 1; }
 
-    /* Right: contact form */
+    /* ── Right form panel ───────────────────────────────────────── */
     .contact-form-wrap {
       background: #FFFFFF;
-      border-radius: 6px;
-      padding: 48px 44px;
-      box-shadow: var(--shadow);
+      padding: 80px 72px;
+      display: flex; flex-direction: column; justify-content: center;
+      border-left: 1px solid #EEEAE4;
+    }
+    .form-heading-bar {
+      width: 36px; height: 3px;
+      background: linear-gradient(90deg, var(--red), var(--yellow));
+      border-radius: 2px; margin-bottom: 20px;
     }
     .form-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem; font-weight: 700;
-      color: #1A1A1A; margin-bottom: 6px;
+      font-size: clamp(1.5rem, 2.2vw, 2rem); font-weight: 700;
+      color: #1A1A1A; margin-bottom: 8px; line-height: 1.2;
     }
     .form-subtitle {
-      font-size: 0.8rem; color: var(--gray-m);
-      margin-bottom: 32px; line-height: 1.6;
+      font-size: 0.79rem; color: #9E9A93;
+      margin-bottom: 36px; line-height: 1.7; max-width: 420px;
     }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-group {
-      display: flex; flex-direction: column;
-      gap: 6px; margin-bottom: 20px;
+      display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px;
     }
-    .form-group.full { grid-column: 1 / -1; }
     .form-label {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--gray-d);
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: #6B6762;
     }
     .form-input, .form-select, .form-textarea {
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.85rem; color: #1A1A1A;
-      background: #FAFAF8;
-      border: 1.5px solid #E8E4DE;
-      border-radius: 4px;
-      padding: 11px 14px;
+      font-size: 0.84rem; color: #1A1A1A;
+      background: #F9F7F4;
+      border: 1.5px solid #E8E3DB;
+      border-radius: 8px;
+      padding: 13px 16px;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
       width: 100%;
     }
     .form-input:focus, .form-select:focus, .form-textarea:focus {
       border-color: var(--red);
-      box-shadow: 0 0 0 3px rgba(215,38,46,0.08);
+      box-shadow: 0 0 0 3px rgba(215,38,46,0.07);
       background: #FFFFFF;
     }
     .form-input::placeholder, .form-textarea::placeholder {
-      color: var(--gray-m); font-size: 0.82rem;
+      color: #BDB9B2; font-size: 0.81rem;
     }
-    .form-textarea {
-      resize: vertical;
-      min-height: 130px;
-    }
+    .form-textarea { resize: vertical; min-height: 120px; }
     .form-select {
       appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%23BDBDBD'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px; cursor: pointer;
+      background-repeat: no-repeat; background-position: right 16px center;
+      padding-right: 40px; cursor: pointer;
     }
-    .form-check-row {
-      display: flex; align-items: flex-start; gap: 10px;
-      margin-bottom: 28px;
-    }
-    .form-check-row input[type="checkbox"] {
-      margin-top: 2px; accent-color: var(--red);
-      width: 15px; height: 15px; cursor: pointer; flex-shrink: 0;
-    }
-    .form-check-label {
-      font-size: 0.75rem; color: var(--gray-d); line-height: 1.6;
-    }
-    .form-check-label a { color: var(--red); text-decoration: none; }
-    .form-check-label a:hover { text-decoration: underline; }
     .form-submit {
-      width: 100%;
-      background: var(--red); color: #FFFFFF;
-      border: none; border-radius: 4px;
-      padding: 15px 32px;
+      width: 100%; background: #25D366; color: #FFFFFF;
+      border: none; border-radius: 8px; padding: 16px 32px;
       font-family: 'Montserrat', sans-serif;
-      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.1em;
+      font-size: 0.83rem; font-weight: 700; letter-spacing: 0.1em;
       text-transform: uppercase; cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
       display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-top: 10px;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.3);
     }
-    .form-submit:hover { background: #b81e25; transform: translateY(-2px); }
-    .form-submit svg { width: 16px; height: 16px; fill: #FFFFFF; flex-shrink: 0; }
+    .form-submit:hover {
+      background: #1aad57; transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(37,211,102,0.42);
+    }
+    .form-submit svg { width: 20px; height: 20px; fill: #FFFFFF; flex-shrink: 0; }
 
-    /* ── Responsive extras ──────────────────────────────────────── */
+    /* ── Responsive ──────────────────────────────────────────────── */
     @media (max-width: 900px) {
-      .contact-section { padding: 64px 32px; }
-      .contact-layout { grid-template-columns: 1fr; gap: 40px; }
-      .contact-form-wrap { padding: 32px 24px; }
+      .contact-layout { grid-template-columns: 1fr; min-height: unset; }
+      .contact-panel { padding: 60px 32px; }
+      .contact-panel-stripe { width: 100%; height: 4px; top: 0; left: 0; }
+      .contact-panel-sub { max-width: 100%; }
+      .contact-form-wrap { padding: 52px 28px; border-left: none; border-top: 1px solid #EEEAE4; }
       .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .contact-panel { padding: 48px 24px; }
+      .contact-form-wrap { padding: 40px 20px; }
     }
 
     /* ── Real product image ─────────────────────────────────────── */
     .product-img-real {
       width: 100%; height: 100%;
       object-fit: cover;
+      mix-blend-mode: multiply;
       transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .product-card:hover .product-img-real { transform: scale(1.07); }
@@ -1025,10 +1057,7 @@
 <nav>
   <a href="#portada" class="nav-logo-link">
     <img src="media/iconoFinal.png" alt="ArtEcuador" class="nav-icon-img" />
-    
-    <span class="nav-brand-text">
-      <span class="yellow">Art</span><span class="blue">Ecua</span><span class="red">dor</span>
-    </span>
+
   </a>
   <ul class="nav-links">
     <li><a href="#portada">Inicio</a></li>
@@ -1112,71 +1141,15 @@
     </p>
   </div>
   <div class="featured-img-area" id="featMosaic">
-    <!-- Stat: Artesanos -->
-    <div class="feat-cell" style="background:#D7262E;">
-      <span class="feat-stat-num">200+</span>
-      <span class="feat-stat-lbl">Artesanos</span>
-    </div>
-    <!-- Icon: Chakana -->
-    <div class="feat-cell feat-icon-cell" style="background:#1A1A1A;">
-      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M21 0h14v14h14v14H35v14H21V28H7V14h14Z" fill="#F4C430" opacity=".9"/>
-      </svg>
-      <span class="feat-stat-lbl">Chakana</span>
-    </div>
-    <!-- Stat: Provincias -->
-    <div class="feat-cell" style="background:#4CAF50;">
-      <span class="feat-stat-num">18</span>
-      <span class="feat-stat-lbl">Provincias</span>
-    </div>
-    <!-- Icon: Inti (sol) -->
-    <div class="feat-cell feat-icon-cell" style="background:#F4C430;">
-      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="28" cy="28" r="10" fill="#1A1A1A" opacity=".85"/>
-        <circle cx="28" cy="28" r="16" fill="none" stroke="#1A1A1A" stroke-width="1.8" stroke-dasharray="4 3" opacity=".6"/>
-        <line x1="28" y1="6" x2="28" y2="11" stroke="#1A1A1A" stroke-width="2.5" opacity=".8"/>
-        <line x1="28" y1="45" x2="28" y2="50" stroke="#1A1A1A" stroke-width="2.5" opacity=".8"/>
-        <line x1="6" y1="28" x2="11" y2="28" stroke="#1A1A1A" stroke-width="2.5" opacity=".8"/>
-        <line x1="45" y1="28" x2="50" y2="28" stroke="#1A1A1A" stroke-width="2.5" opacity=".8"/>
-        <line x1="12" y1="12" x2="16" y2="16" stroke="#1A1A1A" stroke-width="2" opacity=".7"/>
-        <line x1="40" y1="40" x2="44" y2="44" stroke="#1A1A1A" stroke-width="2" opacity=".7"/>
-        <line x1="44" y1="12" x2="40" y2="16" stroke="#1A1A1A" stroke-width="2" opacity=".7"/>
-        <line x1="12" y1="44" x2="16" y2="40" stroke="#1A1A1A" stroke-width="2" opacity=".7"/>
-      </svg>
-      <span class="feat-stat-lbl" style="color:rgba(0,0,0,0.6);">Inti</span>
-    </div>
-    <!-- Stat: Productos -->
-    <div class="feat-cell" style="background:#2D9CDB;">
-      <span class="feat-stat-num">500+</span>
-      <span class="feat-stat-lbl">Productos</span>
-    </div>
-    <!-- Icon: Cóndor -->
-    <div class="feat-cell feat-icon-cell" style="background:#6A1B9A;">
-      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M28 20 Q18 15 6 24 Q18 26 24 32 Q28 40 28 44 Q28 40 32 32 Q38 26 50 24 Q38 15 28 20Z" fill="white" opacity=".85"/>
-        <circle cx="28" cy="16" r="4" fill="white" opacity=".9"/>
-      </svg>
-      <span class="feat-stat-lbl">Cóndor</span>
-    </div>
-    <!-- Stat: Años -->
-    <div class="feat-cell" style="background:#333333;">
-      <span class="feat-stat-num">40</span>
-      <span class="feat-stat-lbl">Años de<br>tradición</span>
-    </div>
-    <!-- Icon: Pachamama / Montaña -->
-    <div class="feat-cell feat-icon-cell" style="background:#D7262E;">
-      <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <path d="M4 50 L28 8 L52 50 Z" fill="none" stroke="white" stroke-width="2.5" opacity=".85"/>
-        <path d="M14 50 L28 22 L42 50 Z" fill="white" opacity=".25"/>
-        <path d="M23 14 L28 8 L33 14" fill="white" stroke="white" stroke-width="1" opacity=".8"/>
-      </svg>
-      <span class="feat-stat-lbl">Pachamama</span>
-    </div>
-    <!-- Stat: Países -->
-    <div class="feat-cell" style="background:#1A1A1A;">
-      <span class="feat-stat-num">30+</span>
-      <span class="feat-stat-lbl">Países de<br>envío</span>
-    </div>
+    <div class="feat-cell feat-img-cell mc-r"><img alt="Cliente ArtEcuador" /></div>
+    <div class="feat-cell feat-img-cell mc-y"><img alt="Cliente ArtEcuador" /></div>
+    <div class="feat-cell feat-img-cell mc-g"><img alt="Cliente ArtEcuador" /></div>
+    <div class="feat-cell feat-img-cell mc-b"><img alt="Cliente ArtEcuador" /></div>
+    <div class="feat-cell feat-img-cell" style="background:#2a2a2a"><img alt="Cliente ArtEcuador" /></div>
+    <div class="feat-cell feat-img-cell mc-r"><img alt="Cliente ArtEcuador" /></div>
+    <div class="feat-cell feat-img-cell mc-y"><img alt="Cliente ArtEcuador" /></div>
+    <div class="feat-cell feat-img-cell mc-g"><img alt="Cliente ArtEcuador" /></div>
+    <div class="feat-cell feat-img-cell mc-b"><img alt="Cliente ArtEcuador" /></div>
   </div>
 </div>
 
@@ -1198,9 +1171,6 @@
       <div class="product-img-wrap">
         <img src="media/products/cuadros%20Guayasamin%20barro%20medianos.png" alt="Cuadros Guayasamín en Barro" class="product-img-real" loading="lazy" />
         <span class="product-badge feat">Destacado</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuadros · Guayasamín</p>
@@ -1215,9 +1185,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/cuadros%20guaysamin%202.png" alt="Cuadros Guayasamín Serie 2" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuadros · Guayasamín</p>
@@ -1233,9 +1200,6 @@
       <div class="product-img-wrap">
         <img src="media/products/cuadro%20acrilico%20de%20la%20ronda%20de%20quito.png" alt="La Ronda de Quito — Acrílico" class="product-img-real" loading="lazy" />
         <span class="product-badge new">Nuevo</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuadros · Quito</p>
@@ -1250,9 +1214,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/cuadro%20la%20ronda%202.png" alt="La Ronda de Quito — Vista 2" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuadros · Quito</p>
@@ -1268,9 +1229,6 @@
       <div class="product-img-wrap">
         <img src="media/products/cuadro%20san%20francisco%20quito.png" alt="Iglesia San Francisco de Quito" class="product-img-real" loading="lazy" />
         <span class="product-badge feat">Destacado</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuadros · Quito</p>
@@ -1286,9 +1244,6 @@
       <div class="product-img-wrap">
         <img src="media/products/cuando%20cotopaxi%20animado%20.png" alt="Cotopaxi Animado" class="product-img-real" loading="lazy" />
         <span class="product-badge new">Nuevo</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuadros · Volcanes</p>
@@ -1303,9 +1258,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/cuado%20con%20base%20de%20de%20tronco.png" alt="Cuadro sobre Tronco Natural" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuadros · Madera</p>
@@ -1321,9 +1273,6 @@
       <div class="product-img-wrap">
         <img src="media/products/bateas%20madera%20tigua.png" alt="Bateas Pintadas de Tigua" class="product-img-real" loading="lazy" />
         <span class="product-badge feat">Destacado</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuadros · Tigua</p>
@@ -1355,9 +1304,6 @@
       <div class="product-img-wrap">
         <img src="media/products/ceramica%20otavalena%20tradicional.png" alt="Cerámica Otavaleña Tradicional" class="product-img-real" loading="lazy" />
         <span class="product-badge feat">Destacado</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cerámica · Otavalo</p>
@@ -1373,9 +1319,6 @@
       <div class="product-img-wrap">
         <img src="media/products/ceramica%20Cuencana%20de%20vasijas.png" alt="Vasijas Cuencanas" class="product-img-real" loading="lazy" />
         <span class="product-badge new">Nuevo</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cerámica · Cuenca</p>
@@ -1390,9 +1333,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/ceramica%20imbabura%20.png" alt="Cerámica de Imbabura" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cerámica · Imbabura</p>
@@ -1408,9 +1348,6 @@
       <div class="product-img-wrap">
         <img src="media/products/ceramica%20hombre%20saraguro.png" alt="Figura Saraguro en Cerámica" class="product-img-real" loading="lazy" />
         <span class="product-badge limit">Limitado</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cerámica · Figuras</p>
@@ -1425,9 +1362,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/ceramica%20hombre%20riobambeno.png" alt="Figura Riobambeña" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cerámica · Figuras</p>
@@ -1443,9 +1377,6 @@
       <div class="product-img-wrap">
         <img src="media/products/posillos%20pequenos%20de%20barro%20.png" alt="Pocillos de Barro" class="product-img-real" loading="lazy" />
         <span class="product-badge new">Nuevo</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cerámica · Utilitaria</p>
@@ -1460,9 +1391,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/vasos%20barro%20grande%20.png" alt="Vasijas de Barro Grande" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cerámica · Vasijas</p>
@@ -1478,9 +1406,6 @@
       <div class="product-img-wrap">
         <img src="media/products/cuadros%20Guayasamin%20barro%20medianos.png" alt="Cuadros Guayasamín en Barro" class="product-img-real" loading="lazy" />
         <span class="product-badge feat">Destacado</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cerámica · Arte</p>
@@ -1512,9 +1437,6 @@
       <div class="product-img-wrap">
         <img src="media/products/carteras%20y%20billetaras%20tigua%20cuero.png" alt="Carteras y Billeteras Tigua en Cuero" class="product-img-real" loading="lazy" />
         <span class="product-badge feat">Destacado</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuero · Carteras</p>
@@ -1530,9 +1452,6 @@
       <div class="product-img-wrap">
         <img src="media/products/portallaves%20cuero%202.png" alt="Porta Llaves de Cuero" class="product-img-real" loading="lazy" />
         <span class="product-badge new">Nuevo</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuero · Accesorios</p>
@@ -1547,9 +1466,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/portallavaes%20cuero.png" alt="Porta Llaves Cuero Clásico" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Cuero · Accesorios</p>
@@ -1581,9 +1497,6 @@
       <div class="product-img-wrap">
         <img src="media/products/mascaras%20varias%20Ecuatorianas%20madera%20.png" alt="Máscaras Ecuatorianas en Madera" class="product-img-real" loading="lazy" />
         <span class="product-badge feat">Destacado</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Otros · Máscaras</p>
@@ -1599,9 +1512,6 @@
       <div class="product-img-wrap">
         <img src="media/products/animales%20Galapagos%20madera%20.png" alt="Animales de Galápagos en Madera" class="product-img-real" loading="lazy" />
         <span class="product-badge new">Nuevo</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Otros · Madera</p>
@@ -1616,9 +1526,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/sol%20luna%20madera%20cedro%20.png" alt="Sol y Luna en Cedro" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Otros · Madera</p>
@@ -1634,9 +1541,6 @@
       <div class="product-img-wrap">
         <img src="media/products/carros%20tradicionales%20madera.png" alt="Carros Tradicionales en Madera" class="product-img-real" loading="lazy" />
         <span class="product-badge new">Nuevo</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Otros · Madera</p>
@@ -1651,9 +1555,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/casas%20fachada%20tradicionales%20.png" alt="Fachadas Coloniales en Madera" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Otros · Madera</p>
@@ -1668,9 +1569,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/avion%20madera%20.png" alt="Avión Artesanal en Madera" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Otros · Madera</p>
@@ -1685,9 +1583,6 @@
     <div class="product-card">
       <div class="product-img-wrap">
         <img src="media/products/nacimiento%20mini%20.png" alt="Nacimiento Andino Miniatura" class="product-img-real" loading="lazy" />
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Otros · Nacimientos</p>
@@ -1703,9 +1598,6 @@
       <div class="product-img-wrap">
         <img src="media/products/mital%20del%20mundo%20grande%20marmol%20oscura.png" alt="Mitad del Mundo en Mármol" class="product-img-real" loading="lazy" />
         <span class="product-badge limit">Limitado</span>
-        <button class="add-btn" aria-label="Añadir al carrito">
-          <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
-        </button>
       </div>
       <div class="product-body">
         <p class="product-category">Otros · Mármol</p>
@@ -1723,102 +1615,98 @@
 <!-- ║  SECCIÓN: CONTACTAR                                          ║ -->
 <!-- ╚══════════════════════════════════════════════════════════════╝ -->
 <section class="contact-section" id="contactar">
-  <div class="section-header">
-    <div>
-      <p class="section-label">Hablemos</p>
-      <h2 class="section-title">Contáctanos</h2>
-    </div>
-  </div>
-
   <div class="contact-layout">
 
-    <!-- Left: info + socials + artisan CTA -->
-    <div class="contact-info">
-      <h3 class="contact-info-title">Estamos aquí para ayudarte</h3>
+    <!-- ── Panel izquierdo oscuro ── -->
+    <div class="contact-panel">
+      <div class="contact-panel-stripe"></div>
+      <div class="contact-panel-inner">
 
-      <div class="contact-cards">
+        <p class="contact-panel-eyebrow">Hablemos</p>
+        <h2 class="contact-panel-title">Contáctanos,<br><em>estamos aquí</em></h2>
+        <p class="contact-panel-sub">Artesanías ecuatorianas al mundo. Escríbenos para consultas, pedidos personalizados o para conocer más sobre nuestros artesanos.</p>
 
-        <div class="contact-card">
-          <div class="contact-card-icon ci-email">
-            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="2" y="4" width="16" height="12" rx="2.5" stroke="#D7262E" stroke-width="1.6"/>
-              <path d="M2 7l7.293 5.121a1.2 1.2 0 0 0 1.414 0L18 7" stroke="#D7262E" stroke-width="1.6" stroke-linecap="round"/>
-              <line x1="2" y1="7" x2="7.5" y2="11" stroke="#D7262E" stroke-width="0" />
-            </svg>
+        <div class="contact-items">
+
+          <div class="contact-item">
+            <div class="contact-item-icon cii-email">
+              <svg viewBox="0 0 20 20" fill="none">
+                <rect x="2" y="4" width="16" height="12" rx="2.5" stroke="#D7262E" stroke-width="1.6"/>
+                <path d="M2 7l7.293 5.121a1.2 1.2 0 0 0 1.414 0L18 7" stroke="#D7262E" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <p class="contact-item-label">Email</p>
+              <p class="contact-item-value">quitoarte@gmail.com</p>
+            </div>
           </div>
-          <div>
-            <p class="contact-card-label">Email</p>
-            <p class="contact-card-value">quitoarte@gmail.com</p>
+
+          <div class="contact-item">
+            <div class="contact-item-icon cii-phone">
+              <svg viewBox="0 0 20 20" fill="none">
+                <path d="M6.5 2H4a2 2 0 0 0-2 2c0 8.284 6.716 15 15 15a2 2 0 0 0 2-2v-2.5a1 1 0 0 0-.684-.949l-3-1a1 1 0 0 0-1.052.26l-1.2 1.3A11.05 11.05 0 0 1 7.889 8.936l1.3-1.2a1 1 0 0 0 .26-1.052l-1-3A1 1 0 0 0 7.5 3H6.5z" stroke="#4CAF50" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <p class="contact-item-label">Teléfono</p>
+              <p class="contact-item-value">+593 99 900 6925</p>
+            </div>
           </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon cii-wa">
+              <svg viewBox="0 0 20 20" fill="none">
+                <path d="M10 2a8 8 0 0 1 6.928 12.01L18 18l-4.109-1.054A8 8 0 1 1 10 2z" stroke="#25D366" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M7 8.5c0-.5.5-2 2-1 .5.3.8 1 1 1.5.1.3-.1.7-.4.9l-.4.3c.3.6.8 1.1 1.4 1.5l.4-.4c.2-.2.6-.3.9-.1.5.2 1.1.6 1.4 1 .8 1.2-.5 2-1 2-2.2.1-6-3.7-5.3-5.7z" fill="#25D366" opacity=".85"/>
+              </svg>
+            </div>
+            <div>
+              <p class="contact-item-label">WhatsApp</p>
+              <p class="contact-item-value">+593 99 900 6925</p>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-item-icon cii-map">
+              <svg viewBox="0 0 20 20" fill="none">
+                <path d="M10 2a5.5 5.5 0 0 1 5.5 5.5c0 4.5-5.5 10.5-5.5 10.5S4.5 12 4.5 7.5A5.5 5.5 0 0 1 10 2z" stroke="#2D9CDB" stroke-width="1.6" stroke-linejoin="round"/>
+                <circle cx="10" cy="7.5" r="2" stroke="#2D9CDB" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <div>
+              <p class="contact-item-label">Dirección</p>
+              <p class="contact-item-value">Reina Victoria y Jorge Washington<br>Mercado Artesanal "La Mariscal" Local 103<br><span style="color:rgba(255,255,255,0.28);font-size:0.74rem;">Lun–Dom · 8:00–19:00</span></p>
+            </div>
+          </div>
+
         </div>
 
-        <div class="contact-card">
-          <div class="contact-card-icon ci-phone">
-            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.5 2H4a2 2 0 0 0-2 2c0 8.284 6.716 15 15 15a2 2 0 0 0 2-2v-2.5a1 1 0 0 0-.684-.949l-3-1a1 1 0 0 0-1.052.26l-1.2 1.3A11.05 11.05 0 0 1 7.889 8.936l1.3-1.2a1 1 0 0 0 .26-1.052l-1-3A1 1 0 0 0 7.5 3H6.5z" stroke="#4CAF50" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <p class="contact-social-label">Síguenos</p>
+        <div class="contact-social-row">
+          <a href="https://www.instagram.com/artecuador_hecho_a_mano/" target="_blank" rel="noopener" class="social-btn social-btn-ig" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.8"/>
+              <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/>
+              <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor"/>
             </svg>
-          </div>
-          <div>
-            <p class="contact-card-label">Teléfono</p>
-            <p class="contact-card-value">+593 99 900 6925</p>
-          </div>
-        </div>
-
-        <div class="contact-card">
-          <div class="contact-card-icon ci-wa">
-            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 2a8 8 0 0 1 6.928 12.01L18 18l-4.109-1.054A8 8 0 1 1 10 2z" stroke="#25D366" stroke-width="1.6" stroke-linejoin="round"/>
-              <path d="M7 8.5c0-.5.5-2 2-1 .5.3.8 1 1 1.5.1.3-.1.7-.4.9l-.4.3c.3.6.8 1.1 1.4 1.5l.4-.4c.2-.2.6-.3.9-.1.5.2 1.1.6 1.4 1 .8 1.2-.5 2-1 2-2.2.1-6-3.7-5.3-5.7z" fill="#25D366" opacity=".85"/>
+          </a>
+          <a href="https://www.facebook.com/Miguelmaguan/" target="_blank" rel="noopener" class="social-btn social-btn-fb" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M17 2h-3.5A4.5 4.5 0 0 0 9 6.5V9.5H6v4h3V22h4V13.5h3l.5-4H13V6.5a1 1 0 0 1 1-1H17V2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </div>
-          <div>
-            <p class="contact-card-label">WhatsApp</p>
-            <p class="contact-card-value">+593 99 900 6925</p>
-          </div>
-        </div>
-
-        <div class="contact-card">
-          <div class="contact-card-icon ci-map">
-            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 2a5.5 5.5 0 0 1 5.5 5.5c0 4.5-5.5 10.5-5.5 10.5S4.5 12 4.5 7.5A5.5 5.5 0 0 1 10 2z" stroke="#2D9CDB" stroke-width="1.6" stroke-linejoin="round"/>
-              <circle cx="10" cy="7.5" r="2" stroke="#2D9CDB" stroke-width="1.5"/>
-            </svg>
-          </div>
-          <div>
-            <p class="contact-card-label">Dirección</p>
-            <p class="contact-card-value">Reina Victoria y Jorge Washington<br>Mercado Artesanal "La Mariscal" Local 103<br><span style="color:var(--gray-m);font-size:0.78rem;">Lun–Dom · 8:00–19:00</span></p>
-          </div>
+          </a>
         </div>
 
       </div>
-
-      <!-- Social -->
-      <p class="social-title">Síguenos</p>
-      <div class="social-row">
-        <!-- Instagram -->
-        <a href="#" class="social-btn" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.8"/>
-            <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/>
-            <circle cx="17.6" cy="6.4" r="1.1" fill="currentColor"/>
-          </svg>
-        </a>
-        <!-- Facebook -->
-        <a href="#" class="social-btn" aria-label="Facebook">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17 2h-3.5A4.5 4.5 0 0 0 9 6.5V9.5H6v4h3V22h4V13.5h3l.5-4H13V6.5a1 1 0 0 1 1-1H17V2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-      </div>
-
     </div>
 
-    <!-- Right: form -->
+    <!-- ── Panel derecho: formulario ── -->
     <div class="contact-form-wrap">
-      <h3 class="form-title">Envíanos un mensaje</h3>
-      <p class="form-subtitle">Te respondemos en menos de 24 horas hábiles. Para pedidos urgentes usa nuestro WhatsApp.</p>
+      <div class="form-heading-bar"></div>
+      <h3 class="form-title">Contáctanos<br>por WhatsApp</h3>
+      <p class="form-subtitle">Completa el formulario y abriremos una conversación de WhatsApp con tu mensaje listo para enviar.</p>
 
-      <form>
+      <form id="contactForm">
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="f-name">Nombre</label>
@@ -1867,16 +1755,12 @@
           <textarea class="form-textarea" id="f-msg" placeholder="Cuéntanos cómo te podemos ayudar..." required></textarea>
         </div>
 
-        <div class="form-check-row">
-          <input type="checkbox" id="f-privacy" required />
-          <label class="form-check-label" for="f-privacy">
-            He leído y acepto la <a href="#">política de privacidad</a> y el tratamiento de mis datos para recibir respuesta a esta consulta.
-          </label>
-        </div>
-
         <button type="submit" class="form-submit">
-          Enviar mensaje
-          <svg viewBox="0 0 16 16"><path d="M1 8l14-6-6 14-2-6z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 2a10 10 0 0 1 8.66 15.01L22 22l-5.13-1.32A10 10 0 1 1 12 2z" fill="white" opacity=".25" stroke="white" stroke-width="1.3"/>
+            <path d="M8.5 10.5c0-.6.6-2.4 2.5-1.2.6.36 1 1.2 1.25 1.8.12.36-.12.84-.5 1.08l-.5.36c.38.72 1 1.32 1.75 1.8l.5-.48c.25-.24.75-.36 1.12-.12.62.24 1.38.72 1.75 1.2 1 1.44-.62 2.4-1.25 2.4-2.75.12-7.5-4.44-6.62-6.84z" fill="white"/>
+          </svg>
+          Enviar por WhatsApp
         </button>
       </form>
     </div>
@@ -1909,7 +1793,7 @@
 <footer>
   <div class="footer-grid">
     <div>
-      <img src="media/logoFinal.png" alt="ArtEcuador" class="footer-logo-img" />
+      <img src="media/iconoFinal.png" alt="ArtEcuador" class="footer-logo-img" />
       <p class="footer-brand-desc">
         Llevamos la riqueza artesanal del Ecuador al mundo, conectando artesanos
         con personas que valoran lo auténtico, lo hecho a mano y lo culturalmente significativo.
@@ -1939,8 +1823,8 @@
         <li><a href="mailto:quitoarte@gmail.com">quitoarte@gmail.com</a></li>
         <li><a href="tel:+593999006925">+593 99 900 6925</a></li>
         <li><a href="#contactar">La Mariscal · Local 103</a></li>
-        <li><a href="#">Instagram</a></li>
-        <li><a href="#">Facebook</a></li>
+        <li><a href="https://www.instagram.com/artecuador_hecho_a_mano/" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://www.facebook.com/Miguelmaguan/" target="_blank" rel="noopener">Facebook</a></li>
       </ul>
     </div>
   </div>
@@ -2163,6 +2047,74 @@
 
     // CTA link closes modal then scrolls to contact
     modalCTA.addEventListener('click', closeModal);
+  })();
+
+  /* ── Featured strip — ciclo aleatorio de imágenes ───────────── */
+  (function() {
+    var imgs = [
+      'media/clients/clientes%201.jpg',
+      'media/clients/clientes2.jpg',
+      'media/clients/clientes%203.jpg',
+      'media/clients/due%C3%B1o.png',
+      'media/clients/due%C3%B1o%202.png',
+      'media/clients/clientes%204.png',
+      'media/clients/recomendacion.png',
+      'media/clients/trabajpos.png'
+    ];
+    var cells = document.querySelectorAll('#featMosaic .feat-img-cell img');
+    var SHOW = 2200, FADE = 600;
+
+    function randIdx(exclude) {
+      var idx;
+      do { idx = Math.floor(Math.random() * imgs.length); } while (idx === exclude && imgs.length > 1);
+      return idx;
+    }
+
+    cells.forEach(function(img, i) {
+      var idx = randIdx(-1);
+      img.dataset.idx = idx;
+      img.src = imgs[idx];
+    });
+
+    function runCycle(img) {
+      setTimeout(function() {
+        img.style.opacity = '1';
+        setTimeout(function() {
+          img.style.opacity = '0';
+          setTimeout(function() {
+            var next = randIdx(parseInt(img.dataset.idx));
+            img.dataset.idx = next;
+            img.src = imgs[next];
+            runCycle(img);
+          }, FADE);
+        }, FADE + SHOW);
+      }, SHOW);
+    }
+
+    cells.forEach(function(img, i) {
+      setTimeout(function() { runCycle(img); }, i * 400);
+    });
+  })();
+
+  /* ── Formulario de contacto → WhatsApp ──────────────────────── */
+  (function() {
+    var form = document.getElementById('contactForm');
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var nombre = (document.getElementById('f-name').value || '').trim();
+      var email  = (document.getElementById('f-email').value || '').trim();
+      var phone  = (document.getElementById('f-phone').value || '').trim();
+      var tipo   = (document.getElementById('f-tipo').value || '').trim();
+      var msg    = (document.getElementById('f-msg').value || '').trim();
+      var lines  = ['Hola, me pongo en contacto desde *ArtEcuador*:'];
+      if (nombre) lines.push('👤 *Nombre:* ' + nombre);
+      if (email)  lines.push('✉️ *Email:* ' + email);
+      if (phone)  lines.push('📞 *Teléfono:* ' + phone);
+      if (tipo)   lines.push('📋 *Consulta:* ' + tipo);
+      if (msg)    lines.push('\n' + msg);
+      window.open('https://wa.me/593999006925?text=' + encodeURIComponent(lines.join('\n')), '_blank');
+    });
   })();
 
 </script>
