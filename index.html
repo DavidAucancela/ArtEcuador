@@ -394,11 +394,16 @@
     }
 
     .product-footer {
-      display: flex; align-items: center; justify-content: flex-start;
+      display: flex; align-items: center; justify-content: space-between;
       transform: translateY(8px);
       opacity: 0;
       transition: transform 0.38s ease 0.16s, opacity 0.38s ease 0.16s;
     }
+    .product-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; color: var(--gray-d);
+    }
+    .product-price .currency { font-size: 0.75rem; vertical-align: super; margin-right: 1px; color: var(--red); }
     .product-card:hover .product-footer {
       transform: translateY(0); opacity: 1;
     }
@@ -1177,6 +1182,7 @@
         <h3 class="product-name">Cuadros Guayasamín en Barro</h3>
         <p class="product-desc">Reproducciones artesanales de obras de Oswaldo Guayasamín en bajo relieve sobre barro, pintadas a mano.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>45.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Cuadros Guayasamín en Barro">Ver</a>
         </div>
       </div>
@@ -1191,6 +1197,7 @@
         <h3 class="product-name">Guayasamín — Serie 2</h3>
         <p class="product-desc">Segunda colección de cuadros inspirados en Guayasamín, con técnica mixta y colores característicos del maestro.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>38.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Guayasamín Serie 2">Ver</a>
         </div>
       </div>
@@ -1206,6 +1213,7 @@
         <h3 class="product-name">La Ronda de Quito — Acrílico</h3>
         <p class="product-desc">Cuadro acrílico de La Ronda, icónica calle del Centro Histórico de Quito, pintado por artistas locales.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>55.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver La Ronda de Quito — Acrílico">Ver</a>
         </div>
       </div>
@@ -1220,6 +1228,7 @@
         <h3 class="product-name">La Ronda — Vista 2</h3>
         <p class="product-desc">Segunda perspectiva de La Ronda quiteña en técnica mixta, capturando la vida nocturna del barrio histórico.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>50.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver La Ronda Vista 2">Ver</a>
         </div>
       </div>
@@ -1235,6 +1244,7 @@
         <h3 class="product-name">Iglesia San Francisco de Quito</h3>
         <p class="product-desc">Cuadro de la emblemática Iglesia de San Francisco, pintado con detalle arquitectónico colonial y luz andina.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>60.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Iglesia San Francisco de Quito">Ver</a>
         </div>
       </div>
@@ -1250,6 +1260,7 @@
         <h3 class="product-name">Cotopaxi Animado</h3>
         <p class="product-desc">Pintura del volcán Cotopaxi con estilo naïf, representando la relación del pueblo con el paisaje andino ecuatoriano.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>42.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Cotopaxi Animado">Ver</a>
         </div>
       </div>
@@ -1264,6 +1275,7 @@
         <h3 class="product-name">Cuadro sobre Tronco Natural</h3>
         <p class="product-desc">Escenas andinas pintadas sobre madera con base de tronco natural. Cada pieza es única por la forma del tronco.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>35.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Cuadro sobre Tronco Natural">Ver</a>
         </div>
       </div>
@@ -1279,6 +1291,7 @@
         <h3 class="product-name">Bateas Pintadas de Tigua</h3>
         <p class="product-desc">Bateas decorativas pintadas a mano con escenas de vida andina y flora nativa. Arte naïf de Tigua, Cotopaxi.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>28.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Bateas Pintadas de Tigua">Ver</a>
         </div>
       </div>
@@ -1310,6 +1323,7 @@
         <h3 class="product-name">Cerámica Otavaleña Tradicional</h3>
         <p class="product-desc">Piezas pintadas a mano con motivos andinos por artesanos de Otavalo usando pigmentos naturales.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>22.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Cerámica Otavaleña Tradicional">Ver</a>
         </div>
       </div>
@@ -1325,6 +1339,7 @@
         <h3 class="product-name">Vasijas Cuencanas</h3>
         <p class="product-desc">Vasijas elaboradas con técnicas coloniales de Cuenca, esmaltadas y pintadas a mano con diseños floreados.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>18.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Vasijas Cuencanas">Ver</a>
         </div>
       </div>
@@ -1339,6 +1354,7 @@
         <h3 class="product-name">Cerámica de Imbabura</h3>
         <p class="product-desc">Cerámica característica de la provincia de Imbabura con pigmentos naturales y formas tradicionales.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>15.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Cerámica de Imbabura">Ver</a>
         </div>
       </div>
@@ -1354,6 +1370,7 @@
         <h3 class="product-name">Figura Saraguro en Cerámica</h3>
         <p class="product-desc">Figura del hombre Saraguro en cerámica pintada a mano con el atuendo negro tradicional de la cultura.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>25.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Figura Saraguro en Cerámica">Ver</a>
         </div>
       </div>
@@ -1368,6 +1385,7 @@
         <h3 class="product-name">Figura Riobambeña</h3>
         <p class="product-desc">Figura de hombre riobambeño en cerámica pintada con atuendo festivo típico de la Sierra central.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>20.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Figura Riobambeña">Ver</a>
         </div>
       </div>
@@ -1383,6 +1401,7 @@
         <h3 class="product-name">Pocillos de Barro</h3>
         <p class="product-desc">Pocillos artesanales de barro cocido a leña con acabado natural. Perfectos para café o infusiones.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>12.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Pocillos de Barro">Ver</a>
         </div>
       </div>
@@ -1397,6 +1416,7 @@
         <h3 class="product-name">Vasijas de Barro Grande</h3>
         <p class="product-desc">Vasijas de gran formato en barro natural, ideales para decoración o almacenamiento artesanal.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>30.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Vasijas de Barro Grande">Ver</a>
         </div>
       </div>
@@ -1412,6 +1432,7 @@
         <h3 class="product-name">Cuadros Guayasamín en Barro</h3>
         <p class="product-desc">Reproducciones artesanales en barro de obras inspiradas en Oswaldo Guayasamín, maestro de la pintura ecuatoriana.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>45.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Cuadros Guayasamín en Barro">Ver</a>
         </div>
       </div>
@@ -1427,6 +1448,7 @@
         <h3 class="product-name">Cerámica Ponchos Otavalo</h3>
         <p class="product-desc">Gran pieza de cerámica otavaleña con representación de ponchos y tejidos andinos en alto relieve pintado a mano.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>35.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Cerámica Ponchos Otavalo">Ver</a>
         </div>
       </div>
@@ -1441,6 +1463,7 @@
         <h3 class="product-name">Cerámica Saraguro</h3>
         <p class="product-desc">Figura cerámica de la cultura Saraguro, elaborada con arcilla negra y decorada con simbologías ancestrales.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>28.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Cerámica Saraguro">Ver</a>
         </div>
       </div>
@@ -1472,6 +1495,7 @@
         <h3 class="product-name">Carteras y Billeteras Tigua</h3>
         <p class="product-desc">Carteras y billeteras de cuero genuino con diseños pintados a mano del arte Tigua. Funcionales y únicas.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>45.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Carteras y Billeteras Tigua">Ver</a>
         </div>
       </div>
@@ -1487,6 +1511,7 @@
         <h3 class="product-name">Porta Llaves de Cuero</h3>
         <p class="product-desc">Porta llaves artesanal en cuero genuino con grabado de motivos andinos, cosido a mano.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>12.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Porta Llaves de Cuero">Ver</a>
         </div>
       </div>
@@ -1501,6 +1526,7 @@
         <h3 class="product-name">Porta Llaves Cuero Clásico</h3>
         <p class="product-desc">Porta llaves en cuero natural con corte artesanal y acabado al aceite, diseño minimalista andino.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>10.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Porta Llaves Cuero Clásico">Ver</a>
         </div>
       </div>
@@ -1532,6 +1558,7 @@
         <h3 class="product-name">Máscaras Ecuatorianas en Madera</h3>
         <p class="product-desc">Colección de máscaras ceremoniales talladas en madera de cedro y pintadas a mano con colores vivos.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>32.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Máscaras Ecuatorianas en Madera">Ver</a>
         </div>
       </div>
@@ -1547,6 +1574,7 @@
         <h3 class="product-name">Animales de Galápagos en Madera</h3>
         <p class="product-desc">Figuras talladas en madera de animales endémicos de Galápagos: tortugas, iguanas y piqueros de patas azules.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>18.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Animales de Galápagos en Madera">Ver</a>
         </div>
       </div>
@@ -1561,6 +1589,7 @@
         <h3 class="product-name">Sol y Luna en Cedro</h3>
         <p class="product-desc">Dúo decorativo tallado en madera de cedro con acabado natural, símbolo de la cosmovisión andina.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>22.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Sol y Luna en Cedro">Ver</a>
         </div>
       </div>
@@ -1576,6 +1605,7 @@
         <h3 class="product-name">Carros Tradicionales en Madera</h3>
         <p class="product-desc">Réplicas artesanales de vehículos clásicos ecuatorianos tallados y pintados a mano en madera de cedro.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>25.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Carros Tradicionales en Madera">Ver</a>
         </div>
       </div>
@@ -1590,6 +1620,7 @@
         <h3 class="product-name">Fachadas Coloniales en Madera</h3>
         <p class="product-desc">Miniaturas de casas coloniales quiteñas talladas en madera, con detalles pintados a mano.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>28.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Fachadas Coloniales en Madera">Ver</a>
         </div>
       </div>
@@ -1604,6 +1635,7 @@
         <h3 class="product-name">Avión Artesanal en Madera</h3>
         <p class="product-desc">Avión decorativo tallado y pintado a mano en madera, pieza coleccionable elaborada por artesanos quiteños.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>20.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Avión Artesanal en Madera">Ver</a>
         </div>
       </div>
@@ -1618,6 +1650,7 @@
         <h3 class="product-name">Nacimiento Andino Miniatura</h3>
         <p class="product-desc">Nacimiento en miniatura pintado a mano con técnica Tigua. Figuras de la natividad vestidas con trajes andinos.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>15.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Nacimiento Andino Miniatura">Ver</a>
         </div>
       </div>
@@ -1633,6 +1666,7 @@
         <h3 class="product-name">Mitad del Mundo en Mármol</h3>
         <p class="product-desc">Réplica del monumento Mitad del Mundo tallada en mármol oscuro con acabado pulido a mano, edición limitada.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>65.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Mitad del Mundo en Mármol">Ver</a>
         </div>
       </div>
@@ -1648,6 +1682,7 @@
         <h3 class="product-name">Avión Artesanal — Serie 2</h3>
         <p class="product-desc">Segunda versión del avión decorativo en madera pintado a mano, con colores de la bandera ecuatoriana.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>22.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Avión Artesanal Serie 2">Ver</a>
         </div>
       </div>
@@ -1662,6 +1697,7 @@
         <h3 class="product-name">Cruces Tigua en Madera</h3>
         <p class="product-desc">Pequeñas cruces talladas y pintadas con arte Tigua. Motivos andinos y escenas de la vida comunitaria.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>8.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Cruces Tigua en Madera">Ver</a>
         </div>
       </div>
@@ -1676,6 +1712,7 @@
         <h3 class="product-name">Nacimiento Andino — Serie 2</h3>
         <p class="product-desc">Variante del nacimiento en miniatura con técnica Tigua y paleta de colores tierra de la Sierra ecuatoriana.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>15.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Nacimiento Andino Serie 2">Ver</a>
         </div>
       </div>
@@ -1691,6 +1728,7 @@
         <h3 class="product-name">Nacimiento Caja de Fósforo</h3>
         <p class="product-desc">Nacimiento en miniatura extrema dentro de caja de fósforos, delicado trabajo artesanal de figuras pintadas a mano.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>10.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Nacimiento Caja de Fósforo">Ver</a>
         </div>
       </div>
@@ -1705,6 +1743,7 @@
         <h3 class="product-name">Nacimiento Chimborazo</h3>
         <p class="product-desc">Nacimiento andino con el volcán Chimborazo de fondo, técnica Tigua con figuras vestidas con trajes de la Sierra.</p>
         <div class="product-footer">
+          <div class="product-price"><span class="currency">$</span>18.00</div>
           <a href="#" class="product-detail-link" aria-label="Ver Nacimiento Chimborazo">Ver</a>
         </div>
       </div>
