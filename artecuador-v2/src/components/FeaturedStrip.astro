@@ -1,0 +1,28 @@
+---
+import { clientImages } from '../data/products';
+---
+
+<div class="featured-strip" id="origen">
+  <div class="featured-content">
+    <p class="featured-label">Artesanía de origen</p>
+    <h2 class="featured-title">Hecho a mano,<br /><em>con alma andina</em></h2>
+    <p class="featured-desc">
+      Cada pieza de nuestra colección nace del conocimiento ancestral de comunidades indígenas
+      del Ecuador. Trabajamos directamente con más de 200 artesanos certificados, garantizando
+      comercio justo y preservación de técnicas milenarias.
+    </p>
+  </div>
+  <div class="featured-img-area" id="featMosaic">
+    {Array.from({ length: 9 }).map((_, i) => (
+      <div class={`feat-cell feat-img-cell mc-${['r','y','g','b','r','y','g','b','r'][i]}`}
+           style={i === 4 ? 'background:#2a2a2a' : undefined}>
+        <img
+          src={`/media/clients/${clientImages[i % clientImages.length]}`}
+          alt="Cliente ArtEcuador"
+          loading="lazy"
+          style="opacity:1"
+        />
+      </div>
+    ))}
+  </div>
+</div>

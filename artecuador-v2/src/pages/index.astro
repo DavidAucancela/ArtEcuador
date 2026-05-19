@@ -1,0 +1,314 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import FeaturedStrip from '../components/FeaturedStrip.astro';
+import ProductSection from '../components/ProductSection.astro';
+import ContactForm from '../components/ContactForm.astro';
+import Footer from '../components/Footer.astro';
+import { sections } from '../data/products';
+---
+
+<BaseLayout>
+  <Nav />
+
+  <!-- ── Cover ───────────────────────────────────────────────── -->
+  <section class="cover" id="portada">
+    <div class="cover-left">
+      <h1 class="cover-brand">ArtEcuador</h1>
+      <h4 class="cover-title">Hecho a mano</h4>
+      <p class="cover-subtitle">Raíces vivas, manos maestras</p>
+      <p class="cover-desc">
+        Una selección de artesanías auténticas del Ecuador, elaboradas por
+        Artesanos de Comunidades Andinas y Costeras. Cada pieza lleva consigo siglos
+        de tradición y la identidad viva de nuestros pueblos.
+      </p>
+      <div class="cover-actions">
+        <a href="#cuadros" class="btn-primary">Ver Catálogo</a>
+      </div>
+    </div>
+    <div class="cover-right">
+      <div class="cover-mosaic" id="mosaico"></div>
+      <div class="cover-logo-overlay">
+        <img src="/media/logoFinal.png" alt="ArtEcuador" class="cover-logo-big" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Color band ──────────────────────────────────────────── -->
+  <div class="color-band"></div>
+
+  <!-- ── Featured strip ─────────────────────────────────────── -->
+  <FeaturedStrip />
+
+  <!-- ── Product sections ────────────────────────────────────── -->
+  {sections.map((s) => <ProductSection section={s} />)}
+
+  <!-- ── Contact ─────────────────────────────────────────────── -->
+  <ContactForm />
+
+  <!-- ── Product modal ───────────────────────────────────────── -->
+  <div class="modal-overlay" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalName">
+    <div class="modal">
+      <button class="modal-close" id="modalClose" aria-label="Cerrar">
+        <svg viewBox="0 0 14 14" fill="none">
+          <path d="M1 1l12 12M13 1L1 13" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="modal-img-side" id="modalImgSide"></div>
+      <div class="modal-info-side">
+        <span class="modal-badge" id="modalBadge"></span>
+        <p class="modal-category" id="modalCategory"></p>
+        <h2 class="modal-name" id="modalName"></h2>
+        <p class="modal-desc" id="modalDesc"></p>
+        <a href="#contactar" class="btn-primary" id="modalCTA">Consultar precio</a>
+      </div>
+    </div>
+  </div>
+
+  <Footer />
+</BaseLayout>
+
+<script>
+  /* ── Cover mosaic ──────────────────────────────────────────── */
+  (function() {
+    const pattern = [
+      'r,y,g,b,p,r,y,g,b,p,r,y',
+      'y,w,w,w,w,w,w,w,w,w,w,g',
+      'g,w,r,y,w,b,b,w,y,r,w,b',
+      'b,w,y,r,r,w,w,r,r,y,w,p',
+      'p,w,w,r,y,g,g,y,r,w,w,r',
+      'r,w,w,w,g,r,r,g,w,w,w,y',
+      'y,w,w,w,g,r,r,g,w,w,w,g',
+      'g,w,w,r,y,g,g,y,r,w,w,b',
+      'b,w,y,r,r,w,w,r,r,y,w,p',
+      'p,w,r,y,w,b,b,w,y,r,w,r',
+      'r,w,w,w,w,w,w,w,w,w,w,y',
+      'y,g,b,p,r,y,g,b,p,r,y,g',
+      'g,b,p,r,y,g,b,p,r,y,g,b',
+      'b,p,r,y,g,b,p,r,y,g,b,p',
+    ];
+    const map: Record<string, string> = { r:'mc-r', y:'mc-y', g:'mc-g', b:'mc-b', p:'mc-p', w:'mc-w', l:'mc-lg', m:'mc-mg' };
+    const neutralClasses = new Set(['mc-w','mc-lg','mc-mg']);
+    const grid = document.getElementById('mosaico');
+    if (!grid) return;
+    const coloredCells: HTMLElement[] = [];
+    const STEP = 32;
+
+    pattern.forEach((rowStr, rowIdx) => {
+      rowStr.split(',').forEach((key, colIdx) => {
+        const cell = document.createElement('div');
+        const cls = map[key] || 'mc-w';
+        cell.className = 'mosaic-cell ' + cls;
+        cell.style.setProperty('--d', (colIdx + rowIdx) * STEP + 'ms');
+        if (!neutralClasses.has(cls)) {
+          cell.style.setProperty('--wt', (2.2 + Math.random() * 1.2).toFixed(2) + 's');
+          cell.style.setProperty('--wd', Math.floor(Math.random() * 2200) + 'ms');
+          coloredCells.push(cell);
+        }
+        grid.appendChild(cell);
+      });
+    });
+
+    const waveStart = (12 - 1 + 14 - 1) * STEP + 500;
+    setTimeout(() => {
+      coloredCells.forEach(c => { c.style.opacity = '1'; c.classList.add('waving'); });
+    }, waveStart);
+    setTimeout(() => {
+      setInterval(() => {
+        const picks = Math.floor(Math.random() * 2) + 2;
+        for (let i = 0; i < picks; i++) {
+          const cell = coloredCells[Math.floor(Math.random() * coloredCells.length)];
+          if (!cell || cell.classList.contains('sparking')) continue;
+          cell.classList.remove('waving');
+          cell.classList.add('sparking');
+          setTimeout(() => { cell.classList.remove('sparking'); cell.classList.add('waving'); }, 720);
+        }
+      }, 1300);
+    }, waveStart + 400);
+  })();
+
+  /* ── Nav dropdown ──────────────────────────────────────────── */
+  (function() {
+    const dropdown = document.getElementById('navDropdown');
+    const toggle   = document.getElementById('navDropdownBtn');
+    if (!dropdown || !toggle) return;
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target as Node)) {
+        dropdown.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+    dropdown.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        dropdown.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+
+  /* ── Hamburger ─────────────────────────────────────────────── */
+  (function() {
+    const btn = document.getElementById('hamburger');
+    const nav = document.getElementById('mobileNav');
+    const cls = document.getElementById('mobileNavClose');
+    if (!btn || !nav || !cls) return;
+    const closeMenu = () => {
+      btn.classList.remove('active');
+      nav.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+    btn.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('open');
+      btn.classList.toggle('active', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+    cls.addEventListener('click', closeMenu);
+    nav.querySelectorAll('a').forEach(l => l.addEventListener('click', closeMenu));
+  })();
+
+  /* ── Product modal ─────────────────────────────────────────── */
+  (function() {
+    const overlay  = document.getElementById('productModal');
+    const closeBtn = document.getElementById('modalClose');
+    const modalCTA = document.getElementById('modalCTA');
+    if (!overlay || !closeBtn || !modalCTA) return;
+
+    const openModal = (card: Element) => {
+      const img      = card.querySelector('.product-img-real') as HTMLImageElement | null;
+      const badge    = card.querySelector('.product-badge');
+      const category = (card.querySelector('.product-category') as HTMLElement).textContent ?? '';
+      const name     = (card.querySelector('.product-name') as HTMLElement).textContent ?? '';
+      const desc     = (card.querySelector('.product-desc') as HTMLElement).textContent ?? '';
+      const imgSide  = document.getElementById('modalImgSide')!;
+
+      imgSide.innerHTML = img
+        ? `<img src="${img.src}" alt="${name}" />`
+        : '<div style="background:#F7F5F0;"></div>';
+
+      const modalBadge = document.getElementById('modalBadge') as HTMLElement;
+      if (badge) {
+        modalBadge.textContent = badge.textContent;
+        modalBadge.className = 'modal-badge ' + [...badge.classList].slice(1).join(' ');
+        modalBadge.style.display = 'inline-block';
+      } else {
+        modalBadge.style.display = 'none';
+      }
+      (document.getElementById('modalCategory') as HTMLElement).textContent = category;
+      (document.getElementById('modalName') as HTMLElement).textContent     = name;
+      (document.getElementById('modalDesc') as HTMLElement).textContent     = desc;
+
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      (closeBtn as HTMLElement).focus();
+    };
+
+    const closeModal = () => {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    document.querySelectorAll('.product-detail-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal((e.currentTarget as Element).closest('.product-card')!);
+      });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeModal(); return; }
+      if (e.key === 'Tab' && overlay.classList.contains('open')) {
+        const focusable = overlay.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const first = focusable[0] as HTMLElement;
+        const last  = focusable[focusable.length - 1] as HTMLElement;
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    modalCTA.addEventListener('click', closeModal);
+  })();
+
+  /* ── Featured strip cycle ──────────────────────────────────── */
+  (function() {
+    const imgs = [
+      '/media/clients/clientes-1.jpg',
+      '/media/clients/clientes-2.jpg',
+      '/media/clients/clientes-3.jpg',
+      '/media/clients/dueno.png',
+      '/media/clients/dueno-2.png',
+      '/media/clients/clientes-4.png',
+      '/media/clients/recomendacion.png',
+      '/media/clients/trabajpos.png',
+    ];
+    const cells = document.querySelectorAll('#featMosaic .feat-img-cell img');
+    const SHOW = 2200, FADE = 600;
+
+    const randIdx = (exclude: number) => {
+      let idx: number;
+      do { idx = Math.floor(Math.random() * imgs.length); } while (idx === exclude && imgs.length > 1);
+      return idx;
+    };
+
+    const runCycle = (img: HTMLImageElement) => {
+      setTimeout(() => {
+        img.style.opacity = '1';
+        setTimeout(() => {
+          img.style.opacity = '0';
+          setTimeout(() => {
+            const next = randIdx(parseInt(img.dataset.idx ?? '-1'));
+            img.dataset.idx = String(next);
+            img.src = imgs[next];
+            runCycle(img);
+          }, FADE);
+        }, FADE + SHOW);
+      }, SHOW);
+    };
+
+    cells.forEach((img, i) => {
+      const el = img as HTMLImageElement;
+      const idx = randIdx(-1);
+      el.dataset.idx = String(idx);
+      setTimeout(() => runCycle(el), i * 400);
+    });
+  })();
+
+  /* ── Contact form → WhatsApp ───────────────────────────────── */
+  (function() {
+    const form = document.getElementById('contactForm') as HTMLFormElement | null;
+    if (!form) return;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = (id: string) => ((document.getElementById(id) as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement)?.value || '').trim();
+      const nombre = v('f-name'), email = v('f-email'), phone = v('f-phone');
+      const pais = v('f-country'), tipo = v('f-tipo'), msg = v('f-msg');
+      const success = document.getElementById('form-success');
+
+      if (!nombre) { (document.getElementById('f-name') as HTMLElement).focus(); return; }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        (document.getElementById('f-email') as HTMLElement).focus(); return;
+      }
+      if (!msg) { (document.getElementById('f-msg') as HTMLElement).focus(); return; }
+
+      const lines = [
+        'Hola, me pongo en contacto desde *ArtEcuador*:',
+        `👤 *Nombre:* ${nombre}`,
+        `✉️ *Email:* ${email}`,
+        ...(phone ? [`📞 *Teléfono:* ${phone}`] : []),
+        ...(pais  ? [`🌎 *País:* ${pais}`] : []),
+        ...(tipo  ? [`📋 *Consulta:* ${tipo}`] : []),
+        `\n${msg}`,
+      ];
+      window.open('https://wa.me/593999006925?text=' + encodeURIComponent(lines.join('\n')), '_blank');
+      form.reset();
+      if (success) { success.style.display = 'block'; setTimeout(() => { success.style.display = 'none'; }, 6000); }
+    });
+  })();
+</script>

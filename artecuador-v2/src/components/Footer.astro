@@ -1,0 +1,43 @@
+---
+import { sections } from '../data/products';
+---
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#portada" class="footer-logo-link">
+        <img src="/media/logoFinal.png" alt="ArtEcuador" class="footer-logo" />
+      </a>
+      <p class="footer-tagline">Artesanías ecuatorianas auténticas, hechas a mano por comunidades andinas.</p>
+      <div class="footer-dots">
+        <span class="fd-r"></span>
+        <span class="fd-y"></span>
+        <span class="fd-g"></span>
+      </div>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-col-title">Colecciones</p>
+      <ul class="footer-links">
+        {sections.map((s) => (
+          <li><a href={`#${s.id}`}>{s.title} {s.titleEm}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-col-title">Contacto</p>
+      <ul class="footer-links">
+        <li><a href="mailto:quitoarte@gmail.com">quitoarte@gmail.com</a></li>
+        <li><a href="https://wa.me/593999006925">+593 99 900 6925</a></li>
+        <li><span>La Mariscal Local 103, Quito</span></li>
+        <li><a href="https://instagram.com/artecuador_quito" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://facebook.com/artecuador" target="_blank" rel="noopener">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 ArtEcuador · Hecho con orgullo en el Ecuador</p>
+  </div>
+</footer>
