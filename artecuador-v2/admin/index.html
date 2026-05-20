@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArtEcuador — Panel Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:      #D7262E;
+      --red-dark: #b01e25;
+      --navy:     #1A1A2E;
+      --navy-l:   #24243e;
+      --bg:       #F4F5F7;
+      --white:    #FFFFFF;
+      --border:   #E2E4E8;
+      --text:     #1A1A2E;
+      --muted:    #6B7280;
+      --green:    #22c55e;
+      --orange:   #f59e0b;
+      --radius:   8px;
+      --shadow:   0 1px 4px rgba(0,0,0,0.08);
+      --shadow-lg:0 8px 32px rgba(0,0,0,0.14);
+    }
+
+    html, body { height: 100%; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text); background: var(--bg); }
+
+    /* ── LAYOUT ── */
+    .app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+    header {
+      display: flex; align-items: center; gap: 16px;
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 56px; flex-shrink: 0; z-index: 10;
+    }
+    header .logo { font-size: 18px; font-weight: 700; color: var(--red); letter-spacing: -0.3px; }
+    header .logo span { color: var(--navy); }
+    header .spacer { flex: 1; }
+    .save-status { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+    .save-status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+    .save-status .dot.dirty { background: var(--orange); }
+
+    .body { display: flex; flex: 1; overflow: hidden; }
+
+    /* ── SIDEBAR ── */
+    aside {
+      width: 240px; background: var(--navy); color: #fff;
+      display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto;
+    }
+    .sidebar-top { padding: 20px 16px 0; }
+    .stats-box {
+      background: rgba(255,255,255,0.07); border-radius: var(--radius);
+      padding: 12px; margin-bottom: 20px;
+    }
+    .stats-box h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; color: rgba(255,255,255,0.5); margin-bottom: 10px; }
+    .stats-row { display: flex; gap: 4px; }
+    .stat-pill {
+      flex: 1; background: rgba(255,255,255,0.1); border-radius: 6px;
+      padding: 6px 4px; text-align: center;
+    }
+    .stat-pill .n { display: block; font-size: 18px; font-weight: 700; line-height: 1; }
+    .stat-pill .l { display: block; font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+    .stat-pill.active .n { color: var(--green); }
+    .stat-pill.inactive .n { color: #f87171; }
+
+    .section-label-header {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.4); padding: 0 16px 8px;
+    }
+    .section-list { list-style: none; padding: 0 8px; }
+    .section-list li {
+      display: flex; align-items: center; gap: 8px; padding: 9px 8px;
+      border-radius: var(--radius); cursor: pointer; transition: background 0.15s;
+      user-select: none;
+    }
+    .section-list li:hover { background: rgba(255,255,255,0.08); }
+    .section-list li.active { background: var(--red); }
+    .section-list li .sec-name { flex: 1; font-weight: 500; font-size: 13px; }
+    .section-list li .count-badge {
+      background: rgba(255,255,255,0.18); color: #fff; font-size: 11px;
+      font-weight: 600; padding: 2px 7px; border-radius: 20px; min-width: 24px; text-align: center;
+    }
+    .section-list li.active .count-badge { background: rgba(255,255,255,0.3); }
+    .section-list li .edit-sec-btn {
+      background: none; border: none; color: rgba(255,255,255,0.45); cursor: pointer;
+      padding: 2px 4px; border-radius: 4px; font-size: 14px; line-height: 1;
+      transition: color 0.15s;
+    }
+    .section-list li:hover .edit-sec-btn,
+    .section-list li.active .edit-sec-btn { color: rgba(255,255,255,0.85); }
+
+    .sidebar-bottom { padding: 12px 8px; margin-top: auto; }
+    .btn-add-section {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      width: 100%; padding: 9px 12px; border-radius: var(--radius); border: none;
+      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.75);
+      font-size: 13px; font-weight: 500; cursor: pointer; transition: background 0.15s;
+    }
+    .btn-add-section:hover { background: rgba(255,255,255,0.14); color: #fff; }
+
+    /* ── MAIN ── */
+    main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    .main-header {
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: 16px 24px; display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+    }
+    .main-header h2 { font-size: 18px; font-weight: 700; }
+    .main-header h2 em { color: var(--muted); font-style: normal; font-weight: 400; }
+    .main-header .section-label-badge {
+      font-size: 11px; color: var(--muted); background: var(--bg);
+      padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border);
+    }
+    .main-header .spacer { flex: 1; }
+    .btn-primary {
+      background: var(--red); color: #fff; border: none; border-radius: var(--radius);
+      padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--red-dark); }
+    .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+
+    .product-list { flex: 1; overflow-y: auto; padding: 20px 24px; }
+
+    /* ── PRODUCT ROW ── */
+    .product-row {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 10px 14px; margin-bottom: 8px; cursor: default;
+      transition: box-shadow 0.15s, opacity 0.15s;
+    }
+    .product-row:hover { box-shadow: var(--shadow); }
+    .product-row.dragging { opacity: 0.4; }
+    .product-row.drag-over { border: 2px dashed var(--red); background: #fff5f5; }
+
+    .drag-handle {
+      color: var(--border); font-size: 16px; cursor: grab; flex-shrink: 0;
+      user-select: none; line-height: 1; padding: 0 2px;
+    }
+    .drag-handle:active { cursor: grabbing; }
+
+    .product-thumb {
+      width: 44px; height: 44px; border-radius: 6px; object-fit: cover;
+      background: var(--bg); flex-shrink: 0; border: 1px solid var(--border);
+    }
+    .product-thumb-placeholder {
+      width: 44px; height: 44px; border-radius: 6px; background: var(--bg);
+      border: 1px solid var(--border); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 18px;
+    }
+
+    .product-info { flex: 1; min-width: 0; }
+    .product-info .pname { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .product-info .pcat { font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+    .product-price { font-weight: 700; color: var(--red); font-size: 13px; min-width: 56px; text-align: right; }
+
+    .badge-chip {
+      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px;
+      min-width: 60px; text-align: center;
+    }
+    .badge-chip.feat { background: #EFF6FF; color: #1D4ED8; }
+    .badge-chip.new  { background: #F0FDF4; color: #15803D; }
+    .badge-chip.limit{ background: #F5F3FF; color: #6D28D9; }
+    .badge-chip.none { background: transparent; color: transparent; }
+
+    /* Toggle switch */
+    .toggle { position: relative; width: 36px; height: 20px; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-slider {
+      position: absolute; inset: 0; border-radius: 20px; background: #CBD5E0;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%;
+      background: #fff; top: 3px; left: 3px; transition: transform 0.2s;
+    }
+    .toggle input:checked + .toggle-slider { background: var(--green); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(16px); }
+
+    .row-actions { display: flex; gap: 4px; }
+    .icon-btn {
+      background: none; border: none; cursor: pointer; padding: 6px;
+      border-radius: 6px; font-size: 14px; color: var(--muted); transition: color 0.15s, background 0.15s;
+    }
+    .icon-btn:hover { background: var(--bg); color: var(--text); }
+    .icon-btn.delete:hover { color: #ef4444; }
+
+    /* Delete confirm row */
+    .confirm-row {
+      display: flex; align-items: center; gap: 10px;
+      background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: var(--radius);
+      padding: 10px 14px; margin-bottom: 8px;
+    }
+    .confirm-row .confirm-text { flex: 1; font-size: 13px; color: #7F1D1D; }
+    .confirm-row .confirm-text strong { font-weight: 600; }
+    .btn-confirm-del {
+      background: #ef4444; color: #fff; border: none; border-radius: 6px;
+      padding: 5px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .btn-cancel-del {
+      background: none; color: var(--muted); border: 1px solid var(--border); border-radius: 6px;
+      padding: 5px 12px; font-size: 12px; cursor: pointer;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center; padding: 60px 20px; color: var(--muted);
+    }
+    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state p { font-size: 15px; }
+
+    /* ── MODALS ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; padding: 20px;
+      animation: fadeIn 0.15s ease;
+    }
+    .modal-overlay.hidden { display: none; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-box {
+      background: var(--white); border-radius: 12px; width: 100%; max-width: 620px;
+      max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg);
+      animation: slideUp 0.18s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    .modal-box.small { max-width: 440px; }
+
+    .modal-header {
+      display: flex; align-items: center; padding: 20px 24px 0;
+      border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 20px;
+    }
+    .modal-header h3 { font-size: 17px; font-weight: 700; flex: 1; }
+    .modal-close {
+      background: none; border: none; cursor: pointer; font-size: 20px;
+      color: var(--muted); padding: 2px 6px; border-radius: 4px; line-height: 1;
+    }
+    .modal-close:hover { color: var(--text); background: var(--bg); }
+
+    .modal-body { padding: 0 24px 20px; }
+
+    .img-preview-wrap {
+      display: flex; justify-content: center; margin-bottom: 20px;
+    }
+    .img-preview {
+      width: 120px; height: 120px; border-radius: 10px; object-fit: cover;
+      border: 2px solid var(--border); background: var(--bg);
+    }
+    .img-preview-placeholder {
+      width: 120px; height: 120px; border-radius: 10px;
+      border: 2px dashed var(--border); background: var(--bg);
+      display: flex; align-items: center; justify-content: center; font-size: 36px; color: var(--muted);
+    }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-full { grid-column: 1 / -1; }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-group label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 8px 10px; font-size: 13px; font-family: inherit; color: var(--text);
+      background: var(--white); transition: border-color 0.15s;
+      outline: none;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--red); box-shadow: 0 0 0 2px rgba(215,38,46,0.1); }
+    .form-group textarea { resize: vertical; min-height: 72px; }
+    .form-group.has-error input,
+    .form-group.has-error textarea { border-color: #ef4444; }
+    .error-msg { font-size: 11px; color: #ef4444; margin-top: 2px; }
+
+    .price-wrap { position: relative; }
+    .price-wrap .prefix {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      color: var(--muted); font-weight: 600; font-size: 13px; pointer-events: none;
+    }
+    .price-wrap input { padding-left: 22px; }
+
+    .toggle-row { display: flex; align-items: center; gap: 10px; padding: 4px 0; }
+    .toggle-row label.toggle-label { font-size: 13px; font-weight: 500; cursor: pointer; }
+
+    .modal-footer {
+      display: flex; gap: 10px; justify-content: flex-end;
+      padding: 16px 24px; border-top: 1px solid var(--border); margin-top: 4px;
+    }
+    .btn-secondary {
+      background: none; border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 8px 16px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text);
+      transition: background 0.15s;
+    }
+    .btn-secondary:hover { background: var(--bg); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 2000;
+      background: #1A1A2E; color: #fff; padding: 12px 20px;
+      border-radius: var(--radius); font-size: 13px; font-weight: 500;
+      display: flex; align-items: center; gap: 8px;
+      box-shadow: var(--shadow-lg); animation: toastIn 0.2s ease;
+      pointer-events: none;
+    }
+    .toast.hidden { display: none; }
+    @keyframes toastIn { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* ── SAVE BUTTON in header ── */
+    #btnSave {
+      background: var(--red); color: #fff; border: none; border-radius: var(--radius);
+      padding: 7px 18px; font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background 0.15s; display: flex; align-items: center; gap: 6px;
+    }
+    #btnSave:hover:not(:disabled) { background: var(--red-dark); }
+    #btnSave:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">Art<span>Ecuador</span> <span style="font-size:12px;font-weight:400;color:var(--muted);margin-left:4px;">Admin</span></div>
+    <div class="spacer"></div>
+    <div class="save-status" id="saveStatus">
+      <span class="dot" id="statusDot"></span>
+      <span id="statusText">Guardado</span>
+    </div>
+    <button id="btnSave" disabled>Guardar cambios</button>
+  </header>
+
+  <div class="body">
+    <!-- SIDEBAR -->
+    <aside>
+      <div class="sidebar-top">
+        <div class="stats-box">
+          <h4>Estadísticas</h4>
+          <div class="stats-row">
+            <div class="stat-pill">
+              <span class="n" id="statTotal">0</span>
+              <span class="l">Total</span>
+            </div>
+            <div class="stat-pill active">
+              <span class="n" id="statActive">0</span>
+              <span class="l">Activos</span>
+            </div>
+            <div class="stat-pill inactive">
+              <span class="n" id="statInactive">0</span>
+              <span class="l">Inactivos</span>
+            </div>
+          </div>
+        </div>
+        <div class="section-label-header">Colecciones</div>
+        <ul class="section-list" id="sectionList"></ul>
+      </div>
+      <div class="sidebar-bottom">
+        <button class="btn-add-section" id="btnAddSection">
+          <span style="font-size:16px;line-height:1;">+</span> Nueva sección
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+      <div class="main-header" id="mainHeader">
+        <div>
+          <div class="section-label-badge" id="mainLabel"></div>
+          <h2 id="mainTitle" style="margin-top:4px;"></h2>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn-primary" id="btnAddProduct">
+          <span style="font-size:16px;line-height:1;">+</span> Agregar producto
+        </button>
+      </div>
+      <div class="product-list" id="productList"></div>
+    </main>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay hidden" id="productModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="productModalTitle">Editar producto</h3>
+      <button class="modal-close" id="btnCloseProductModal" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="img-preview-wrap" id="imgPreviewWrap">
+        <img class="img-preview hidden" id="imgPreview" alt="Preview" />
+        <div class="img-preview-placeholder" id="imgPlaceholder">&#128247;</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group form-full" id="fgName">
+          <label for="fName">Nombre *</label>
+          <input type="text" id="fName" placeholder="Nombre del producto" />
+          <span class="error-msg hidden" id="errName">El nombre es requerido</span>
+        </div>
+        <div class="form-group" id="fgSlug">
+          <label for="fSlug">Slug *</label>
+          <input type="text" id="fSlug" placeholder="mi-producto" />
+          <span class="error-msg hidden" id="errSlug">El slug es requerido</span>
+        </div>
+        <div class="form-group">
+          <label for="fCategory">Categoría</label>
+          <input type="text" id="fCategory" placeholder="Ej: Cuadros · Quito" />
+        </div>
+        <div class="form-group">
+          <label for="fPrice">Precio</label>
+          <div class="price-wrap">
+            <span class="prefix">$</span>
+            <input type="text" id="fPrice" placeholder="0.00" />
+          </div>
+        </div>
+        <div class="form-group form-full">
+          <label for="fDesc">Descripción</label>
+          <textarea id="fDesc" rows="3" placeholder="Descripción del producto..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="fImg">Imagen (nombre de archivo)</label>
+          <input type="text" id="fImg" placeholder="mi-imagen.png" />
+        </div>
+        <div class="form-group">
+          <label for="fAlt">Alt text</label>
+          <input type="text" id="fAlt" placeholder="Descripción de imagen" />
+        </div>
+        <div class="form-group">
+          <label for="fBadge">Badge</label>
+          <select id="fBadge">
+            <option value="">Sin badge</option>
+            <option value="feat">Destacado</option>
+            <option value="new">Nuevo</option>
+            <option value="limit">Limitado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="fSection">Mover a sección</label>
+          <select id="fSection"></select>
+        </div>
+        <div class="form-group form-full">
+          <div class="toggle-row">
+            <label class="toggle" for="fActive">
+              <input type="checkbox" id="fActive" checked />
+              <span class="toggle-slider"></span>
+            </label>
+            <label class="toggle-label" for="fActive">Activo (visible en el sitio)</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="btnCancelProduct">Cancelar</button>
+      <button class="btn-primary" id="btnSaveProduct">Guardar producto</button>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION MODAL -->
+<div class="modal-overlay hidden" id="sectionModal">
+  <div class="modal-box small">
+    <div class="modal-header">
+      <h3 id="sectionModalTitle">Editar sección</h3>
+      <button class="modal-close" id="btnCloseSectionModal" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group" id="fgSTitle">
+          <label for="fsTitle">Título principal *</label>
+          <input type="text" id="fsTitle" placeholder="Ej: Cuadros" />
+          <span class="error-msg hidden" id="errSTitle">Requerido</span>
+        </div>
+        <div class="form-group">
+          <label for="fsTitleEm">Título em (itálica)</label>
+          <input type="text" id="fsTitleEm" placeholder="Ej: y Pinturas" />
+        </div>
+        <div class="form-group" id="fgSId">
+          <label for="fsId">ID (ancla URL) *</label>
+          <input type="text" id="fsId" placeholder="Ej: cuadros" />
+          <span class="error-msg hidden" id="errSId">Requerido</span>
+        </div>
+        <div class="form-group">
+          <label for="fsLabel">Label</label>
+          <input type="text" id="fsLabel" placeholder="Ej: 01 — Colección" />
+        </div>
+        <div class="form-group form-full">
+          <div class="toggle-row">
+            <label class="toggle" for="fsAlt">
+              <input type="checkbox" id="fsAlt" />
+              <span class="toggle-slider"></span>
+            </label>
+            <label class="toggle-label" for="fsAlt">Fondo alternativo (gris suave)</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" id="btnCancelSection">Cancelar</button>
+      <button class="btn-primary" id="btnSaveSection">Guardar sección</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast hidden" id="toast"></div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+let state = { sections: [], clientImages: [] };
+let dirty = false;
+let activeSectionIdx = 0;
+let editingProduct = null;  // { sectionIdx, productIdx } or null (new)
+let editingSection  = null; // sectionIdx or null (new)
+let dragSrc = null;         // index of row being dragged
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+function toKebab(str) {
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function badgeLabel(badge) {
+  return { feat: 'Destacado', new: 'Nuevo', limit: 'Limitado' }[badge] || '';
+}
+
+// ── DIRTY ─────────────────────────────────────────────────────────────────
+function markDirty() {
+  dirty = true;
+  updateSaveStatus();
+}
+function markClean() {
+  dirty = false;
+  updateSaveStatus();
+}
+function updateSaveStatus() {
+  const dot  = document.getElementById('statusDot');
+  const txt  = document.getElementById('statusText');
+  const btn  = document.getElementById('btnSave');
+  if (dirty) {
+    dot.classList.add('dirty');
+    txt.textContent = 'Sin guardar';
+    btn.disabled = false;
+  } else {
+    dot.classList.remove('dirty');
+    txt.textContent = 'Guardado';
+    btn.disabled = true;
+  }
+}
+
+// ── DATA I/O ──────────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch('/api/products');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    state = await res.json();
+    activeSectionIdx = 0;
+    markClean();
+    render();
+  } catch (e) {
+    showToast('Error al cargar datos: ' + e.message);
+  }
+}
+
+async function saveData() {
+  const btn = document.getElementById('btnSave');
+  btn.disabled = true;
+  btn.textContent = 'Guardando…';
+  try {
+    const res = await fetch('/api/products', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state, null, 2),
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    markClean();
+    showToast('✓ Guardado correctamente');
+  } catch (e) {
+    showToast('Error al guardar: ' + e.message);
+    btn.disabled = false;
+  }
+  btn.textContent = 'Guardar cambios';
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.add('hidden'), 2500);
+}
+
+// ── STATS ─────────────────────────────────────────────────────────────────
+function calcStats() {
+  let total = 0, active = 0;
+  state.sections.forEach(s => s.products.forEach(p => {
+    total++;
+    if (p.active !== false) active++;
+  }));
+  return { total, active, inactive: total - active };
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function render() {
+  renderSidebar();
+  renderMain(activeSectionIdx);
+}
+
+function renderSidebar() {
+  const stats = calcStats();
+  document.getElementById('statTotal').textContent   = stats.total;
+  document.getElementById('statActive').textContent  = stats.active;
+  document.getElementById('statInactive').textContent= stats.inactive;
+
+  const ul = document.getElementById('sectionList');
+  ul.innerHTML = '';
+  state.sections.forEach((sec, idx) => {
+    const li = document.createElement('li');
+    li.className = idx === activeSectionIdx ? 'active' : '';
+    li.innerHTML = `
+      <span class="sec-name">${esc(sec.title)} <em style="opacity:.65;font-style:normal;">${esc(sec.titleEm)}</em></span>
+      <span class="count-badge">${sec.products.length}</span>
+      <button class="edit-sec-btn" data-idx="${idx}" title="Editar sección">&#9998;</button>
+    `;
+    li.addEventListener('click', (e) => {
+      if (e.target.closest('.edit-sec-btn')) return;
+      activeSectionIdx = idx;
+      render();
+    });
+    li.querySelector('.edit-sec-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      openSectionModal(idx);
+    });
+    ul.appendChild(li);
+  });
+}
+
+function renderMain(sectionIdx) {
+  const sec = state.sections[sectionIdx];
+  if (!sec) {
+    document.getElementById('mainLabel').textContent = '';
+    document.getElementById('mainTitle').innerHTML   = '';
+    document.getElementById('productList').innerHTML = '<div class="empty-state"><div class="icon">📂</div><p>No hay secciones. Crea una.</p></div>';
+    return;
+  }
+
+  document.getElementById('mainLabel').textContent  = sec.label || '';
+  document.getElementById('mainTitle').innerHTML    = `${esc(sec.title)} <em>${esc(sec.titleEm)}</em>`;
+
+  const listEl = document.getElementById('productList');
+  listEl.innerHTML = '';
+
+  if (sec.products.length === 0) {
+    listEl.innerHTML = '<div class="empty-state"><div class="icon">🛍️</div><p>Esta sección no tiene productos. Agrega uno.</p></div>';
+    return;
+  }
+
+  sec.products.forEach((p, pIdx) => {
+    const row = buildProductRow(p, sectionIdx, pIdx);
+    listEl.appendChild(row);
+  });
+
+  setupDragDrop(listEl, sectionIdx);
+}
+
+function buildProductRow(p, sectionIdx, pIdx) {
+  const row = document.createElement('div');
+  row.className = 'product-row';
+  row.dataset.sectionIdx = sectionIdx;
+  row.dataset.productIdx = pIdx;
+  row.draggable = true;
+
+  const badge = p.badge ? `<span class="badge-chip ${p.badge}">${badgeLabel(p.badge)}</span>` : `<span class="badge-chip none">—</span>`;
+  const price  = p.price ? `$${p.price}` : '—';
+  const isActive = p.active !== false;
+
+  row.innerHTML = `
+    <span class="drag-handle" title="Arrastrar para reordenar">&#8942;&#8942;</span>
+    <span class="product-thumb-placeholder" id="thumb-placeholder-${sectionIdx}-${pIdx}">&#128247;</span>
+    <div class="product-info">
+      <div class="pname">${esc(p.name)}</div>
+      <div class="pcat">${esc(p.category || '')}</div>
+    </div>
+    <div class="product-price">${price}</div>
+    ${badge}
+    <label class="toggle" title="${isActive ? 'Activo' : 'Inactivo'}">
+      <input type="checkbox" ${isActive ? 'checked' : ''} data-section="${sectionIdx}" data-product="${pIdx}" class="active-toggle" />
+      <span class="toggle-slider"></span>
+    </label>
+    <div class="row-actions">
+      <button class="icon-btn edit-btn" data-section="${sectionIdx}" data-product="${pIdx}" title="Editar">&#9998;</button>
+      <button class="icon-btn delete delete-btn" data-section="${sectionIdx}" data-product="${pIdx}" title="Eliminar">&#128465;</button>
+    </div>
+  `;
+
+  // Load thumb
+  if (p.img) {
+    const img = new Image();
+    img.className = 'product-thumb';
+    img.alt = p.alt || p.name;
+    img.src = '/media/products/' + encodeURIComponent(p.img);
+    img.onload = () => {
+      const ph = row.querySelector(`#thumb-placeholder-${sectionIdx}-${pIdx}`);
+      if (ph) ph.replaceWith(img);
+    };
+  }
+
+  // Toggle active
+  row.querySelector('.active-toggle').addEventListener('change', function() {
+    state.sections[this.dataset.section].products[this.dataset.product].active = this.checked;
+    markDirty();
+    renderSidebar(); // update stats
+  });
+
+  // Edit
+  row.querySelector('.edit-btn').addEventListener('click', function() {
+    openProductModal(+this.dataset.section, +this.dataset.product);
+  });
+
+  // Delete
+  row.querySelector('.delete-btn').addEventListener('click', function() {
+    showDeleteConfirm(row, +this.dataset.section, +this.dataset.product);
+  });
+
+  return row;
+}
+
+function showDeleteConfirm(row, sIdx, pIdx) {
+  const p = state.sections[sIdx].products[pIdx];
+  const confirmRow = document.createElement('div');
+  confirmRow.className = 'confirm-row';
+  confirmRow.innerHTML = `
+    <span class="confirm-text">¿Eliminar <strong>${esc(p.name)}</strong>?</span>
+    <button class="btn-confirm-del">Sí, eliminar</button>
+    <button class="btn-cancel-del">Cancelar</button>
+  `;
+  confirmRow.querySelector('.btn-confirm-del').addEventListener('click', () => {
+    state.sections[sIdx].products.splice(pIdx, 1);
+    markDirty();
+    render();
+  });
+  confirmRow.querySelector('.btn-cancel-del').addEventListener('click', () => {
+    confirmRow.replaceWith(row);
+  });
+  row.replaceWith(confirmRow);
+}
+
+// ── DRAG & DROP ───────────────────────────────────────────────────────────
+function setupDragDrop(listEl, sectionIdx) {
+  const rows = listEl.querySelectorAll('.product-row');
+  rows.forEach((row) => {
+    row.addEventListener('dragstart', (e) => {
+      dragSrc = +row.dataset.productIdx;
+      row.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', dragSrc);
+    });
+    row.addEventListener('dragend', () => {
+      row.classList.remove('dragging');
+      listEl.querySelectorAll('.product-row').forEach(r => r.classList.remove('drag-over'));
+    });
+    row.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      listEl.querySelectorAll('.product-row').forEach(r => r.classList.remove('drag-over'));
+      row.classList.add('drag-over');
+    });
+    row.addEventListener('dragleave', () => {
+      row.classList.remove('drag-over');
+    });
+    row.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const destIdx = +row.dataset.productIdx;
+      if (dragSrc === null || dragSrc === destIdx) return;
+      const prods = state.sections[sectionIdx].products;
+      const [moved] = prods.splice(dragSrc, 1);
+      prods.splice(destIdx, 0, moved);
+      markDirty();
+      renderMain(sectionIdx);
+    });
+  });
+}
+
+// ── PRODUCT MODAL ─────────────────────────────────────────────────────────
+function openProductModal(sectionIdx, productIdx) {
+  editingProduct = { sectionIdx, productIdx };
+  const isNew = productIdx === -1;
+  const p = isNew ? { active: true } : state.sections[sectionIdx].products[productIdx];
+
+  document.getElementById('productModalTitle').textContent = isNew ? 'Agregar producto' : 'Editar producto';
+
+  // Populate section select
+  const fSection = document.getElementById('fSection');
+  fSection.innerHTML = '';
+  state.sections.forEach((s, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${s.title} ${s.titleEm}`;
+    if (i === sectionIdx) opt.selected = true;
+    fSection.appendChild(opt);
+  });
+
+  // Fill fields
+  document.getElementById('fName').value     = p.name     || '';
+  document.getElementById('fSlug').value     = p.slug     || '';
+  document.getElementById('fCategory').value = p.category || '';
+  document.getElementById('fPrice').value    = p.price    || '';
+  document.getElementById('fDesc').value     = p.desc     || '';
+  document.getElementById('fImg').value      = p.img      || '';
+  document.getElementById('fAlt').value      = p.alt      || '';
+  document.getElementById('fBadge').value    = p.badge    || '';
+  document.getElementById('fActive').checked = p.active !== false;
+
+  // Clear errors
+  ['fgName','fgSlug'].forEach(id => document.getElementById(id).classList.remove('has-error'));
+  ['errName','errSlug'].forEach(id => document.getElementById(id).classList.add('hidden'));
+
+  updateImgPreview(p.img || '');
+  document.getElementById('productModal').classList.remove('hidden');
+  document.getElementById('fName').focus();
+}
+
+function updateImgPreview(filename) {
+  const img = document.getElementById('imgPreview');
+  const ph  = document.getElementById('imgPlaceholder');
+  if (!filename) {
+    img.classList.add('hidden');
+    ph.classList.remove('hidden');
+    return;
+  }
+  img.src = '/media/products/' + encodeURIComponent(filename);
+  img.onload  = () => { img.classList.remove('hidden'); ph.classList.add('hidden'); };
+  img.onerror = () => { img.classList.add('hidden');    ph.classList.remove('hidden'); };
+}
+
+function closeProductModal() {
+  document.getElementById('productModal').classList.add('hidden');
+  editingProduct = null;
+}
+
+function saveProductModal() {
+  const name = document.getElementById('fName').value.trim();
+  const slug = document.getElementById('fSlug').value.trim();
+  let valid = true;
+
+  if (!name) {
+    document.getElementById('fgName').classList.add('has-error');
+    document.getElementById('errName').classList.remove('hidden');
+    valid = false;
+  } else {
+    document.getElementById('fgName').classList.remove('has-error');
+    document.getElementById('errName').classList.add('hidden');
+  }
+  if (!slug) {
+    document.getElementById('fgSlug').classList.add('has-error');
+    document.getElementById('errSlug').classList.remove('hidden');
+    valid = false;
+  } else {
+    document.getElementById('fgSlug').classList.remove('has-error');
+    document.getElementById('errSlug').classList.add('hidden');
+  }
+  if (!valid) return;
+
+  const targetSectionIdx = +document.getElementById('fSection').value;
+  const product = {
+    slug,
+    img:      document.getElementById('fImg').value.trim(),
+    alt:      document.getElementById('fAlt').value.trim(),
+    badge:    document.getElementById('fBadge').value || undefined,
+    category: document.getElementById('fCategory').value.trim(),
+    name,
+    desc:     document.getElementById('fDesc').value.trim(),
+    price:    document.getElementById('fPrice').value.trim(),
+    active:   document.getElementById('fActive').checked,
+  };
+  // Remove undefined badge
+  if (!product.badge) delete product.badge;
+
+  const { sectionIdx, productIdx } = editingProduct;
+
+  if (productIdx === -1) {
+    // New product
+    state.sections[targetSectionIdx].products.push(product);
+  } else if (targetSectionIdx !== sectionIdx) {
+    // Move to different section
+    state.sections[sectionIdx].products.splice(productIdx, 1);
+    state.sections[targetSectionIdx].products.push(product);
+    activeSectionIdx = targetSectionIdx;
+  } else {
+    state.sections[sectionIdx].products[productIdx] = product;
+  }
+
+  markDirty();
+  closeProductModal();
+  render();
+}
+
+// ── SECTION MODAL ─────────────────────────────────────────────────────────
+function openSectionModal(sectionIdx) {
+  editingSection = sectionIdx;
+  const isNew = sectionIdx === -1;
+  const s = isNew ? {} : state.sections[sectionIdx];
+
+  document.getElementById('sectionModalTitle').textContent = isNew ? 'Nueva sección' : 'Editar sección';
+  document.getElementById('fsTitle').value   = s.title    || '';
+  document.getElementById('fsTitleEm').value = s.titleEm  || '';
+  document.getElementById('fsId').value      = s.id       || '';
+  document.getElementById('fsLabel').value   = s.label    || '';
+  document.getElementById('fsAlt').checked   = s.alt      || false;
+
+  ['fgSTitle','fgSId'].forEach(id => document.getElementById(id).classList.remove('has-error'));
+  ['errSTitle','errSId'].forEach(id => document.getElementById(id).classList.add('hidden'));
+
+  document.getElementById('sectionModal').classList.remove('hidden');
+  document.getElementById('fsTitle').focus();
+}
+
+function closeSectionModal() {
+  document.getElementById('sectionModal').classList.add('hidden');
+  editingSection = null;
+}
+
+function saveSectionModal() {
+  const title   = document.getElementById('fsTitle').value.trim();
+  const id      = document.getElementById('fsId').value.trim();
+  let valid = true;
+
+  if (!title) {
+    document.getElementById('fgSTitle').classList.add('has-error');
+    document.getElementById('errSTitle').classList.remove('hidden');
+    valid = false;
+  } else {
+    document.getElementById('fgSTitle').classList.remove('has-error');
+    document.getElementById('errSTitle').classList.add('hidden');
+  }
+  if (!id) {
+    document.getElementById('fgSId').classList.add('has-error');
+    document.getElementById('errSId').classList.remove('hidden');
+    valid = false;
+  } else {
+    document.getElementById('fgSId').classList.remove('has-error');
+    document.getElementById('errSId').classList.add('hidden');
+  }
+  if (!valid) return;
+
+  const section = {
+    id,
+    label:    document.getElementById('fsLabel').value.trim(),
+    title,
+    titleEm:  document.getElementById('fsTitleEm').value.trim(),
+    alt:      document.getElementById('fsAlt').checked,
+    products: editingSection === -1 ? [] : state.sections[editingSection].products,
+  };
+
+  if (editingSection === -1) {
+    state.sections.push(section);
+    activeSectionIdx = state.sections.length - 1;
+  } else {
+    state.sections[editingSection] = section;
+  }
+
+  markDirty();
+  closeSectionModal();
+  render();
+}
+
+// ── ESCAPE HTML ───────────────────────────────────────────────────────────
+function esc(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── EVENT LISTENERS ───────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  loadData();
+
+  // Save button
+  document.getElementById('btnSave').addEventListener('click', saveData);
+
+  // Add product
+  document.getElementById('btnAddProduct').addEventListener('click', () => {
+    if (state.sections.length === 0) { showToast('Crea una sección primero'); return; }
+    openProductModal(activeSectionIdx, -1);
+  });
+
+  // Add section
+  document.getElementById('btnAddSection').addEventListener('click', () => openSectionModal(-1));
+
+  // Product modal close
+  document.getElementById('btnCloseProductModal').addEventListener('click', closeProductModal);
+  document.getElementById('btnCancelProduct').addEventListener('click', closeProductModal);
+  document.getElementById('btnSaveProduct').addEventListener('click', saveProductModal);
+
+  // Section modal close
+  document.getElementById('btnCloseSectionModal').addEventListener('click', closeSectionModal);
+  document.getElementById('btnCancelSection').addEventListener('click', closeSectionModal);
+  document.getElementById('btnSaveSection').addEventListener('click', saveSectionModal);
+
+  // Close modals on overlay click
+  document.getElementById('productModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeProductModal();
+  });
+  document.getElementById('sectionModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeSectionModal();
+  });
+
+  // Image preview update on filename change
+  document.getElementById('fImg').addEventListener('input', function() {
+    updateImgPreview(this.value.trim());
+  });
+
+  // Auto-generate slug from name (only if slug is empty)
+  document.getElementById('fName').addEventListener('input', function() {
+    const slugField = document.getElementById('fSlug');
+    if (!slugField.value) {
+      slugField.value = toKebab(this.value);
+    }
+  });
+
+  // Esc key closes modals
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (!document.getElementById('productModal').classList.contains('hidden')) closeProductModal();
+      if (!document.getElementById('sectionModal').classList.contains('hidden'))  closeSectionModal();
+    }
+    // Ctrl+S save
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      if (dirty) saveData();
+    }
+  });
+});
+</script>
+</body>
+</html>
