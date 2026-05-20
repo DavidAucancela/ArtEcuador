@@ -1,0 +1,260 @@
+---
+import { sections } from '../data/products';
+---
+
+<div class="filter-bar" id="filterBar">
+  <div class="filter-bar-inner">
+    <!-- Búsqueda -->
+    <div class="filter-search-wrap">
+      <svg class="filter-search-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M13.5 13.5L17 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <input
+        class="filter-search"
+        id="filterSearch"
+        type="search"
+        placeholder="Buscar artesanía..."
+        aria-label="Buscar productos"
+      />
+      <button class="filter-search-clear" id="filterClear" aria-label="Limpiar búsqueda" style="display:none">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <!-- Filtros de categoría -->
+    <div class="filter-cats" role="group" aria-label="Filtrar por categoría">
+      <button class="filter-cat active" data-cat="all">Todos</button>
+      {sections.map((s) => (
+        <button class="filter-cat" data-cat={s.id}>
+          {s.title} {s.titleEm}
+        </button>
+      ))}
+    </div>
+
+    <!-- Contador de resultados -->
+    <span class="filter-count" id="filterCount" aria-live="polite"></span>
+  </div>
+</div>
+
+<div class="filter-no-results" id="filterNoResults" style="display:none">
+  <p>No se encontraron productos para "<strong id="filterNoResultsTerm"></strong>"</p>
+  <button class="filter-reset-btn" id="filterReset">Ver todos los productos</button>
+</div>
+
+<style>
+  .filter-bar {
+    position: sticky; top: 72px; z-index: 90;
+    background: rgba(250,250,248,0.97);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 0 48px;
+  }
+  .filter-bar-inner {
+    max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; gap: 20px;
+    height: 56px; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-bar-inner::-webkit-scrollbar { display: none; }
+
+  /* Search */
+  .filter-search-wrap {
+    position: relative; flex-shrink: 0;
+    display: flex; align-items: center;
+  }
+  .filter-search-icon {
+    position: absolute; left: 10px;
+    width: 15px; height: 15px;
+    color: var(--gray-m); pointer-events: none;
+  }
+  .filter-search {
+    width: 200px; padding: 7px 32px 7px 30px;
+    border: 1.5px solid #E8E4DE; border-radius: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem; background: #fff;
+    transition: border-color 0.2s, width 0.3s;
+    outline: none;
+  }
+  .filter-search:focus { border-color: var(--red); width: 260px; }
+  .filter-search-clear {
+    position: absolute; right: 8px;
+    background: none; border: none; cursor: pointer;
+    color: var(--gray-m); padding: 2px;
+    display: flex; align-items: center;
+  }
+  .filter-search-clear svg { width: 10px; height: 10px; }
+  .filter-search-clear:hover { color: var(--red); }
+
+  /* Category buttons */
+  .filter-cats {
+    display: flex; gap: 6px; flex-shrink: 0;
+  }
+  .filter-cat {
+    padding: 5px 14px; border-radius: 20px;
+    border: 1.5px solid #E8E4DE; background: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
+    cursor: pointer; white-space: nowrap;
+    color: var(--gray-d); transition: all 0.18s;
+  }
+  .filter-cat:hover { border-color: var(--red); color: var(--red); }
+  .filter-cat.active {
+    background: var(--red); border-color: var(--red);
+    color: #fff;
+  }
+
+  /* Count */
+  .filter-count {
+    margin-left: auto; flex-shrink: 0;
+    font-size: 0.7rem; font-weight: 500; color: var(--gray-m);
+    white-space: nowrap;
+  }
+
+  /* No results */
+  .filter-no-results {
+    text-align: center; padding: 80px 24px;
+    font-size: 1rem; color: var(--gray-d);
+  }
+  .filter-reset-btn {
+    margin-top: 16px;
+    padding: 10px 24px; border-radius: 6px;
+    background: var(--red); color: #fff; border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem; font-weight: 600; cursor: pointer;
+  }
+
+  @media (max-width: 900px) {
+    .filter-bar { padding: 0 16px; }
+    .filter-search { width: 160px; }
+    .filter-search:focus { width: 190px; }
+  }
+  @media (max-width: 560px) {
+    .filter-bar-inner { height: auto; padding: 10px 0; flex-wrap: wrap; gap: 10px; }
+    .filter-search { width: 100%; }
+    .filter-search:focus { width: 100%; }
+  }
+</style>
+
+<script>
+  (function () {
+    const searchInput  = document.getElementById('filterSearch') as HTMLInputElement;
+    const clearBtn     = document.getElementById('filterClear') as HTMLButtonElement;
+    const countEl      = document.getElementById('filterCount') as HTMLElement;
+    const noResults    = document.getElementById('filterNoResults') as HTMLElement;
+    const noResultsTerm= document.getElementById('filterNoResultsTerm') as HTMLElement;
+    const resetBtn     = document.getElementById('filterReset') as HTMLButtonElement;
+    const catBtns      = document.querySelectorAll<HTMLButtonElement>('.filter-cat');
+
+    let activeCat = 'all';
+    let query     = '';
+
+    function applyFilters() {
+      const cards    = document.querySelectorAll<HTMLElement>('.product-card');
+      const sections = document.querySelectorAll<HTMLElement>('section[id]');
+      let visible    = 0;
+
+      // Show/hide cards
+      cards.forEach((card) => {
+        const name     = card.dataset.name ?? '';
+        const category = card.dataset.category ?? '';
+        const sectionEl= card.closest('section') as HTMLElement | null;
+        const sectionId= sectionEl?.id ?? '';
+
+        const matchCat  = activeCat === 'all' || sectionId === activeCat;
+        const matchText = !query || name.includes(query) || category.includes(query);
+        const show = matchCat && matchText;
+
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      // Show/hide section headers when all cards in section are hidden
+      sections.forEach((sec) => {
+        const secCards   = sec.querySelectorAll<HTMLElement>('.product-card');
+        const anyVisible = [...secCards].some((c) => c.style.display !== 'none');
+        sec.style.display = anyVisible ? '' : 'none';
+      });
+
+      // Count label
+      const total = cards.length;
+      countEl.textContent = query || activeCat !== 'all'
+        ? `${visible} de ${total} productos`
+        : '';
+
+      // No results message
+      noResults.style.display = visible === 0 ? '' : 'none';
+      noResultsTerm.textContent = query;
+    }
+
+    // Search input
+    searchInput.addEventListener('input', () => {
+      query = searchInput.value.toLowerCase().trim();
+      clearBtn.style.display = query ? '' : 'none';
+      applyFilters();
+    });
+
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      query = '';
+      clearBtn.style.display = 'none';
+      applyFilters();
+    });
+
+    // Category buttons
+    catBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeCat = btn.dataset.cat ?? 'all';
+        catBtns.forEach((b) => b.classList.toggle('active', b === btn));
+
+        // Scroll to section if specific category selected
+        if (activeCat !== 'all') {
+          const target = document.getElementById(activeCat);
+          if (target) {
+            const offset = 72 + 56 + 16; // nav + filterbar + gap
+            const y = target.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+          }
+        }
+        applyFilters();
+      });
+    });
+
+    // Reset
+    resetBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      query = '';
+      activeCat = 'all';
+      clearBtn.style.display = 'none';
+      catBtns.forEach((b) => b.classList.toggle('active', b.dataset.cat === 'all'));
+      applyFilters();
+    });
+
+    // Highlight active category on scroll
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && activeCat === 'all') {
+            const id = (entry.target as HTMLElement).id;
+            catBtns.forEach((b) => b.classList.toggle('active', b.dataset.cat === id));
+          }
+        });
+      },
+      { rootMargin: '-30% 0px -60% 0px' }
+    );
+
+    document.querySelectorAll('section[id]').forEach((s) => observer.observe(s));
+
+    // Re-highlight "Todos" when scrolled to top / no section intersecting
+    const topObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && activeCat === 'all') {
+          catBtns.forEach((b) => b.classList.toggle('active', b.dataset.cat === 'all'));
+        }
+      },
+      { threshold: 0.1 }
+    );
+    const cover = document.getElementById('portada');
+    if (cover) topObserver.observe(cover);
+  })();
+</script>

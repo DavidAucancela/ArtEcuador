@@ -8,7 +8,7 @@ const { product } = Astro.props;
 const badgeLabel: Record<string, string> = { feat: 'Destacado', new: 'Nuevo', limit: 'Limitado' };
 ---
 
-<div class="product-card">
+<div class="product-card" data-name={product.name.toLowerCase()} data-category={product.category.toLowerCase()}>
   <div class="product-img-wrap">
     <img
       src={`/media/products/${product.img}`}
@@ -19,11 +19,6 @@ const badgeLabel: Record<string, string> = { feat: 'Destacado', new: 'Nuevo', li
     {product.badge && (
       <span class={`product-badge ${product.badge}`}>{badgeLabel[product.badge]}</span>
     )}
-    <button class="add-btn" aria-label="Añadir al carrito">
-      <svg viewBox="0 0 16 16" fill="none">
-        <path d="M8 3v10M3 8h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
-      </svg>
-    </button>
   </div>
   <div class="product-body">
     <p class="product-category">{product.category}</p>
@@ -33,7 +28,7 @@ const badgeLabel: Record<string, string> = { feat: 'Destacado', new: 'Nuevo', li
       <div class="product-price">
         <span class="currency">$</span>{product.price}
       </div>
-      <a href="#" class="product-detail-link" aria-label={`Ver ${product.name}`}>Ver</a>
+      <a href={`/productos/${product.slug}`} class="product-detail-link" aria-label={`Ver ${product.name}`}>Ver</a>
     </div>
   </div>
 </div>

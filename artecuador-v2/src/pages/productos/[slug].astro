@@ -1,0 +1,309 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { allProducts, sections, type Product } from '../../data/products';
+
+export function getStaticPaths() {
+  return allProducts().map((p) => ({
+    params:  { slug: p.slug },
+    props:   { product: p },
+  }));
+}
+
+interface Props { product: ReturnType<typeof allProducts>[number] }
+const { product } = Astro.props;
+const { sectionId, sectionTitle, ...p } = product;
+
+const badgeLabel: Record<string, string> = { feat: 'Destacado', new: 'Nuevo', limit: 'Limitado' };
+
+// Productos relacionados: misma sección, excluir el actual, máx 4
+const section  = sections.find((s) => s.id === sectionId)!;
+const related  = section.products.filter((r) => r.slug !== p.slug).slice(0, 4);
+
+const waMsg = encodeURIComponent(
+  `Hola, estoy interesado/a en:\n*${p.name}*\nPrecio: $${p.price}\n\n¿Está disponible?`
+);
+
+const title = `${p.name} — ArtEcuador`;
+const desc  = p.desc;
+const ogImg = `/media/products/${p.img}`;
+---
+
+<BaseLayout
+  title={title}
+  description={desc}
+  ogImage={ogImg}
+  ogType="product"
+  canonical={`/productos/${p.slug}`}
+>
+  <!-- ── Minimal nav for detail page ─────────────────────────── -->
+  <nav class="detail-nav">
+    <a href="/" class="detail-nav-back">
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Volver al catálogo
+    </a>
+    <a href="/" class="nav-logo">Art<span>Ecuador</span></a>
+    <a href="/#contactar" class="nav-cta">Contáctanos</a>
+  </nav>
+
+  <!-- ── Product hero ─────────────────────────────────────────── -->
+  <main class="detail-main">
+    <div class="detail-hero">
+
+      <div class="detail-img-side">
+        <img
+          src={`/media/products/${p.img}`}
+          alt={p.alt}
+          class="detail-img"
+          loading="eager"
+        />
+      </div>
+
+      <div class="detail-info-side">
+        <nav class="detail-breadcrumb" aria-label="Ruta">
+          <a href="/">Inicio</a>
+          <span>/</span>
+          <a href={`/#${sectionId}`}>{sectionTitle}</a>
+          <span>/</span>
+          <span>{p.name}</span>
+        </nav>
+
+        {p.badge && (
+          <span class={`product-badge ${p.badge}`}>{badgeLabel[p.badge]}</span>
+        )}
+
+        <h1 class="detail-name">{p.name}</h1>
+        <p class="detail-category">{p.category}</p>
+
+        <div class="detail-price">
+          <span class="detail-currency">$</span>{p.price}
+          <span class="detail-price-note">USD · IVA incluido</span>
+        </div>
+
+        <p class="detail-desc">{p.desc}</p>
+
+        <div class="detail-actions">
+          <a
+            href={`https://wa.me/593999006925?text=${waMsg}`}
+            target="_blank"
+            rel="noopener"
+            class="btn-primary detail-btn-wa"
+          >
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M10 2a8 8 0 0 1 6.928 12.01L18 18l-4.109-1.054A8 8 0 1 1 10 2z" stroke="white" stroke-width="1.4" stroke-linejoin="round"/>
+              <path d="M7 8.5c0-.5.5-2 2-1 .5.3.8 1 1 1.5.1.3-.1.7-.4.9l-.4.3c.3.6.8 1.1 1.4 1.5l.4-.4c.2-.2.6-.3.9-.1.5.2 1.1.6 1.4 1 .8 1.2-.5 2-1 2-2.2.1-6-3.7-5.3-5.7z" fill="white"/>
+            </svg>
+            Consultar por WhatsApp
+          </a>
+          <a href={`/#${sectionId}`} class="detail-btn-back-sec">
+            Ver más {sectionTitle}
+          </a>
+        </div>
+
+        <ul class="detail-features">
+          <li>
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4.5" stroke="#4CAF50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Hecho a mano por artesanos ecuatorianos
+          </li>
+          <li>
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4.5" stroke="#4CAF50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Envíos nacionales e internacionales
+          </li>
+          <li>
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4.5" stroke="#4CAF50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Comercio justo — apoya a comunidades andinas
+          </li>
+          <li>
+            <svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 4.5" stroke="#4CAF50" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Disponible en pedidos personalizados y mayoreo
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ── Related products ──────────────────────────────────── -->
+    {related.length > 0 && (
+      <section class="detail-related">
+        <h2 class="detail-related-title">También en <em>{sectionTitle}</em></h2>
+        <div class="detail-related-grid">
+          {related.map((r) => (
+            <a href={`/productos/${r.slug}`} class="detail-related-card">
+              <div class="detail-related-img-wrap">
+                <img src={`/media/products/${r.img}`} alt={r.alt} loading="lazy" />
+              </div>
+              <p class="detail-related-name">{r.name}</p>
+              <p class="detail-related-price"><span>$</span>{r.price}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+</BaseLayout>
+
+<style>
+  /* ── Detail nav ──────────────────────────────────────────────── */
+  .detail-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    padding: 0 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+    gap: 16px;
+  }
+  .detail-nav-back {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
+    text-decoration: none; color: var(--gray-d);
+    transition: color 0.2s;
+    white-space: nowrap;
+  }
+  .detail-nav-back svg { width: 18px; height: 18px; }
+  .detail-nav-back:hover { color: var(--red); }
+
+  /* ── Main layout ─────────────────────────────────────────────── */
+  .detail-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+  .detail-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+    margin-bottom: 80px;
+  }
+  @media (max-width: 800px) {
+    .detail-hero { grid-template-columns: 1fr; gap: 32px; }
+    .detail-nav { padding: 0 20px; }
+    .detail-nav-back span { display: none; }
+  }
+
+  /* ── Image ───────────────────────────────────────────────────── */
+  .detail-img-side {
+    position: sticky; top: 96px;
+    border-radius: 12px; overflow: hidden;
+    box-shadow: var(--shadow-hover);
+    aspect-ratio: 1/1;
+  }
+  .detail-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  @media (max-width: 800px) {
+    .detail-img-side { position: static; aspect-ratio: 4/3; }
+  }
+
+  /* ── Info ─────────────────────────────────────────────────────── */
+  .detail-breadcrumb {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.7rem; letter-spacing: 0.08em; color: var(--gray-m);
+    margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .detail-breadcrumb a { color: var(--gray-m); text-decoration: none; }
+  .detail-breadcrumb a:hover { color: var(--red); }
+  .detail-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700; line-height: 1.2;
+    color: #1A1A1A; margin: 12px 0 6px;
+  }
+  .detail-category {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gray-m); margin-bottom: 24px;
+  }
+  .detail-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 700; color: var(--gray-d);
+    margin-bottom: 24px; display: flex; align-items: baseline; gap: 4px;
+  }
+  .detail-currency { font-size: 1.2rem; color: var(--red); }
+  .detail-price-note {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem; font-weight: 500; color: var(--gray-m);
+    margin-left: 8px;
+  }
+  .detail-desc {
+    font-size: 0.95rem; line-height: 1.75; color: #444;
+    margin-bottom: 32px;
+  }
+
+  /* ── Actions ─────────────────────────────────────────────────── */
+  .detail-actions {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .detail-btn-wa {
+    display: flex; align-items: center; gap: 8px;
+    padding: 14px 28px;
+  }
+  .detail-btn-wa svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .detail-btn-back-sec {
+    display: flex; align-items: center;
+    padding: 14px 24px;
+    border: 1.5px solid var(--gray-m); border-radius: 6px;
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gray-d); text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .detail-btn-back-sec:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── Features list ───────────────────────────────────────────── */
+  .detail-features {
+    list-style: none; display: flex; flex-direction: column; gap: 10px;
+    border-top: 1px solid #F0EDE8; padding-top: 24px;
+  }
+  .detail-features li {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.82rem; color: var(--gray-d);
+  }
+  .detail-features svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ── Related ─────────────────────────────────────────────────── */
+  .detail-related { border-top: 1px solid #F0EDE8; padding-top: 48px; }
+  .detail-related-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 700;
+    margin-bottom: 32px; color: #1A1A1A;
+  }
+  .detail-related-title em { font-style: italic; color: var(--red); }
+  .detail-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+  .detail-related-card {
+    text-decoration: none; color: inherit;
+    border-radius: 8px; overflow: hidden;
+    border: 1px solid #F0EDE8;
+    transition: box-shadow 0.25s, transform 0.25s;
+  }
+  .detail-related-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+  }
+  .detail-related-img-wrap {
+    aspect-ratio: 1/1; overflow: hidden; background: #F7F5F0;
+  }
+  .detail-related-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.35s ease;
+  }
+  .detail-related-card:hover img { transform: scale(1.06); }
+  .detail-related-name {
+    font-size: 0.8rem; font-weight: 600;
+    padding: 10px 12px 2px; color: #1A1A1A;
+  }
+  .detail-related-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem; font-weight: 700;
+    padding: 0 12px 12px; color: var(--gray-d);
+  }
+  .detail-related-price span { color: var(--red); font-size: 0.7rem; }
+</style>
