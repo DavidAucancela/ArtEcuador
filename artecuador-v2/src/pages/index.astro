@@ -158,7 +158,9 @@ import { sections } from '../data/products';
 
   /* ── Featured strip — aparición aleatoria de imágenes ─────── */
   (function() {
-    const imgs = [
+    const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+    const imgUrls = [
       '/media/clients/clientes-1.jpg',
       '/media/clients/clientes-2.jpg',
       '/media/clients/clientes-3.jpg',
@@ -172,57 +174,46 @@ import { sections } from '../data/products';
     const cells = Array.from(
       document.querySelectorAll<HTMLElement>('#featMosaic .feat-img-cell')
     );
-    const FADE    = 800;   // ms de transición CSS
-    const SHOW    = 4500;  // ms que permanece visible una imagen
-    const MAX_VIS = 3;     // máx celdas con imagen al mismo tiempo
-    const TICK    = 2200;  // ms entre cambios
+    const FADE    = 800;
+    const SHOW    = 4500;
+    const MAX_VIS = 3;
+    const TICK    = 2200;
 
-    // Estado: qué celdas tienen imagen activa
     const active = new Set<number>();
     let lastImgIdx = -1;
 
     const getImg = (cell: HTMLElement) =>
       cell.querySelector<HTMLImageElement>('img')!;
 
-    // Carga y muestra una imagen en una celda vacía aleatoria
     const showRandom = () => {
-      const empty = cells
-        .map((_, i) => i)
-        .filter(i => !active.has(i));
+      const empty = cells.map((_, i) => i).filter(i => !active.has(i));
       if (!empty.length) return;
 
       const cellIdx = empty[Math.floor(Math.random() * empty.length)];
       let imgIdx: number;
-      do { imgIdx = Math.floor(Math.random() * imgs.length); }
-      while (imgIdx === lastImgIdx && imgs.length > 1);
+      do { imgIdx = Math.floor(Math.random() * imgUrls.length); }
+      while (imgIdx === lastImgIdx && imgUrls.length > 1);
       lastImgIdx = imgIdx;
 
       const cell = cells[cellIdx];
       const img  = getImg(cell);
-      img.src = imgs[imgIdx];
       active.add(cellIdx);
 
       img.onload = () => { img.style.opacity = '1'; };
-      // Si ya estaba cargada
+      img.src = imgUrls[imgIdx];
       if (img.complete && img.naturalWidth) img.style.opacity = '1';
 
-      // Después de SHOW ms, desvanecer
       setTimeout(() => {
         img.style.opacity = '0';
         setTimeout(() => {
-          img.src = '';
+          img.src = BLANK;   // pixel transparente — nunca dispara request a la página actual
           active.delete(cellIdx);
         }, FADE);
       }, SHOW);
     };
 
-    // Mostrar una imagen inicial tras un breve delay
     setTimeout(showRandom, 600);
-
-    // Cada TICK, si hay espacio, mostrar otra
-    setInterval(() => {
-      if (active.size < MAX_VIS) showRandom();
-    }, TICK);
+    setInterval(() => { if (active.size < MAX_VIS) showRandom(); }, TICK);
   })();
 
   /* ── Contact form → WhatsApp ───────────────────────────────── */
