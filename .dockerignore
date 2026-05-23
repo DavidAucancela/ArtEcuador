@@ -1,10 +1,6 @@
-# Build artifacts and dev tools (not needed in Docker)
 artecuador-v2/node_modules
 artecuador-v2/dist
 artecuador-v2/.astro
-artecuador-v2/admin
-
-# Git and IDE files
-.git
-.gitignore
-
+artecuador-v2/.env
+artecuador-v2/.env.production
+**/.DS_Store
