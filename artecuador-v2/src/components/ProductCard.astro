@@ -8,7 +8,7 @@ const { product } = Astro.props;
 const badgeLabel: Record<string, string> = { feat: 'Destacado', new: 'Nuevo', limit: 'Limitado' };
 ---
 
-<div class="product-card" data-name={product.name.toLowerCase()} data-category={product.category.toLowerCase()}>
+<a href={`/productos/${product.slug}`} class="product-card" data-name={product.name.toLowerCase()} data-category={product.category.toLowerCase()} aria-label={`Ver ${product.name}`}>
   <div class="product-img-wrap">
     <img
       src={`/media/products/${product.img}`}
@@ -19,16 +19,15 @@ const badgeLabel: Record<string, string> = { feat: 'Destacado', new: 'Nuevo', li
     {product.badge && (
       <span class={`product-badge ${product.badge}`}>{badgeLabel[product.badge]}</span>
     )}
-  </div>
-  <div class="product-body">
-    <p class="product-category">{product.category}</p>
-    <h3 class="product-name">{product.name}</h3>
-    <p class="product-desc">{product.desc}</p>
-    <div class="product-footer">
-      <div class="product-price">
-        <span class="currency">$</span>{product.price}
-      </div>
-      <a href={`/productos/${product.slug}`} class="product-detail-link" aria-label={`Ver ${product.name}`}>Ver</a>
+    <div class="product-hover-overlay">
+      <span class="product-ver-btn">Ver detalle →</span>
     </div>
   </div>
-</div>
+  <div class="product-info">
+    <p class="product-category">{product.category}</p>
+    <h3 class="product-name">{product.name}</h3>
+    <div class="product-price-row">
+      <span class="product-price"><span class="currency">$</span>{product.price}</span>
+    </div>
+  </div>
+</a>

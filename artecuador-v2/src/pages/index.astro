@@ -156,7 +156,7 @@ import { sections } from '../data/products';
     nav.querySelectorAll('a').forEach(l => l.addEventListener('click', closeMenu));
   })();
 
-  /* ── Featured strip cycle ──────────────────────────────────── */
+  /* ── Featured strip — aparición aleatoria de imágenes ─────── */
   (function() {
     const imgs = [
       '/media/clients/clientes-1.jpg',
@@ -168,36 +168,61 @@ import { sections } from '../data/products';
       '/media/clients/recomendacion.png',
       '/media/clients/trabajpos.png',
     ];
-    const cells = document.querySelectorAll('#featMosaic .feat-img-cell img');
-    const SHOW = 2200, FADE = 600;
 
-    const randIdx = (exclude: number) => {
-      let idx: number;
-      do { idx = Math.floor(Math.random() * imgs.length); } while (idx === exclude && imgs.length > 1);
-      return idx;
-    };
+    const cells = Array.from(
+      document.querySelectorAll<HTMLElement>('#featMosaic .feat-img-cell')
+    );
+    const FADE    = 800;   // ms de transición CSS
+    const SHOW    = 4500;  // ms que permanece visible una imagen
+    const MAX_VIS = 3;     // máx celdas con imagen al mismo tiempo
+    const TICK    = 2200;  // ms entre cambios
 
-    const runCycle = (img: HTMLImageElement) => {
+    // Estado: qué celdas tienen imagen activa
+    const active = new Set<number>();
+    let lastImgIdx = -1;
+
+    const getImg = (cell: HTMLElement) =>
+      cell.querySelector<HTMLImageElement>('img')!;
+
+    // Carga y muestra una imagen en una celda vacía aleatoria
+    const showRandom = () => {
+      const empty = cells
+        .map((_, i) => i)
+        .filter(i => !active.has(i));
+      if (!empty.length) return;
+
+      const cellIdx = empty[Math.floor(Math.random() * empty.length)];
+      let imgIdx: number;
+      do { imgIdx = Math.floor(Math.random() * imgs.length); }
+      while (imgIdx === lastImgIdx && imgs.length > 1);
+      lastImgIdx = imgIdx;
+
+      const cell = cells[cellIdx];
+      const img  = getImg(cell);
+      img.src = imgs[imgIdx];
+      active.add(cellIdx);
+
+      img.onload = () => { img.style.opacity = '1'; };
+      // Si ya estaba cargada
+      if (img.complete && img.naturalWidth) img.style.opacity = '1';
+
+      // Después de SHOW ms, desvanecer
       setTimeout(() => {
-        img.style.opacity = '1';
+        img.style.opacity = '0';
         setTimeout(() => {
-          img.style.opacity = '0';
-          setTimeout(() => {
-            const next = randIdx(parseInt(img.dataset.idx ?? '-1'));
-            img.dataset.idx = String(next);
-            img.src = imgs[next];
-            runCycle(img);
-          }, FADE);
-        }, FADE + SHOW);
+          img.src = '';
+          active.delete(cellIdx);
+        }, FADE);
       }, SHOW);
     };
 
-    cells.forEach((img, i) => {
-      const el = img as HTMLImageElement;
-      const idx = randIdx(-1);
-      el.dataset.idx = String(idx);
-      setTimeout(() => runCycle(el), i * 400);
-    });
+    // Mostrar una imagen inicial tras un breve delay
+    setTimeout(showRandom, 600);
+
+    // Cada TICK, si hay espacio, mostrar otra
+    setInterval(() => {
+      if (active.size < MAX_VIS) showRandom();
+    }, TICK);
   })();
 
   /* ── Contact form → WhatsApp ───────────────────────────────── */

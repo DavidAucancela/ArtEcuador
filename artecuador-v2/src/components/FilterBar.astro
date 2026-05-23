@@ -13,9 +13,10 @@ import { sections } from '../data/products';
       <input
         class="filter-search"
         id="filterSearch"
-        type="search"
+        type="text"
         placeholder="Buscar artesanía..."
         aria-label="Buscar productos"
+        autocomplete="off"
       />
       <button class="filter-search-clear" id="filterClear" aria-label="Limpiar búsqueda" style="display:none">
         <svg viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -207,11 +208,12 @@ import { sections } from '../data/products';
         activeCat = btn.dataset.cat ?? 'all';
         catBtns.forEach((b) => b.classList.toggle('active', b === btn));
 
-        // Scroll to section if specific category selected
-        if (activeCat !== 'all') {
+        if (activeCat === 'all') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
           const target = document.getElementById(activeCat);
           if (target) {
-            const offset = 72 + 56 + 16; // nav + filterbar + gap
+            const offset = 72 + 56 + 16;
             const y = target.getBoundingClientRect().top + window.scrollY - offset;
             window.scrollTo({ top: y, behavior: 'smooth' });
           }
@@ -227,6 +229,7 @@ import { sections } from '../data/products';
       activeCat = 'all';
       clearBtn.style.display = 'none';
       catBtns.forEach((b) => b.classList.toggle('active', b.dataset.cat === 'all'));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       applyFilters();
     });
 
