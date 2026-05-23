@@ -1,0 +1,15 @@
+# Exclude symlink — media is copied explicitly in Dockerfile
+artecuador-v2/public/media
+
+# Ignore build artifacts and dev dependencies
+artecuador-v2/node_modules
+artecuador-v2/dist
+artecuador-v2/.astro
+
+# Ignore admin server (not needed in production image)
+artecuador-v2/admin
+
+# Git and editor files
+.git
+.gitignore
+*.md

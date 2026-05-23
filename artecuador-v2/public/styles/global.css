@@ -391,9 +391,9 @@
     }
     .product-price {
       font-family: 'Playfair Display', serif;
-      font-size: 1rem; font-weight: 700; color: var(--gray-d);
+      font-size: 1rem; font-weight: 700; color: #fff;
     }
-    .product-price .currency { font-size: 0.75rem; vertical-align: super; margin-right: 1px; color: var(--red); }
+    .product-price .currency { font-size: 0.75rem; vertical-align: super; margin-right: 1px; color: var(--yellow); }
     .product-card:hover .product-footer {
       transform: translateY(0); opacity: 1;
     }
@@ -588,6 +588,13 @@
       .cover-left { padding: 60px 24px; }
       .section-header { flex-direction: column; align-items: flex-start; gap: 16px; }
       .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Touch devices: always show overlay (no hover available) */
+    @media (hover: none) {
+      .product-body { transform: translateY(0); opacity: 1; }
+      .product-name { transform: translateY(0); opacity: 1; }
+      .product-footer { transform: translateY(8px); opacity: 1; transform: none; }
     }
 
     /* ── Print / PDF ────────────────────────────────────────────── */
@@ -806,7 +813,6 @@
     .product-img-real {
       width: 100%; height: 100%;
       object-fit: cover;
-      mix-blend-mode: multiply;
       transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .product-card:hover .product-img-real { transform: scale(1.07); }
