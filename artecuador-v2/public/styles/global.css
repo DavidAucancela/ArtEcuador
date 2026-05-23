@@ -56,12 +56,14 @@
       height: 72px;
     }
     .nav-logo {
+      display: flex; align-items: center; gap: 10px;
       font-family: 'Playfair Display', serif;
       font-size: 1.5rem; font-weight: 700;
       letter-spacing: 0.04em;
-      color: #1A1A1A;
+      color: #1A1A1A; text-decoration: none;
     }
     .nav-logo span { color: var(--red); }
+    .nav-icon { height: 40px; width: auto; object-fit: contain; flex-shrink: 0; }
     .nav-links {
       display: flex; gap: 36px; list-style: none;
       align-items: center; height: 100%;
@@ -946,6 +948,12 @@
     }
 
     /* ── Cover brand title ──────────────────────────────────────── */
+    .cover-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--red);
+      margin-bottom: 12px;
+    }
     .cover-brand {
       font-family: 'Playfair Display', serif;
       font-size: clamp(3.2rem, 6vw, 5.5rem);
@@ -1006,37 +1014,33 @@
     }
 
     /* ── Nav dropdown (Categorías) ──────────────────────────────── */
-    .nav-dropdown { position: relative; }
-    .nav-dropdown-toggle {
+    .nav-item-dropdown { position: relative; }
+    .nav-dropdown-btn {
       background: none; border: none; cursor: pointer; padding: 0;
       font-family: 'Montserrat', sans-serif;
       font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
       text-transform: uppercase; color: var(--gray-d);
-      display: flex; align-items: center; gap: 5px;
-      transition: color 0.2s;
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s; height: 100%;
     }
-    .nav-dropdown-toggle:hover,
-    .nav-dropdown.open .nav-dropdown-toggle { color: var(--red); }
-    .nav-dropdown-toggle::after {
-      content: '';
-      width: 0; height: 0;
-      border-left: 3.5px solid transparent;
-      border-right: 3.5px solid transparent;
-      border-top: 4px solid currentColor;
-      transition: transform 0.2s;
+    .nav-dropdown-btn:hover { color: var(--red); }
+    .nav-chevron {
+      width: 10px; height: 6px; flex-shrink: 0;
+      transition: transform 0.2s ease;
     }
-    .nav-dropdown.open .nav-dropdown-toggle::after { transform: rotate(180deg); }
-    .nav-dropdown-menu {
+    .nav-dropdown.open ~ * .nav-chevron,
+    .nav-item-dropdown:has(.nav-dropdown.open) .nav-chevron { transform: rotate(180deg); }
+    .nav-dropdown {
       display: none;
-      position: absolute; top: calc(100% + 18px); left: 50%;
+      position: absolute; top: calc(100% + 12px); left: 50%;
       transform: translateX(-50%);
       background: #FFFFFF; border-radius: 8px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-      min-width: 200px; padding: 6px 0;
+      min-width: 200px; padding: 6px 0; list-style: none;
       z-index: 101; border: 1px solid rgba(0,0,0,0.05);
     }
-    .nav-dropdown.open .nav-dropdown-menu { display: block; }
-    .nav-dropdown-menu a {
+    .nav-dropdown.open { display: block; }
+    .nav-dropdown a {
       display: flex; align-items: center; gap: 10px;
       padding: 10px 18px;
       font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
@@ -1044,7 +1048,7 @@
       text-decoration: none; transition: background 0.15s, color 0.15s;
       white-space: nowrap;
     }
-    .nav-dropdown-menu a:hover { background: #FEF0F0; color: var(--red); }
+    .nav-dropdown a:hover { background: #FEF0F0; color: var(--red); }
     .nav-cat-dot {
       width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
     }
