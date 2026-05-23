@@ -68,22 +68,6 @@
     .nav-brand-text span { color: var(--red); }
     .nav-icon { height: 40px; width: auto; object-fit: contain; flex-shrink: 0; }
 
-    /* ── Nav hold ring (position:absolute → fuera del flex flow) ─ */
-    .nav-hold-ring {
-      position: absolute;
-      left: 0; top: 50%; transform: translateY(-50%);
-      width: 48px; height: 48px;
-      pointer-events: none; opacity: 0;
-      transition: opacity 0.15s;
-      flex-shrink: 0;
-    }
-    .nav-logo.holding .nav-hold-ring { opacity: 1; }
-    .nav-ring-fill {
-      fill: none; stroke: var(--red); stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-dasharray: 131.95; stroke-dashoffset: 131.95;
-      transform-origin: 24px 24px; transform: rotate(-90deg);
-    }
 
     /* ── Admin login modal ──────────────────────────────────────── */
     .admin-overlay {
