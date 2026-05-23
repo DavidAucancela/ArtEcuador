@@ -3,8 +3,13 @@ import { sections } from '../data/products';
 ---
 
 <nav>
-  <a href="#portada" class="nav-logo">
-    <img src="/media/iconoFinal.png" alt="ArtEcuador" class="nav-icon" /><span class="nav-brand-text">Art<span>Ecuador</span></span>
+  <a href="#portada" class="nav-logo" id="navLogoBtn" draggable="false">
+    <span class="nav-icon-wrap">
+      <img src="/media/iconoFinal.png" alt="ArtEcuador" class="nav-icon" draggable="false" />
+      <svg class="nav-hold-ring" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="21" class="nav-ring-fill" id="navHoldRing"/>
+      </svg>
+    </span><span class="nav-brand-text">Art<span>Ecuador</span></span>
   </a>
 
   <ul class="nav-links">
@@ -56,3 +61,145 @@ import { sections } from '../data/products';
     <li><a href="#contactar" class="mobile-nav-cta">Contáctanos</a></li>
   </ul>
 </div>
+
+<!-- Admin login modal -->
+<div class="admin-overlay" id="adminOverlay" aria-hidden="true">
+  <div class="admin-card" role="dialog" aria-modal="true" aria-label="Acceso administrador">
+    <button class="admin-close" id="adminClose" aria-label="Cerrar">
+      <svg viewBox="0 0 14 14" fill="none">
+        <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <img src="/media/iconoFinal.png" alt="ArtEcuador" class="admin-login-logo" />
+    <h2 class="admin-login-title">Panel de administración</h2>
+    <p class="admin-login-sub">Acceso restringido</p>
+    <form class="admin-login-form" id="adminLoginForm" novalidate>
+      <div class="admin-login-field">
+        <label for="adminUser">Usuario</label>
+        <input type="text" id="adminUser" name="username" autocomplete="username" placeholder="Usuario" />
+      </div>
+      <div class="admin-login-field">
+        <label for="adminPass">Contraseña</label>
+        <input type="password" id="adminPass" name="password" autocomplete="current-password" placeholder="Contraseña" />
+      </div>
+      <p class="admin-login-error" id="adminLoginError" role="alert"></p>
+      <button type="submit" class="admin-login-btn" id="adminLoginBtn">Ingresar al panel</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  /* ── Admin — mantener logo 5 s para acceder ─────────────────── */
+  (function () {
+    const logo    = document.getElementById('navLogoBtn') as HTMLAnchorElement | null;
+    const ring    = document.getElementById('navHoldRing') as SVGCircleElement | null;
+    const overlay = document.getElementById('adminOverlay');
+    const form    = document.getElementById('adminLoginForm') as HTMLFormElement | null;
+    const closeBtn= document.getElementById('adminClose');
+    const errEl   = document.getElementById('adminLoginError');
+    const btn     = document.getElementById('adminLoginBtn') as HTMLButtonElement | null;
+    if (!logo || !overlay || !form || !closeBtn || !errEl || !btn) return;
+
+    const CIRC    = 131.95;
+    const HOLD_MS = 5000;
+    /* SHA-256("admin:artecuador2026") — cambia este hash para actualizar la contraseña */
+    const HASH = 'da5c8060d7f3de5fc7aba7fdd418ff11009f70aca445a5248701694e60fb3ba8';
+
+    let holdStart: number | null = null;
+    let holdRaf:   number | null = null;
+    let didComplete = false;
+
+    if (ring) ring.style.strokeDashoffset = String(CIRC);
+
+    function startHold(e: Event) {
+      if (e instanceof MouseEvent && e.button !== 0) return;
+      holdStart   = Date.now();
+      didComplete = false;
+      logo!.classList.add('holding');
+
+      const tick = () => {
+        if (holdStart === null) return;
+        const pct = Math.min((Date.now() - holdStart) / HOLD_MS, 1);
+        if (ring) ring.style.strokeDashoffset = String(CIRC * (1 - pct));
+        if (pct < 1) {
+          holdRaf = requestAnimationFrame(tick);
+        } else {
+          endHold(true);
+        }
+      };
+      holdRaf = requestAnimationFrame(tick);
+    }
+
+    function endHold(success = false) {
+      if (holdRaf !== null) { cancelAnimationFrame(holdRaf); holdRaf = null; }
+      holdStart = null;
+      logo!.classList.remove('holding');
+      if (ring) ring.style.strokeDashoffset = String(CIRC);
+      if (success) { didComplete = true; openModal(); }
+    }
+
+    logo.addEventListener('mousedown',   (e) => startHold(e));
+    logo.addEventListener('touchstart',  (e) => startHold(e), { passive: true });
+    logo.addEventListener('mouseup',     () => endHold(false));
+    logo.addEventListener('mouseleave',  () => endHold(false));
+    logo.addEventListener('touchend',    () => endHold(false));
+    logo.addEventListener('touchcancel', () => endHold(false));
+    logo.addEventListener('click', (e) => {
+      if (didComplete) { e.preventDefault(); didComplete = false; }
+    });
+
+    function openModal() {
+      overlay!.classList.add('open');
+      overlay!.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => (document.getElementById('adminUser') as HTMLInputElement | null)?.focus(), 60);
+    }
+    function closeModal() {
+      overlay!.classList.remove('open');
+      overlay!.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      form!.reset();
+      errEl!.textContent = '';
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay!.classList.contains('open')) closeModal();
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const user = ((document.getElementById('adminUser') as HTMLInputElement | null)?.value ?? '').trim();
+      const pass = (document.getElementById('adminPass') as HTMLInputElement | null)?.value ?? '';
+
+      btn!.disabled = true;
+      errEl!.textContent = '';
+
+      try {
+        const encoded = new TextEncoder().encode(user + ':' + pass);
+        const buf     = await crypto.subtle.digest('SHA-256', encoded);
+        const hex     = Array.from(new Uint8Array(buf))
+          .map((b) => b.toString(16).padStart(2, '0')).join('');
+
+        if (hex === HASH) {
+          closeModal();
+          const host = window.location.hostname;
+          if (host === 'localhost' || host === '127.0.0.1') {
+            window.open('http://localhost:4000', '_blank');
+          } else {
+            alert('El panel admin está disponible solo en desarrollo local.\nEjecuta: npm run admin');
+          }
+        } else {
+          errEl!.textContent = 'Usuario o contraseña incorrectos.';
+          const passEl = document.getElementById('adminPass') as HTMLInputElement | null;
+          if (passEl) { passEl.value = ''; passEl.focus(); }
+        }
+      } catch (_) {
+        errEl!.textContent = 'Error al verificar credenciales.';
+      } finally {
+        btn!.disabled = false;
+      }
+    });
+  })();
+</script>

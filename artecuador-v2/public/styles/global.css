@@ -64,6 +64,102 @@
     }
     .nav-logo span { color: var(--red); }
     .nav-icon { height: 40px; width: auto; object-fit: contain; flex-shrink: 0; }
+
+    /* ── Nav hold ring ──────────────────────────────────────────── */
+    .nav-icon-wrap {
+      position: relative;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .nav-hold-ring {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px; height: 50px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    .nav-logo.holding .nav-hold-ring { opacity: 1; }
+    .nav-ring-fill {
+      fill: none;
+      stroke: var(--red);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-dasharray: 131.95;
+      stroke-dashoffset: 131.95;
+      transform-origin: 24px 24px;
+      transform: rotate(-90deg);
+    }
+    .nav-logo { user-select: none; -webkit-user-select: none; }
+
+    /* ── Admin login modal ──────────────────────────────────────── */
+    .admin-overlay {
+      position: fixed; inset: 0;
+      background: rgba(10,10,20,0.72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; z-index: 9999;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.22s, visibility 0.22s;
+    }
+    .admin-overlay.open { opacity: 1; visibility: visible; }
+    .admin-card {
+      background: #fff; border-radius: 18px;
+      padding: 44px 40px 36px;
+      width: 100%; max-width: 360px;
+      text-align: center; position: relative;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.28);
+      transform: translateY(20px);
+      transition: transform 0.22s;
+    }
+    .admin-overlay.open .admin-card { transform: translateY(0); }
+    .admin-close {
+      position: absolute; top: 14px; right: 14px;
+      background: none; border: none; cursor: pointer;
+      color: var(--gray-m); padding: 6px; border-radius: 6px; line-height: 0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .admin-close:hover { background: var(--bg); color: var(--gray-d); }
+    .admin-close svg { width: 14px; height: 14px; }
+    .admin-login-logo { width: 52px; height: 52px; object-fit: contain; margin-bottom: 14px; }
+    .admin-login-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; font-weight: 700;
+      color: #1a1a1a; margin-bottom: 4px;
+    }
+    .admin-login-sub { font-size: 0.78rem; color: var(--gray-m); margin-bottom: 28px; letter-spacing: 0.04em; }
+    .admin-login-form { text-align: left; }
+    .admin-login-field { margin-bottom: 14px; }
+    .admin-login-field label {
+      display: block; font-size: 0.68rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--gray-d); margin-bottom: 6px;
+    }
+    .admin-login-field input {
+      width: 100%; border: 1.5px solid #e2e4e8;
+      border-radius: 8px; padding: 10px 13px;
+      font-size: 0.88rem; font-family: 'Montserrat', sans-serif;
+      color: #1a1a1a; background: #fff; outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .admin-login-field input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(215,38,46,0.1);
+    }
+    .admin-login-error {
+      min-height: 18px; font-size: 0.78rem;
+      color: #ef4444; margin: -4px 0 10px;
+    }
+    .admin-login-btn {
+      width: 100%; background: var(--red); color: #fff; border: none;
+      border-radius: 8px; padding: 12px;
+      font-size: 0.88rem; font-weight: 700; font-family: 'Montserrat', sans-serif;
+      cursor: pointer; margin-top: 4px; transition: background 0.15s;
+    }
+    .admin-login-btn:hover:not(:disabled) { background: #b01e25; }
+    .admin-login-btn:disabled { background: var(--gray-m); cursor: not-allowed; }
     .nav-links {
       display: flex; gap: 36px; list-style: none;
       align-items: center; height: 100%;
