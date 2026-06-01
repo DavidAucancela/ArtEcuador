@@ -10,17 +10,16 @@ Catálogo web de artesanías ecuatorianas. **El proyecto es `artecuador-v2/`**, 
 ArtEcuador/
 ├── CLAUDE.md                    # Esta guía de desarrollo
 ├── artecuador-v2/               # ← TODO el código vive aquí
-│   ├── astro.config.mjs
+│   ├── astro.config.mjs         # output: static + @astrojs/node adapter
 │   ├── package.json
 │   ├── tsconfig.json
-│   ├── Dockerfile               # Imagen nginx:alpine, puerto 8080
-│   ├── nginx.conf               # Routing SPA en puerto 8080
-│   ├── README.md                # Instrucciones de despliegue
-│   ├── admin/
-│   │   ├── index.html           # UI del panel de administración
-│   │   └── server.js            # Servidor Node.js puro (puerto 4000)
+│   ├── Dockerfile               # Node.js standalone, puerto 8080
+│   ├── admin/                   # Legacy — ya no se usa en dev normal
+│   │   ├── index.html
+│   │   └── server.js
 │   ├── public/
 │   │   ├── favicon.ico / favicon.svg
+│   │   ├── media → ../../media  # Symlink a imágenes compartidas
 │   │   └── styles/global.css    # CSS global con tokens de diseño
 │   └── src/
 │       ├── components/
@@ -32,25 +31,23 @@ ArtEcuador/
 │       │   ├── ContactForm.astro
 │       │   └── Footer.astro
 │       ├── data/
-│       │   ├── products.json    # Fuente de verdad: secciones + productos
+│       │   ├── products.json    # Fuente de verdad: secciones + productos + clientImages
 │       │   └── products.ts      # Tipos y helpers de acceso a los datos
 │       ├── layouts/
 │       │   └── BaseLayout.astro # HTML base, meta OG, fuentes
 │       └── pages/
 │           ├── index.astro      # Página principal (catálogo)
+│           ├── admin.astro      # Panel de administración (protegido)
 │           ├── sitemap.xml.ts   # Sitemap auto-generado
+│           ├── api/
+│           │   └── products.ts  # GET/POST endpoint — lee/escribe products.json
 │           └── productos/
 │               └── [slug].astro # Página de detalle por producto
 └── media/                       # Imágenes compartidas (servidas por public/media symlink)
     ├── logoFinal.png            # Logo horizontal (cover + footer)
     ├── iconoFinal.png           # Ícono cuadrado (nav + favicon)
-    ├── logo ArtEcuador Final.png
-    ├── frontal tarjetaPresentacion.png
-    ├── reverso tarjetaPresentacion .png
-    ├── reverso2 tarjetaPresentacion .png
-    ├── tarjetaPresentacionV1/
-    ├── clients/                 # Fotos clientes / testimonios
-    └── products/                # Fotos de productos (nombres normalizados, sin espacios)
+    ├── clients/                 # Fotos clientes / testimonios (mosaico FeaturedStrip)
+    └── products/                # Fotos de productos (nombres en kebab-case, sin espacios)
 ```
 
 ---
@@ -60,18 +57,18 @@ ArtEcuador/
 ```bash
 cd artecuador-v2
 
-npm run dev       # Servidor dev Astro en http://localhost:4321
+npm run dev       # Sitio + admin + API en http://localhost:4321
 npm run build     # Build de producción en dist/
 npm run preview   # Preview del build en local
-npm run admin     # Panel admin en http://localhost:4000
 ```
 
 | Entorno | Comando |
 |---|---|
 | Local dev | `npm run dev` (desde `artecuador-v2/`) |
-| Admin panel | `npm run admin` (desde `artecuador-v2/`) |
 | Docker | `docker build -t artecuador . && docker run -p 8080:8080 artecuador` (desde `artecuador-v2/`) |
 | Railway | Push a `main` — auto-detecta `artecuador-v2/Dockerfile` |
+
+> **Un solo proceso.** `npm run dev` levanta Astro en el 4321 y sirve el sitio, el admin y la API desde el mismo servidor. No hace falta ningún comando adicional.
 
 ---
 
@@ -127,22 +124,23 @@ Es la **única fuente de verdad** para el catálogo. Estructura:
       ]
     }
   ],
-  "clientImages": ["clientes-1.jpg", "..."]
+  "clientImages": ["clientes-1.jpg", "clientes-2.jpg"]
 }
 ```
 
 - `badge`: `"feat"` | `"new"` | `"limit"` | omitido
 - `active: false` oculta el producto sin borrarlo
-- Editar directamente en JSON o via panel admin (`npm run admin`)
+- `clientImages`: nombres de archivo en `media/clients/` — alimentan el mosaico del FeaturedStrip automáticamente
+- Editar directamente en JSON o via panel admin (`/admin`)
 
-### Secciones actuales (34 productos activos)
+### Secciones actuales (42 productos activos)
 
 | # | ID | Título | Productos |
 |---|---|---|---|
 | 01 | `cuadros` | Cuadros y Pinturas | 8 |
-| 02 | `ceramica` | Cerámica Ancestral | 10 |
+| 02 | `ceramica` | Cerámica Ancestral | 15 |
 | 03 | `cuero` | Cuero Artesanal | 3 |
-| 04 | `otros` | Otras Artesanías | 13 |
+| 04 | `otros` | Otras Artesanías | 16 |
 
 ---
 
@@ -151,6 +149,8 @@ Es la **única fuente de verdad** para el catálogo. Estructura:
 | Ruta | Archivo | Descripción |
 |---|---|---|
 | `/` | `pages/index.astro` | Catálogo completo: portada, featured strip, secciones, contacto |
+| `/admin` | `pages/admin.astro` | Panel de administración (requiere login) |
+| `/api/products` | `pages/api/products.ts` | GET: lee catálogo · POST: escribe catálogo (requiere token) |
 | `/productos/[slug]` | `pages/productos/[slug].astro` | Detalle de producto: imagen, precio, descripción, WhatsApp, productos relacionados |
 | `/sitemap.xml` | `pages/sitemap.xml.ts` | Sitemap auto-generado |
 
@@ -160,12 +160,12 @@ Es la **única fuente de verdad** para el catálogo. Estructura:
 
 | Componente | Descripción |
 |---|---|
-| `Nav.astro` | Nav sticky con dropdown de categorías (se genera desde `sections`) + hamburger móvil |
+| `Nav.astro` | Nav sticky con dropdown de categorías + hamburger móvil. Hold 5 s en el logo abre el login del admin |
 | `FilterBar.astro` | Barra sticky con búsqueda en tiempo real + filtros por categoría + contador de resultados |
-| `FeaturedStrip.astro` | Franja "Hecho a mano, con alma andina" con 9 celdas de imágenes |
+| `FeaturedStrip.astro` | Franja "Hecho a mano, con alma andina" — mosaico 3×3 con imágenes de `clientImages` ciclando (fade cada 4.5 s, máx 3 visibles) |
 | `ProductCard.astro` | Tarjeta de producto: imagen, badge, nombre, precio, descripción, link a detalle |
 | `ProductSection.astro` | Sección de categoría: header + cat-strip + grid de tarjetas |
-| `ContactForm.astro` | Formulario → WhatsApp pre-formateado (`wa.me/593999006925`) |
+| `ContactForm.astro` | Formulario con validación JS → WhatsApp pre-formateado (`wa.me/593999006925`), incluye país y tipo de consulta |
 | `Footer.astro` | Logo + columnas Colecciones y Contacto |
 | `BaseLayout.astro` | HTML base, meta OG/Twitter, canonical, Google Fonts |
 
@@ -173,11 +173,24 @@ Es la **única fuente de verdad** para el catálogo. Estructura:
 
 ## Panel de administración
 
-`npm run admin` levanta un servidor Node.js puro (sin deps) en **http://localhost:4000**.
+Acceso: mantener presionado el logo del Nav **5 segundos** → modal de login → ingresar credenciales → redirige a `/admin`.
 
-- **GET /api/products** → lee `src/data/products.json`
-- **POST /api/products** → escribe `src/data/products.json` (valida JSON)
-- **GET /media/*** → sirve imágenes desde `../../media/`
+El panel corre en el **mismo servidor** que el sitio (no requiere proceso separado).
+
+### Autenticación
+
+- Las credenciales se verifican con SHA-256 en el navegador
+- Hash esperado: `da5c8060d7f3de5fc7aba7fdd418ff11009f70aca445a5248701694e60fb3ba8` → `admin:artecuador2026`
+- Al hacer login el hash se guarda en `sessionStorage` como `adminToken`
+- Visitar `/admin` sin token redirige a `/`
+- **Para cambiar la contraseña:** recalcular `SHA-256("usuario:nuevacontraseña")` y actualizar el valor de `HASH` en `Nav.astro` y `ADMIN_HASH` en `src/pages/api/products.ts`
+
+### API
+
+| Endpoint | Método | Auth | Descripción |
+|---|---|---|---|
+| `/api/products` | GET | No | Lee `src/data/products.json` |
+| `/api/products` | POST | Sí (Bearer token) | Escribe `src/data/products.json` |
 
 Cambios guardados en el admin se reflejan automáticamente en el dev server (hot-reload de Astro).
 
@@ -186,8 +199,14 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 ## Agregar un producto nuevo
 
 1. Copiar la imagen a `media/products/` (nombre en kebab-case, sin espacios)
-2. Abrir el panel admin (`npm run admin`) o editar `src/data/products.json` directamente
+2. Navegar a `/admin` (requiere login) o editar `src/data/products.json` directamente
 3. Agregar el objeto en el array `products` de la sección correspondiente
+
+## Agregar una imagen al mosaico (FeaturedStrip)
+
+1. Copiar la imagen a `media/clients/`
+2. Agregar el nombre del archivo al array `clientImages` en `products.json` (via admin o directamente)
+3. El mosaico la incluye automáticamente — no requiere cambios en el código
 
 ## Agregar una sección nueva
 
@@ -209,11 +228,24 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 
 ---
 
+## Arquitectura — decisiones clave
+
+| Decisión | Razón |
+|---|---|
+| Astro v6 `output: static` + `@astrojs/node` | Páginas públicas pre-renderizadas (rápidas); `/admin` y `/api/products` son server-rendered para poder leer/escribir archivos |
+| `products.json` como única fuente de verdad | Sin base de datos que mantener; el admin escribe directamente el JSON |
+| Token en `sessionStorage` (no cookie) | Sin necesidad de manejo de sesiones en servidor; el token expira al cerrar la pestaña |
+| Dockerfile Node.js (antes nginx) | Necesario para servir las rutas de servidor (`/admin`, `/api/products`) en producción |
+
+---
+
 ## Deuda técnica conocida
 
-| # | Área | Detalle |
-|---|---|---|
-| 1 | Featured strip | Imágenes de celdas pendientes de asignar desde `media/clients/` |
-| 2 | Formulario | Sin validación client-side ni mensaje de confirmación en pantalla |
-| 3 | País en formulario | Select capturado pero no incluido en mensaje WhatsApp |
-| 4 | Imágenes sin usar | Varias fotos en `media/products/` sin tarjeta asignada |
+Ninguna deuda activa. Ítems anteriores resueltos:
+
+| Ítem | Estado |
+|---|---|
+| FeaturedStrip sin imágenes | ✅ Resuelto — mosaico dinámico desde `clientImages` |
+| Formulario sin validación | ✅ Ya tenía validación JS + mensaje de éxito 6 s |
+| País no incluido en WhatsApp | ✅ Ya se incluía (`🌎 *País:*`) |
+| Imágenes sin tarjeta asignada | ✅ Resuelto — 8 productos nuevos agregados |
