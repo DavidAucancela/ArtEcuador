@@ -157,8 +157,9 @@ import { sections } from '../data/products';
           .map((b) => b.toString(16).padStart(2, '0')).join('');
 
         if (hex === HASH) {
+          sessionStorage.setItem('adminToken', hex);
           closeModal();
-          window.open('http://localhost:4000', '_blank');
+          window.location.href = '/admin';
         } else {
           errEl!.textContent = 'Usuario o contraseña incorrectos.';
           const passEl = document.getElementById('adminPass') as HTMLInputElement | null;
