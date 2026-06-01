@@ -206,6 +206,56 @@
           "desc": "Figura cerámica de la cultura Saraguro, elaborada con arcilla negra y decorada con simbologías ancestrales.",
           "price": "28.00",
           "active": true
+        },
+        {
+          "slug": "vasijas-barro-serie-2",
+          "img": "vasos-barro-2.png",
+          "alt": "Vasijas de Barro Serie 2",
+          "category": "Cerámica · Vasijas",
+          "name": "Vasijas de Barro Serie 2",
+          "desc": "Vasijas artesanales de barro cocido con acabado natural, ideales para decoración o uso cotidiano.",
+          "price": "22.00",
+          "active": true
+        },
+        {
+          "slug": "vasijas-barro-serie-3",
+          "img": "vasos-barro-3.png",
+          "alt": "Vasijas de Barro Serie 3",
+          "category": "Cerámica · Vasijas",
+          "name": "Vasijas de Barro Serie 3",
+          "desc": "Vasijas de barro con formas tradicionales de la alfarería andina ecuatoriana, acabado rústico.",
+          "price": "22.00",
+          "active": true
+        },
+        {
+          "slug": "vasijas-barro-serie-4",
+          "img": "vasos-barro-4.png",
+          "alt": "Vasijas de Barro Serie 4",
+          "category": "Cerámica · Vasijas",
+          "name": "Vasijas de Barro Serie 4",
+          "desc": "Colección de vasijas en barro con decoración incisa, elaboradas por artesanos de la Sierra ecuatoriana.",
+          "price": "25.00",
+          "active": true
+        },
+        {
+          "slug": "vasijas-barro-serie-5",
+          "img": "vasos-barro-5.png",
+          "alt": "Vasijas de Barro Serie 5",
+          "category": "Cerámica · Vasijas",
+          "name": "Vasijas de Barro Serie 5",
+          "desc": "Vasijas de barro hechas a mano con técnica ancestral, cada pieza es única en textura y forma.",
+          "price": "25.00",
+          "active": true
+        },
+        {
+          "slug": "vasijas-barro-serie-6",
+          "img": "vasos-barro-6.png",
+          "alt": "Vasijas de Barro Serie 6",
+          "category": "Cerámica · Vasijas",
+          "name": "Vasijas de Barro Serie 6",
+          "desc": "Vasijas artesanales de barro negro, piezas de colección con acabado brillante y formas clásicas.",
+          "price": "28.00",
+          "active": true
         }
       ]
     },
@@ -392,24 +442,35 @@
           "desc": "Nacimiento andino con el volcán Chimborazo de fondo, técnica Tigua con figuras vestidas con trajes de la Sierra.",
           "price": "18.00",
           "active": true
-        }
-      ]
-    },
-    {
-      "id": "testss",
-      "label": "2",
-      "title": "Test",
-      "titleEm": "pruebas",
-      "alt": true,
-      "products": [
+        },
         {
-          "slug": "1asdasd",
-          "img": "",
-          "alt": "",
-          "category": "",
-          "name": "123123",
-          "desc": "",
-          "price": "",
+          "slug": "nacimiento-andino-serie-3",
+          "img": "nacimiento-mini-3.png",
+          "alt": "Nacimiento Andino Serie 3",
+          "category": "Otros · Nacimientos",
+          "name": "Nacimiento Andino Serie 3",
+          "desc": "Nacimiento en miniatura con figuras vestidas con trajes de la Sierra, pintadas a mano sobre barro.",
+          "price": "15.00",
+          "active": true
+        },
+        {
+          "slug": "nacimiento-andino-serie-4",
+          "img": "nacimiento-mini-4.png",
+          "alt": "Nacimiento Andino Serie 4",
+          "category": "Otros · Nacimientos",
+          "name": "Nacimiento Andino Serie 4",
+          "desc": "Nacimiento andino en miniatura, detalles finos en trajes típicos ecuatorianos, ideal para regalo.",
+          "price": "15.00",
+          "active": true
+        },
+        {
+          "slug": "nacimiento-andino-serie-5",
+          "img": "nacimiento-mini-5.png",
+          "alt": "Nacimiento Andino Serie 5",
+          "category": "Otros · Nacimientos",
+          "name": "Nacimiento Andino Serie 5",
+          "desc": "Nacimiento artesanal con paisaje andino de fondo, figuras en barro pintadas con colores vivos.",
+          "price": "18.00",
           "active": true
         }
       ]
