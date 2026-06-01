@@ -6,13 +6,13 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "node admin/server.js & astro dev",
+    "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "admin": "node admin/server.js"
+    "astro": "astro"
   },
   "dependencies": {
-    "astro": "^6.3.5"
+    "@astrojs/node": "^10.1.2",
+    "astro": "^6.4.2"
   }
 }
