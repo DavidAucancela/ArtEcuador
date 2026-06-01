@@ -12,7 +12,8 @@ import { clientImages } from '../data/products';
       comercio justo y preservación de técnicas milenarias.
     </p>
   </div>
-  <div class="featured-img-area" id="featMosaic">
+  <div class="featured-img-area" id="featMosaic"
+       data-images={JSON.stringify(clientImages.map(f => `/media/clients/${f}`))}>
     {Array.from({ length: 9 }).map((_, i) => (
       <div class={`feat-cell feat-img-cell mc-${['r','y','g','b','r','y','g','b','r'][i]}`}
            style={i === 4 ? 'background:#2a2a2a' : undefined}>

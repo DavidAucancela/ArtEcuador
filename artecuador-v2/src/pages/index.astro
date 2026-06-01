@@ -160,16 +160,8 @@ import { sections } from '../data/products';
   (function() {
     const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
-    const imgUrls = [
-      '/media/clients/clientes-1.jpg',
-      '/media/clients/clientes-2.jpg',
-      '/media/clients/clientes-3.jpg',
-      '/media/clients/dueno.png',
-      '/media/clients/dueno-2.png',
-      '/media/clients/clientes-4.png',
-      '/media/clients/recomendacion.png',
-      '/media/clients/trabajpos.png',
-    ];
+    const mosaic = document.getElementById('featMosaic');
+    const imgUrls: string[] = JSON.parse(mosaic?.dataset.images ?? '[]');
 
     const cells = Array.from(
       document.querySelectorAll<HTMLElement>('#featMosaic .feat-img-cell')
