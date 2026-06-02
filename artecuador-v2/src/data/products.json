@@ -297,6 +297,16 @@
           "desc": "Porta llaves en cuero natural con corte artesanal y acabado al aceite, diseño minimalista andino.",
           "price": "10.00",
           "active": true
+        },
+        {
+          "slug": "123123",
+          "img": "",
+          "alt": "",
+          "category": "123123",
+          "name": "123123",
+          "desc": "123",
+          "price": "123.00",
+          "active": true
         }
       ]
     },
