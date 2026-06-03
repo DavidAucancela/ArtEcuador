@@ -345,35 +345,14 @@
       transform: translateY(-4px);
     }
 
-    /* Image area — fixed ratio, top 72% */
+    /* Image area */
     .product-img-wrap {
       position: relative;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 4 / 5;
       overflow: hidden;
       background: #f7f4ef;
       flex-shrink: 0;
     }
-
-    /* Hover overlay sobre la imagen */
-    .product-hover-overlay {
-      position: absolute; inset: 0; z-index: 2;
-      background: rgba(10, 6, 4, 0.38);
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0;
-      transition: opacity 0.28s ease;
-    }
-    .product-card:hover .product-hover-overlay { opacity: 1; }
-
-    .product-ver-btn {
-      background: var(--red); color: #fff;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 9px 20px; border-radius: 4px;
-      transform: translateY(6px);
-      transition: transform 0.28s ease;
-    }
-    .product-card:hover .product-ver-btn { transform: translateY(0); }
 
     /* Badge */
     .product-badge {
@@ -415,11 +394,6 @@
       font-size: 0.72rem; vertical-align: super; margin-right: 1px; color: var(--red);
     }
 
-    /* Touch: imagen siempre visible */
-    @media (hover: none) {
-      .product-hover-overlay { opacity: 1; background: rgba(10,6,4,0.22); }
-      .product-ver-btn { transform: translateY(0); }
-    }
 
     /* ── Joyería image themes ────────────────────────────────────── */
     .bg-joy-1 { background: linear-gradient(145deg, #FEF9EE 0%, #F7E8B0 100%); }

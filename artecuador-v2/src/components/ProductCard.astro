@@ -19,9 +19,6 @@ const badgeLabel: Record<string, string> = { feat: 'Destacado', new: 'Nuevo', li
     {product.badge && (
       <span class={`product-badge ${product.badge}`}>{badgeLabel[product.badge]}</span>
     )}
-    <div class="product-hover-overlay">
-      <span class="product-ver-btn">Ver detalle →</span>
-    </div>
   </div>
   <div class="product-info">
     <p class="product-category">{product.category}</p>
