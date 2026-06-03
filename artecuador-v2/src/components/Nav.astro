@@ -118,6 +118,7 @@ import { sections } from '../data/products';
     logo.addEventListener('mouseleave',  () => endHold(false));
     logo.addEventListener('touchend',    () => endHold(false));
     logo.addEventListener('touchcancel', () => endHold(false));
+    logo.addEventListener('contextmenu', (e) => e.preventDefault());
     logo.addEventListener('click', (e) => {
       if (didComplete) { e.preventDefault(); didComplete = false; }
     });

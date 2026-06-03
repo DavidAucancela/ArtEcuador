@@ -63,10 +63,11 @@
       letter-spacing: 0.04em;
       color: #1A1A1A; text-decoration: none;
       user-select: none; -webkit-user-select: none;
+      -webkit-touch-callout: none;
     }
     .nav-brand-text { color: #1A1A1A; }
     .nav-brand-text span { color: var(--red); }
-    .nav-icon { height: 40px; width: auto; object-fit: contain; flex-shrink: 0; }
+    .nav-icon { height: 40px; width: auto; object-fit: contain; flex-shrink: 0; pointer-events: none; -webkit-touch-callout: none; }
 
 
     /* ── Admin login modal ──────────────────────────────────────── */
