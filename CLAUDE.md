@@ -40,7 +40,9 @@ ArtEcuador/
 │           ├── admin.astro      # Panel de administración (protegido)
 │           ├── sitemap.xml.ts   # Sitemap auto-generado
 │           ├── api/
-│           │   └── products.ts  # GET/POST endpoint — lee/escribe products.json
+│           │   ├── products.ts  # GET/POST — lee/escribe products.json
+│           │   ├── images.ts    # GET — lista archivos de media/products y media/clients
+│           │   └── upload.ts    # POST — sube imágenes desde cualquier dispositivo (requiere token)
 │           └── productos/
 │               └── [slug].astro # Página de detalle por producto
 └── media/                       # Imágenes compartidas (servidas por public/media symlink)
@@ -191,25 +193,63 @@ El panel corre en el **mismo servidor** que el sitio (no requiere proceso separa
 |---|---|---|---|
 | `/api/products` | GET | No | Lee `src/data/products.json` |
 | `/api/products` | POST | Sí (Bearer token) | Escribe `src/data/products.json` |
+| `/api/images` | GET | No | Lista archivos de `media/products/` y `media/clients/` |
+| `/api/upload` | POST | Sí (Bearer token) | Sube imagen a `media/products/` o `media/clients/` (máx 10 MB, formatos: jpg/png/webp/gif) |
 
 Cambios guardados en el admin se reflejan automáticamente en el dev server (hot-reload de Astro).
+
+### Panel — funcionalidades
+
+| Área | Funcionalidad |
+|---|---|
+| **Productos** | Grid de tarjetas con imagen 4:3 `object-fit:cover` — todas del mismo tamaño |
+| **Productos** | Clic en imagen → abre editor directamente |
+| **Productos** | Toggle visible/oculto en cada tarjeta (inactivos se ven semitransparentes) |
+| **Productos** | Drag ⠿ para reordenar dentro de la colección |
+| **Productos** | Campo slug oculto — se auto-genera del nombre (nuevo) o se preserva (edición) |
+| **Fotos** | Galería modal al seleccionar foto — muestra todas las imágenes disponibles con búsqueda en tiempo real |
+| **Fotos** | Botón "📱 Subir foto" — sube desde celular, tablet o computador (cualquier dispositivo) |
+| **Colecciones** | Drag ⠿ en sidebar para reordenar colecciones |
+| **Colecciones** | Botón "Eliminar colección" en modal con confirmación y conteo de productos |
+| **Colecciones** | ID de sección oculto — se auto-genera del título (nuevo) o se preserva (edición) |
+| **Mosaico** | Botón "🖼 Fotos del mosaico (N)" en sidebar → modal para gestionar `clientImages` |
+| **Mosaico** | Drag para reordenar, "×" para quitar, "+ Agregar" abre galería de `media/clients/` |
+| **Labels** | Terminología no técnica: "Tipo de artesanía", "Etiqueta especial", "Colección", etc. |
+| **Precio** | Validación numérica, normaliza a `XX.XX` al guardar |
 
 ---
 
 ## Agregar un producto nuevo
 
+**Opción A — desde el panel admin (recomendada, para el cliente):**
+1. Abrir `/admin` → seleccionar colección → clic en "+ Agregar producto"
+2. Escribir el nombre, tipo, descripción y precio
+3. Clic en "Foto del producto" → galería → seleccionar o subir foto desde el dispositivo
+4. Guardar producto → clic en "Guardar cambios" (Ctrl+S)
+
+**Opción B — directamente en JSON (para desarrollo):**
 1. Copiar la imagen a `media/products/` (nombre en kebab-case, sin espacios)
-2. Navegar a `/admin` (requiere login) o editar `src/data/products.json` directamente
-3. Agregar el objeto en el array `products` de la sección correspondiente
+2. Editar `src/data/products.json` y agregar el objeto en el array `products` de la sección
 
 ## Agregar una imagen al mosaico (FeaturedStrip)
 
+**Desde el panel admin:**
+1. Clic en "🖼 Fotos del mosaico" en la sidebar del admin
+2. Clic en "+ Agregar foto al mosaico" → galería de `media/clients/` → seleccionar o subir
+3. Reordenar con drag si es necesario → "Guardar mosaico"
+
+**Directamente:**
 1. Copiar la imagen a `media/clients/`
-2. Agregar el nombre del archivo al array `clientImages` en `products.json` (via admin o directamente)
-3. El mosaico la incluye automáticamente — no requiere cambios en el código
+2. Agregar el nombre al array `clientImages` en `products.json`
 
-## Agregar una sección nueva
+## Agregar una sección (colección) nueva
 
+**Desde el panel admin:**
+1. Clic en "+ Nueva colección" en la sidebar
+2. Escribir el título (el ID se genera automáticamente)
+3. Guardar → agregar productos a la nueva colección
+
+**Directamente en código:**
 1. Agregar objeto en `sections` de `products.json` (nuevo `id`, `label`, `title`, `titleEm`, `alt`, `products: []`)
 2. Añadir clase `.cat-NUEVA` con gradiente en `global.css` (ver `.cat-cuadros`, `.cat-ceramica`…)
 3. El Nav, FilterBar y Footer se actualizan automáticamente desde `sections`
@@ -232,10 +272,14 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 
 | Decisión | Razón |
 |---|---|
-| Astro v6 `output: static` + `@astrojs/node` | Páginas públicas pre-renderizadas (rápidas); `/admin` y `/api/products` son server-rendered para poder leer/escribir archivos |
+| Astro v6 `output: static` + `@astrojs/node` | Páginas públicas pre-renderizadas (rápidas); `/admin` y `/api/*` son server-rendered para leer/escribir archivos |
 | `products.json` como única fuente de verdad | Sin base de datos que mantener; el admin escribe directamente el JSON |
 | Token en `sessionStorage` (no cookie) | Sin necesidad de manejo de sesiones en servidor; el token expira al cerrar la pestaña |
-| Dockerfile Node.js (antes nginx) | Necesario para servir las rutas de servidor (`/admin`, `/api/products`) en producción |
+| Dockerfile Node.js (antes nginx) | Necesario para servir las rutas de servidor en producción |
+| `GET /api/images` sin auth | Las imágenes son activos públicos; listarlas no expone información sensible |
+| `POST /api/upload` con Bearer token | Misma auth que `/api/products`; el CSRF de Astro acepta la subida porque el browser envía `Origin` correcto |
+| Slug preservado en edición | Cambiar el slug de un producto existente rompería URLs externas y SEO |
+| Grid de tarjetas 4:3 en admin | `object-fit: cover` con `aspect-ratio` fijo garantiza que todas las imágenes se vean del mismo tamaño independientemente de sus dimensiones originales |
 
 ---
 
@@ -249,3 +293,10 @@ Ninguna deuda activa. Ítems anteriores resueltos:
 | Formulario sin validación | ✅ Ya tenía validación JS + mensaje de éxito 6 s |
 | País no incluido en WhatsApp | ✅ Ya se incluía (`🌎 *País:*`) |
 | Imágenes sin tarjeta asignada | ✅ Resuelto — 8 productos nuevos agregados |
+| Admin — imágenes inconsistentes | ✅ Resuelto — grid 4:3 con object-fit:cover |
+| Admin — no se podía subir fotos | ✅ Resuelto — `/api/upload` + botón en galería |
+| Admin — terminología técnica | ✅ Resuelto — labels en español no técnico |
+| Admin — sin gestión de mosaico | ✅ Resuelto — modal de clientImages en sidebar |
+| Admin — no se podía eliminar/reordenar secciones | ✅ Resuelto — drag sidebar + botón eliminar |
+
+> **Nota Railway:** Los cambios guardados en el admin (productos, imágenes subidas) son efímeros en Railway — se pierden al redeploy porque el filesystem no persiste. Para persistencia real en producción habría que usar un bucket S3/R2 o una base de datos.
