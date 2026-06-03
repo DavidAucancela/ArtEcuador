@@ -41,10 +41,10 @@ const ogImg = `/media/products/${p.img}`;
       <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
         <path d="M13 4l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      Volver al catálogo
+      <span>Volver al catálogo</span>
     </a>
     <a href="/" class="nav-logo">Art<span>Ecuador</span></a>
-    <a href="/#contactar" class="nav-cta">Contáctanos</a>
+    <a href="/#contactar" class="nav-cta detail-nav-cta">Contáctanos</a>
   </nav>
 
   <!-- ── Product hero ─────────────────────────────────────────── -->
@@ -145,14 +145,16 @@ const ogImg = `/media/products/${p.img}`;
 <style>
   /* ── Detail nav ──────────────────────────────────────────────── */
   .detail-nav {
-    position: sticky; top: 0; z-index: 100;
+    position: sticky; top: 0; z-index: 200;
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(0,0,0,0.07);
     padding: 0 48px;
     display: flex; align-items: center; justify-content: space-between;
     height: 72px;
     gap: 16px;
+    transform: translateZ(0);
   }
   .detail-nav-back {
     display: flex; align-items: center; gap: 6px;
@@ -178,9 +180,16 @@ const ogImg = `/media/products/${p.img}`;
     margin-bottom: 80px;
   }
   @media (max-width: 800px) {
-    .detail-hero { grid-template-columns: 1fr; gap: 32px; }
-    .detail-nav { padding: 0 20px; }
+    .detail-hero { grid-template-columns: 1fr; gap: 24px; }
+    .detail-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      padding: 0 16px;
+      gap: 8px;
+    }
+    .nav-logo { justify-self: center; }
     .detail-nav-back span { display: none; }
+    .detail-nav-cta { visibility: hidden; }
   }
 
   /* ── Image ───────────────────────────────────────────────────── */
@@ -276,6 +285,12 @@ const ogImg = `/media/products/${p.img}`;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 20px;
+  }
+  @media (max-width: 640px) {
+    .detail-main { padding: 24px 16px 60px; }
+    .detail-hero { margin-bottom: 40px; }
+    .detail-related { padding-top: 32px; }
+    .detail-related-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   }
   .detail-related-card {
     text-decoration: none; color: inherit;
