@@ -88,7 +88,12 @@ export const POST: APIRoute = async ({ request }) => {
     .replace(/^-|-$/g, '')
     .slice(0, 80) || 'foto';
 
-  const destDir = path.join(process.cwd(), 'public', 'media', folder);
+  // Dev: public/media/ (symlink → ../../media)
+  // Production (node standalone): dist/client/media/ (where the static server reads from)
+  const mediaRoot = import.meta.env.PROD
+    ? path.join(process.cwd(), 'dist', 'client', 'media')
+    : path.join(process.cwd(), 'public', 'media');
+  const destDir = path.join(mediaRoot, folder);
   await fs.mkdir(destDir, { recursive: true });
 
   // Avoid overwriting: add suffix if file exists
