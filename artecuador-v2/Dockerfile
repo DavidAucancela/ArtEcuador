@@ -1,8 +1,9 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
-COPY package.json ./
+COPY artecuador-v2/package.json ./
 RUN npm install
-COPY . .
+COPY artecuador-v2/ .
+COPY media/ ./public/media/
 RUN npm run build
 
 FROM node:22-alpine
