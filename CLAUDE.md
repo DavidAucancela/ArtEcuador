@@ -67,8 +67,10 @@ npm run preview   # Preview del build en local
 | Entorno | Comando |
 |---|---|
 | Local dev | `npm run dev` (desde `artecuador-v2/`) |
-| Docker | `docker build -t artecuador . && docker run -p 8080:8080 artecuador` (desde `artecuador-v2/`) |
-| Railway | Push a `main` — auto-detecta `artecuador-v2/Dockerfile` |
+| Docker | `docker build -t artecuador -f artecuador-v2/Dockerfile . && docker run -p 8080:8080 artecuador` (desde la raíz del repo) |
+| Railway | Push a `main` — usa `artecuador-v2/Dockerfile` con contexto = raíz del repo |
+
+> **Build context de Docker:** Railway usa la **raíz del repo** como contexto (no `artecuador-v2/`). El `Dockerfile` copia los archivos con el prefijo `artecuador-v2/` explícitamente y copia `media/` directamente para resolver el symlink `public/media → ../../media`.
 
 > **Un solo proceso.** `npm run dev` levanta Astro en el 4321 y sirve el sitio, el admin y la API desde el mismo servidor. No hace falta ningún comando adicional.
 
@@ -162,10 +164,10 @@ Es la **única fuente de verdad** para el catálogo. Estructura:
 
 | Componente | Descripción |
 |---|---|
-| `Nav.astro` | Nav sticky con dropdown de categorías + hamburger móvil. Hold 5 s en el logo abre el login del admin |
+| `Nav.astro` | Nav sticky con dropdown de categorías + hamburger móvil. Hold 5 s en el logo abre el login del admin. `-webkit-touch-callout:none` + `contextmenu preventDefault` para que el hold funcione en iOS |
 | `FilterBar.astro` | Barra sticky con búsqueda en tiempo real + filtros por categoría + contador de resultados |
 | `FeaturedStrip.astro` | Franja "Hecho a mano, con alma andina" — mosaico 3×3 con imágenes de `clientImages` ciclando (fade cada 4.5 s, máx 3 visibles) |
-| `ProductCard.astro` | Tarjeta de producto: imagen, badge, nombre, precio, descripción, link a detalle |
+| `ProductCard.astro` | Tarjeta de producto: imagen `4:5` portrait, badge, nombre, precio, link a detalle. Sin overlay "Ver detalle" |
 | `ProductSection.astro` | Sección de categoría: header + cat-strip + grid de tarjetas |
 | `ContactForm.astro` | Formulario con validación JS → WhatsApp pre-formateado (`wa.me/593999006925`), incluye país y tipo de consulta |
 | `Footer.astro` | Logo + columnas Colecciones y Contacto |
@@ -202,18 +204,22 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 
 | Área | Funcionalidad |
 |---|---|
-| **Productos** | Grid de tarjetas con imagen 4:3 `object-fit:cover` — todas del mismo tamaño |
-| **Productos** | Clic en imagen → abre editor directamente |
+| **Layout** | Sidebar colapsable: 200px normal, 52px colapsada (solo iniciales). Botón ☰ en header. Estado persiste en `localStorage` |
+| **Productos** | Grid `minmax(155px, 1fr)`, gap 8px — 5-6 columnas en desktop, 3 en tablet |
+| **Productos** | Imagen cuadrada 1:1 `object-fit:cover` — thumbnails compactos y simétricos |
+| **Productos** | Clic en imagen o tarjeta → abre side panel editor |
 | **Productos** | Toggle visible/oculto en cada tarjeta (inactivos se ven semitransparentes) |
 | **Productos** | Drag ⠿ para reordenar dentro de la colección |
 | **Productos** | Campo slug oculto — se auto-genera del nombre (nuevo) o se preserva (edición) |
-| **Fotos** | Galería modal al seleccionar foto — muestra todas las imágenes disponibles con búsqueda en tiempo real |
-| **Fotos** | Botón "📱 Subir foto" — sube desde celular, tablet o computador (cualquier dispositivo) |
+| **Editor** | Side panel deslizable desde la derecha (360px) — no tapa el contenido |
+| **Editor** | Flechas ‹ › para navegar entre productos de la misma colección sin cerrar |
+| **Editor** | Preview de foto full-width 4:3 con hint "Cambiar foto" al hover |
+| **Fotos** | Galería modal al seleccionar foto — búsqueda en tiempo real |
+| **Fotos** | Botón "📱 Subir foto" — sube desde cualquier dispositivo |
 | **Colecciones** | Drag ⠿ en sidebar para reordenar colecciones |
+| **Colecciones** | Sidebar colapsada muestra la inicial de cada colección en círculo |
 | **Colecciones** | Botón "Eliminar colección" en modal con confirmación y conteo de productos |
-| **Colecciones** | ID de sección oculto — se auto-genera del título (nuevo) o se preserva (edición) |
 | **Mosaico** | Botón "🖼 Fotos del mosaico (N)" en sidebar → modal para gestionar `clientImages` |
-| **Mosaico** | Drag para reordenar, "×" para quitar, "+ Agregar" abre galería de `media/clients/` |
 | **Labels** | Terminología no técnica: "Tipo de artesanía", "Etiqueta especial", "Colección", etc. |
 | **Precio** | Validación numérica, normaliza a `XX.XX` al guardar |
 
@@ -263,8 +269,9 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 | > 1100px | Grid 4 col, nav desktop, portada 2 col |
 | ≤ 1100px | Grid 3 col |
 | ≤ 900px | Grid 2 col · Hamburger · Nav desktop oculto · Portada 1 col |
-| ≤ 640px | Detalle de producto 1 col |
-| ≤ 560px | Grid 1 col |
+| ≤ 800px | Detalle de producto: hero 1 col · nav 3-columnas grid (logo centrado, CTA oculto) |
+| ≤ 640px | Detalle: padding compacto · productos relacionados 2 col |
+| ≤ 560px | Grid 2 col · padding sección reducido (44px/16px) · hero 240px |
 
 ---
 
@@ -276,10 +283,15 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 | `products.json` como única fuente de verdad | Sin base de datos que mantener; el admin escribe directamente el JSON |
 | Token en `sessionStorage` (no cookie) | Sin necesidad de manejo de sesiones en servidor; el token expira al cerrar la pestaña |
 | Dockerfile Node.js (antes nginx) | Necesario para servir las rutas de servidor en producción |
+| Build context = raíz del repo | Railway ignora `buildContext` en `railway.toml`; el Dockerfile usa `artecuador-v2/` como prefijo en COPY y copia `media/` directamente |
+| `builder = "DOCKERFILE"` en `railway.toml` | Sin esta línea, Railway usa Nixpacks y sirve el sitio con nginx (muestra página por defecto) |
 | `GET /api/images` sin auth | Las imágenes son activos públicos; listarlas no expone información sensible |
 | `POST /api/upload` con Bearer token | Misma auth que `/api/products`; el CSRF de Astro acepta la subida porque el browser envía `Origin` correcto |
 | Slug preservado en edición | Cambiar el slug de un producto existente rompería URLs externas y SEO |
-| Grid de tarjetas 4:3 en admin | `object-fit: cover` con `aspect-ratio` fijo garantiza que todas las imágenes se vean del mismo tamaño independientemente de sus dimensiones originales |
+| Grid de tarjetas 1:1 en admin | Thumbnails cuadrados compactos — más columnas visibles, simetría garantizada |
+| Imagen de producto 4:5 (portrait) en catálogo | Más área visible por producto en el grid de 2 columnas mobile |
+| Side panel en lugar de modal en admin | No tapa el contenido; permite ver otras tarjetas mientras se edita |
+| `-webkit-touch-callout:none` en logo hold | iOS dispara `touchcancel` en long-press si no se bloquea el callout, cancelando el timer |
 
 ---
 
@@ -298,5 +310,17 @@ Ninguna deuda activa. Ítems anteriores resueltos:
 | Admin — terminología técnica | ✅ Resuelto — labels en español no técnico |
 | Admin — sin gestión de mosaico | ✅ Resuelto — modal de clientImages en sidebar |
 | Admin — no se podía eliminar/reordenar secciones | ✅ Resuelto — drag sidebar + botón eliminar |
+| Railway mostraba "Welcome to nginx!" | ✅ Resuelto — `builder = "DOCKERFILE"` en `railway.toml` + build context = raíz |
+| Docker build fallaba con `package-lock.json not found` | ✅ Resuelto — COPY explícito con prefijo `artecuador-v2/`, `npm install` en lugar de `npm ci` |
+| Overlay "Ver detalle" en tarjetas | ✅ Eliminado — toda la tarjeta es clickeable |
+| Grid mobile mostraba 1 columna | ✅ Resuelto — removido `aspect-ratio:3/5` del card, padding reducido |
+| Nav de detalle asimétrico en mobile | ✅ Resuelto — grid 3-col, texto "Volver" en `<span>`, CTA `visibility:hidden` |
+| Breadcrumb se montaba sobre el nav en iOS | ✅ Resuelto — `z-index:200` + `transform:translateZ(0)` fuerza capa GPU |
+| Hold del logo no funcionaba en iOS | ✅ Resuelto — `-webkit-touch-callout:none` + `contextmenu preventDefault` |
+| Productos relacionados 1 columna en mobile | ✅ Resuelto — `repeat(2,1fr)` en ≤640px |
+| Logo del detalle sin colores ni ícono | ✅ Resuelto — mismo markup que Nav.astro |
+| Admin — grid con cards enormes | ✅ Resuelto — `minmax(155px)`, gap 8px, imagen 1:1 |
+| Admin — modal tapaba todo el contenido | ✅ Resuelto — side panel deslizable desde la derecha |
+| Admin — sidebar demasiado ancha | ✅ Resuelto — 200px, colapsable a 52px con botón ☰ |
 
 > **Nota Railway:** Los cambios guardados en el admin (productos, imágenes subidas) son efímeros en Railway — se pierden al redeploy porque el filesystem no persiste. Para persistencia real en producción habría que usar un bucket S3/R2 o una base de datos.
