@@ -451,6 +451,7 @@ export const prerender = false;
       pointer-events: none;
     }
     .toast.hidden { display: none; }
+    .toast.error { background: #b91c1c; }
     @keyframes toastIn { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
     /* ── SAVE BUTTON in header ── */
@@ -930,12 +931,13 @@ async function saveData() {
 
 // ── TOAST ─────────────────────────────────────────────────────────────────
 let toastTimer = null;
-function showToast(msg) {
+function showToast(msg, isError = false) {
   const el = document.getElementById('toast');
   el.textContent = msg;
+  el.classList.toggle('error', isError);
   el.classList.remove('hidden');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.add('hidden'), 2500);
+  toastTimer = setTimeout(() => el.classList.add('hidden'), isError ? 5000 : 2500);
 }
 
 // ── STATS ─────────────────────────────────────────────────────────────────
@@ -1535,13 +1537,26 @@ async function uploadFile(file) {
     const fd = new FormData();
     fd.append('file', file);
     fd.append('folder', galleryMode);
-    const res = await fetch('/api/upload', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + token },
-      body: fd,
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Error al subir');
+    let res;
+    try {
+      res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token },
+        body: fd,
+      });
+    } catch (networkErr) {
+      throw new Error('No se pudo conectar al servidor. Revisa tu conexión.');
+    }
+
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      const text = await res.text().catch(() => '');
+      throw new Error(text || `Error del servidor (${res.status})`);
+    }
+
+    if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
 
     // Refresh image list and select the new file
     const imgRes = await fetch('/api/images');
@@ -1552,7 +1567,7 @@ async function uploadFile(file) {
     renderGalleryGrid(search);
     showToast('✓ Foto subida: ' + data.filename);
   } catch (e) {
-    showToast('Error: ' + e.message);
+    showToast('⚠ ' + e.message, true);
   } finally {
     btn.innerHTML = original;
     btn.disabled = false;
