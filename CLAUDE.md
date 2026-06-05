@@ -205,10 +205,12 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 | Área | Funcionalidad |
 |---|---|
 | **Layout** | Sidebar colapsable: 200px normal, 52px colapsada (solo iniciales). Botón ☰ en header. Estado persiste en `localStorage` |
-| **Productos** | Grid `minmax(155px, 1fr)`, gap 8px — 5-6 columnas en desktop, 3 en tablet |
-| **Productos** | Imagen cuadrada 1:1 `object-fit:cover` — thumbnails compactos y simétricos |
-| **Productos** | Clic en imagen o tarjeta → abre side panel editor |
-| **Productos** | Toggle visible/oculto en cada tarjeta (inactivos se ven semitransparentes) |
+| **Productos** | Grid `minmax(160px, 1fr)`, gap 10px, `align-items:start` — columnas uniformes, cada tarjeta toma su altura natural |
+| **Productos** | Tarjeta: topbar compacto 28px (⠿ drag + toggle), imagen cuadrada 1:1, footer (nombre + badge / precio + ✏️ + 🗑) |
+| **Productos** | Imagen cuadrada forzada con `padding-bottom:100%` + hijos `position:absolute` — no depende de las dimensiones naturales del archivo |
+| **Productos** | Botón 🗑 solo visible en hover de la tarjeta (opacity 0→1). Tarjetas inactivas: `opacity:0.55 + grayscale(0.5)` |
+| **Productos** | Clic en imagen → abre side panel editor |
+| **Productos** | Toggle visible/oculto en topbar de cada tarjeta |
 | **Productos** | Drag ⠿ para reordenar dentro de la colección |
 | **Productos** | Campo slug oculto — se auto-genera del nombre (nuevo) o se preserva (edición) |
 | **Editor** | Side panel deslizable desde la derecha (360px) — no tapa el contenido |
@@ -292,6 +294,8 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 | Imagen de producto 4:5 (portrait) en catálogo | Más área visible por producto en el grid de 2 columnas mobile |
 | Side panel en lugar de modal en admin | No tapa el contenido; permite ver otras tarjetas mientras se edita |
 | `-webkit-touch-callout:none` en logo hold | iOS dispara `touchcancel` en long-press si no se bloquea el callout, cancelando el timer |
+| `<style is:global>` en `admin.astro` | El CSS del admin vive en un `<style>` sin scope para que aplique a elementos creados por JavaScript. Astro scoped CSS añade `[data-astro-cid-*]` a los selectores; los elementos dinámicos (grid, cards, imagen) no reciben ese atributo y el CSS es ignorado por el browser |
+| `padding-bottom:100%` para thumbnails cuadrados | `aspect-ratio:1/1` + `height:100%` en el img hijo crea dependencia circular — el browser usa las dimensiones naturales del archivo. `padding-bottom:100%` (relativo al ancho del contenedor) + hijos `position:absolute;inset:0` rompe la circularidad sin importar el tamaño original de la imagen |
 
 ---
 
@@ -322,5 +326,8 @@ Ninguna deuda activa. Ítems anteriores resueltos:
 | Admin — grid con cards enormes | ✅ Resuelto — `minmax(155px)`, gap 8px, imagen 1:1 |
 | Admin — modal tapaba todo el contenido | ✅ Resuelto — side panel deslizable desde la derecha |
 | Admin — sidebar demasiado ancha | ✅ Resuelto — 200px, colapsable a 52px con botón ☰ |
+| Admin — CSS ignorado (grid sin columnas, imágenes a tamaño natural) | ✅ Resuelto — `<style is:global>` en `admin.astro`; Astro scopeaba todos los selectores con `[data-astro-cid-*]` y los elementos JS no recibían ese atributo |
+| Admin — thumbnails a tamaño natural aunque hubiera CSS | ✅ Resuelto — `padding-bottom:100%` + hijos `position:absolute` en `.card-img-wrap`; `aspect-ratio` fallaba por dependencia circular con `img height:100%` |
+| Admin — botones desorganizados (badge+toggle+✏️+🗑 en topbar) | ✅ Resuelto — topbar compacto solo con drag+toggle; badge+precio+✏️+🗑 movidos al footer de la tarjeta |
 
 > **Nota Railway:** Los cambios guardados en el admin (productos, imágenes subidas) son efímeros en Railway — se pierden al redeploy porque el filesystem no persiste. Para persistencia real en producción habría que usar un bucket S3/R2 o una base de datos.
