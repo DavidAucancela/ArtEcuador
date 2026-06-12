@@ -1,8 +1,8 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import fs from 'fs/promises';
 import path from 'path';
+import { saveImage, imageExists, type MediaFolder } from '../../lib/storage';
 
 const ADMIN_HASH = 'da5c8060d7f3de5fc7aba7fdd418ff11009f70aca445a5248701694e60fb3ba8';
 const MAX_SIZE = 20 * 1024 * 1024; // 20 MB
@@ -88,29 +88,16 @@ export const POST: APIRoute = async ({ request }) => {
     .replace(/^-|-$/g, '')
     .slice(0, 80) || 'foto';
 
-  // Dev: public/media/ (symlink → ../../media)
-  // Production (node standalone): dist/client/media/ (where the static server reads from)
-  const mediaRoot = import.meta.env.PROD
-    ? path.join(process.cwd(), 'dist', 'client', 'media')
-    : path.join(process.cwd(), 'public', 'media');
-  const destDir = path.join(mediaRoot, folder);
-  await fs.mkdir(destDir, { recursive: true });
-
   // Avoid overwriting: add suffix if file exists
   let filename = baseName + ext;
   let counter = 1;
-  while (true) {
-    try {
-      await fs.access(path.join(destDir, filename));
-      filename = `${baseName}-${counter}${ext}`;
-      counter++;
-    } catch {
-      break;
-    }
+  while (await imageExists(folder as MediaFolder, filename)) {
+    filename = `${baseName}-${counter}${ext}`;
+    counter++;
   }
 
   const buffer = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(destDir, filename), buffer);
+  await saveImage(folder as MediaFolder, filename, buffer);
 
   return new Response(JSON.stringify({ ok: true, filename }), {
     headers: { 'Content-Type': 'application/json' },

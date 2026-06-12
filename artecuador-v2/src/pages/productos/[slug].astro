@@ -1,16 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { allProducts, sections, type Product } from '../../data/products';
+import { allProducts, getSections } from '../../data/products';
 
-export function getStaticPaths() {
-  return allProducts().map((p) => ({
-    params:  { slug: p.slug },
-    props:   { product: p },
-  }));
-}
+// Server-rendered: resuelve el slug en cada request — los productos nuevos
+// creados desde el admin tienen página de detalle sin redeploy
+export const prerender = false;
 
-interface Props { product: ReturnType<typeof allProducts>[number] }
-const { product } = Astro.props;
+const products = await allProducts();
+const product = products.find((prod) => prod.slug === Astro.params.slug);
+if (!product) return Astro.redirect('/');
+
+const sections = await getSections();
 const { sectionId, sectionTitle, ...p } = product;
 
 const badgeLabel: Record<string, string> = { feat: 'Destacado', new: 'Nuevo', limit: 'Limitado' };

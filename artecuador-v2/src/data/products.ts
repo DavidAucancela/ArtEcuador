@@ -1,5 +1,3 @@
-import data from './products.json';
-
 export type Badge = 'feat' | 'new' | 'limit';
 
 export interface Product {
@@ -23,16 +21,27 @@ export interface Section {
   products: Product[];
 }
 
-const raw = data as { sections: Section[]; clientImages: string[] };
+/*
+ * Los datos se leen en runtime (no en build) para que lo guardado desde el
+ * panel admin se refleje en el sitio sin redeploy. Las páginas que los usan
+ * son server-rendered (prerender = false).
+ */
+import { getCatalog } from '../lib/storage';
 
-export const sections: Section[] = raw.sections.map((s) => ({
-  ...s,
-  products: s.products.filter((p) => p.active !== false),
-}));
+export async function getSections(): Promise<Section[]> {
+  const { sections } = await getCatalog();
+  return sections.map((s) => ({
+    ...s,
+    products: s.products.filter((p) => p.active !== false),
+  }));
+}
 
-export const clientImages = raw.clientImages;
+export async function getClientImages(): Promise<string[]> {
+  return (await getCatalog()).clientImages;
+}
 
-export function allProducts() {
+export async function allProducts() {
+  const sections = await getSections();
   return sections.flatMap((s) =>
     s.products.map((p) => ({ ...p, sectionId: s.id, sectionTitle: `${s.title} ${s.titleEm}` }))
   );

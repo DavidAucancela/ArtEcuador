@@ -9,14 +9,13 @@ Catálogo web de artesanías ecuatorianas. **El proyecto es `artecuador-v2/`**, 
 ```
 ArtEcuador/
 ├── CLAUDE.md                    # Esta guía de desarrollo
+├── README.md                    # Resumen del proyecto y comandos básicos
+├── railway.toml                 # builder = DOCKERFILE + dockerfilePath = artecuador-v2/Dockerfile
 ├── artecuador-v2/               # ← TODO el código vive aquí
-│   ├── astro.config.mjs         # output: static + @astrojs/node adapter
-│   ├── package.json
+│   ├── astro.config.mjs         # output: static + @astrojs/node adapter + checkOrigin: false
+│   ├── package.json             # Requiere Node >= 22.12.0
 │   ├── tsconfig.json
-│   ├── Dockerfile               # Node.js standalone, puerto 8080
-│   ├── admin/                   # Legacy — ya no se usa en dev normal
-│   │   ├── index.html
-│   │   └── server.js
+│   ├── Dockerfile               # Node.js standalone, puerto 8080 — el único Dockerfile del repo
 │   ├── public/
 │   │   ├── favicon.ico / favicon.svg
 │   │   ├── media → ../../media  # Symlink a imágenes compartidas
@@ -31,20 +30,24 @@ ArtEcuador/
 │       │   ├── ContactForm.astro
 │       │   └── Footer.astro
 │       ├── data/
-│       │   ├── products.json    # Fuente de verdad: secciones + productos + clientImages
-│       │   └── products.ts      # Tipos y helpers de acceso a los datos
+│       │   ├── products.json    # Datos iniciales / seed (en S3 el bucket es la fuente de verdad)
+│       │   └── products.ts      # Tipos + loaders async (getSections, getClientImages, allProducts)
+│       ├── lib/
+│       │   └── storage.ts       # Capa de almacenamiento: S3/R2 si hay env vars, filesystem si no
 │       ├── layouts/
 │       │   └── BaseLayout.astro # HTML base, meta OG, fuentes
 │       └── pages/
-│           ├── index.astro      # Página principal (catálogo)
+│           ├── index.astro      # Página principal (catálogo) — server-rendered
 │           ├── admin.astro      # Panel de administración (protegido)
-│           ├── sitemap.xml.ts   # Sitemap auto-generado
+│           ├── sitemap.xml.ts   # Sitemap auto-generado — server-rendered
 │           ├── api/
-│           │   ├── products.ts  # GET/POST — lee/escribe products.json
-│           │   ├── images.ts    # GET — lista archivos de media/products y media/clients
-│           │   └── upload.ts    # POST — sube imágenes desde cualquier dispositivo (requiere token)
+│           │   ├── products.ts  # GET/POST — lee/escribe el catálogo vía storage.ts
+│           │   ├── images.ts    # GET — lista imágenes locales + del bucket
+│           │   └── upload.ts    # POST — sube imágenes al bucket o filesystem (requiere token)
+│           ├── media/
+│           │   └── [...path].ts # Proxy: sirve imágenes del bucket que no existen como estáticas
 │           └── productos/
-│               └── [slug].astro # Página de detalle por producto
+│               └── [slug].astro # Detalle por producto — server-rendered (slug en runtime)
 └── media/                       # Imágenes compartidas (servidas por public/media symlink)
     ├── logoFinal.png            # Logo horizontal (cover + footer)
     ├── iconoFinal.png           # Ícono cuadrado (nav + favicon)
@@ -66,11 +69,13 @@ npm run preview   # Preview del build en local
 
 | Entorno | Comando |
 |---|---|
-| Local dev | `npm run dev` (desde `artecuador-v2/`) |
+| Local dev | `npm run dev` (desde `artecuador-v2/`, requiere Node ≥ 22.12.0) |
 | Docker | `docker build -t artecuador -f artecuador-v2/Dockerfile . && docker run -p 8080:8080 artecuador` (desde la raíz del repo) |
 | Railway | Push a `main` — usa `artecuador-v2/Dockerfile` con contexto = raíz del repo |
 
 > **Build context de Docker:** Railway usa la **raíz del repo** como contexto (no `artecuador-v2/`). El `Dockerfile` copia los archivos con el prefijo `artecuador-v2/` explícitamente y copia `media/` directamente para resolver el symlink `public/media → ../../media`.
+
+> **Un solo Dockerfile:** `artecuador-v2/Dockerfile` (Node standalone), el que Railway usa vía `dockerfilePath` en `railway.toml`. Usar `-f artecuador-v2/Dockerfile` en builds locales. (El Dockerfile nginx legacy de la raíz, `nginx.conf` y el admin viejo `admin/` fueron eliminados en junio 2026.)
 
 > **Un solo proceso.** `npm run dev` levanta Astro en el 4321 y sirve el sitio, el admin y la API desde el mismo servidor. No hace falta ningún comando adicional.
 
@@ -137,13 +142,13 @@ Es la **única fuente de verdad** para el catálogo. Estructura:
 - `clientImages`: nombres de archivo en `media/clients/` — alimentan el mosaico del FeaturedStrip automáticamente
 - Editar directamente en JSON o via panel admin (`/admin`)
 
-### Secciones actuales (42 productos activos)
+### Secciones actuales (43 productos activos)
 
 | # | ID | Título | Productos |
 |---|---|---|---|
 | 01 | `cuadros` | Cuadros y Pinturas | 8 |
 | 02 | `ceramica` | Cerámica Ancestral | 15 |
-| 03 | `cuero` | Cuero Artesanal | 3 |
+| 03 | `cuero` | Cuero Artesanal | 4 |
 | 04 | `otros` | Otras Artesanías | 16 |
 
 ---
@@ -196,7 +201,7 @@ El panel corre en el **mismo servidor** que el sitio (no requiere proceso separa
 | `/api/products` | GET | No | Lee `src/data/products.json` |
 | `/api/products` | POST | Sí (Bearer token) | Escribe `src/data/products.json` |
 | `/api/images` | GET | No | Lista archivos de `media/products/` y `media/clients/` |
-| `/api/upload` | POST | Sí (Bearer token) | Sube imagen a `media/products/` o `media/clients/` (máx 10 MB, formatos: jpg/png/webp/gif) |
+| `/api/upload` | POST | Sí (Bearer token) | Sube imagen a `media/products/` o `media/clients/` (máx 20 MB, formatos: jpg/png/webp/gif/avif — HEIC rechazado con mensaje para el usuario) |
 
 Cambios guardados en el admin se reflejan automáticamente en el dev server (hot-reload de Astro).
 
@@ -281,14 +286,18 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 
 | Decisión | Razón |
 |---|---|
-| Astro v6 `output: static` + `@astrojs/node` | Páginas públicas pre-renderizadas (rápidas); `/admin` y `/api/*` son server-rendered para leer/escribir archivos |
-| `products.json` como única fuente de verdad | Sin base de datos que mantener; el admin escribe directamente el JSON |
+| **Todas las páginas son server-rendered** (`prerender = false`) | Antes eran pre-renderizadas y los cambios guardados en el admin no se veían sin redeploy: el catálogo quedaba "congelado" en el HTML del build. Ahora `index`, `productos/[slug]` y `sitemap` leen el catálogo en cada request |
+| Capa de almacenamiento `src/lib/storage.ts` | Si están definidas las env vars `S3_*`, el catálogo y las imágenes subidas viven en un bucket S3/R2 (persisten entre redeploys de Railway). Sin env vars: filesystem local (dev). Cache en memoria 60 s, invalidada al guardar |
+| Datos accesibles solo vía loaders async (`getSections()` etc.) | El `import` estático del JSON se resolvía en build time; los loaders leen vía storage en runtime |
+| Proxy `/media/[...path]` | El static server sirve primero las imágenes del repo (baked en el build); las subidas al bucket no existen como archivo y caen en esta ruta, que las lee de S3/R2 |
+| `[slug].astro` sin `getStaticPaths` | El slug se resuelve por request → productos nuevos tienen detalle sin redeploy. Slug inexistente → redirect a `/` |
 | Token en `sessionStorage` (no cookie) | Sin necesidad de manejo de sesiones en servidor; el token expira al cerrar la pestaña |
 | Dockerfile Node.js (antes nginx) | Necesario para servir las rutas de servidor en producción |
 | Build context = raíz del repo | Railway ignora `buildContext` en `railway.toml`; el Dockerfile usa `artecuador-v2/` como prefijo en COPY y copia `media/` directamente |
 | `builder = "DOCKERFILE"` en `railway.toml` | Sin esta línea, Railway usa Nixpacks y sirve el sitio con nginx (muestra página por defecto) |
 | `GET /api/images` sin auth | Las imágenes son activos públicos; listarlas no expone información sensible |
-| `POST /api/upload` con Bearer token | Misma auth que `/api/products`; el CSRF de Astro acepta la subida porque el browser envía `Origin` correcto |
+| `POST /api/upload` con Bearer token | Misma auth que `/api/products` |
+| `security: { checkOrigin: false }` en `astro.config.mjs` | Safari no envía el header `Origin` en requests same-origin y el CSRF de Astro bloqueaba todos los uploads; la auth real es el Bearer token |
 | Slug preservado en edición | Cambiar el slug de un producto existente rompería URLs externas y SEO |
 | Grid de tarjetas 1:1 en admin | Thumbnails cuadrados compactos — más columnas visibles, simetría garantizada |
 | Imagen de producto 4:5 (portrait) en catálogo | Más área visible por producto en el grid de 2 columnas mobile |
@@ -330,4 +339,21 @@ Ninguna deuda activa. Ítems anteriores resueltos:
 | Admin — thumbnails a tamaño natural aunque hubiera CSS | ✅ Resuelto — `padding-bottom:100%` + hijos `position:absolute` en `.card-img-wrap`; `aspect-ratio` fallaba por dependencia circular con `img height:100%` |
 | Admin — botones desorganizados (badge+toggle+✏️+🗑 en topbar) | ✅ Resuelto — topbar compacto solo con drag+toggle; badge+precio+✏️+🗑 movidos al footer de la tarjeta |
 
-> **Nota Railway:** Los cambios guardados en el admin (productos, imágenes subidas) son efímeros en Railway — se pierden al redeploy porque el filesystem no persiste. Para persistencia real en producción habría que usar un bucket S3/R2 o una base de datos.
+## Persistencia en producción — bucket S3/R2
+
+Para que los cambios del admin (productos e imágenes) **persistan entre redeploys** de Railway, configurar estas variables de entorno en el servicio de Railway:
+
+| Variable | Valor |
+|---|---|
+| `S3_ENDPOINT` | Endpoint del bucket (R2: `https://<account-id>.r2.cloudflarestorage.com`) |
+| `S3_ACCESS_KEY_ID` | Access key del bucket |
+| `S3_SECRET_ACCESS_KEY` | Secret key del bucket |
+| `S3_BUCKET` | Nombre del bucket (ej. `artecuador`) |
+| `S3_REGION` | Opcional — default `auto` (correcto para R2) |
+
+Comportamiento:
+- **Sin las variables** (dev local): todo funciona contra el filesystem, como siempre.
+- **Con las variables**: `products.json` vive en el bucket bajo `data/products.json` (se siembra automáticamente desde el JSON del build la primera vez) y las imágenes subidas van a `media/products/` / `media/clients/` del bucket, servidas por la ruta proxy `/media/[...path]`.
+- Las imágenes que ya están en el repo siguen baked en la imagen Docker y se sirven como estáticas — el bucket solo guarda lo nuevo.
+
+> Recomendado: Cloudflare R2 (10 GB gratis, sin costo de egreso). Crear bucket + API token con permisos de lectura/escritura de objetos.
