@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# contador de visitas (datos locales de dev; en prod vive en el bucket)
+src/data/analytics.json
+
 # macOS-specific files
 .DS_Store
 
