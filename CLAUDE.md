@@ -201,7 +201,10 @@ El panel corre en el **mismo servidor** que el sitio (no requiere proceso separa
 | `/api/products` | GET | No | Lee `src/data/products.json` |
 | `/api/products` | POST | Sí (Bearer token) | Escribe `src/data/products.json` |
 | `/api/images` | GET | No | Lista archivos de `media/products/` y `media/clients/` |
+| `/api/images` | DELETE | Sí (Bearer token) | Borra una imagen (`{folder, filename}`). Valida path traversal. Borra la copia local y/o del bucket |
 | `/api/upload` | POST | Sí (Bearer token) | Sube imagen a `media/products/` o `media/clients/` (máx 20 MB, formatos: jpg/png/webp/gif/avif — HEIC rechazado con mensaje para el usuario) |
+| `/api/track` | POST | No | Registra una visita (contador). Body `{path}`; la IP sale de `x-forwarded-for`. Lo dispara `BaseLayout.astro` en cada carga de página pública |
+| `/api/stats` | GET | Sí (Bearer token) | Devuelve las estadísticas de visitas (`src/lib/analytics.ts` → `data/analytics.json`) |
 
 Cambios guardados en el admin se reflejan automáticamente en el dev server (hot-reload de Astro).
 
@@ -227,6 +230,10 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 | **Colecciones** | Sidebar colapsada muestra la inicial de cada colección en círculo |
 | **Colecciones** | Botón "Eliminar colección" en modal con confirmación y conteo de productos |
 | **Mosaico** | Botón "🖼 Fotos del mosaico (N)" en sidebar → modal para gestionar `clientImages` |
+| **Todas las fotos** | Botón "🗂 Todas las fotos" en sidebar → gestor de TODAS las fotos subidas (pestañas Productos / Mosaico, búsqueda, badge "En uso/Sin usar", subir). Solo se pueden borrar las fotos **sin usar** (las en uso tienen el 🗑 deshabilitado) |
+| **Visitas** | Botón "📊 Visitas" en sidebar → modal con total, gráfico de 14 días, países (alcance), ciudades, páginas más visitadas y visitas recientes (vía `/api/stats`) |
+| **Guardado** | Aviso `beforeunload` nativo si hay cambios sin guardar (`dirty`) al recargar/cerrar la pestaña |
+| **Header móvil** | El header del admin es responsive (`@media ≤640px`): oculta el texto de estado, acorta "Guardar" y deja solo la flecha "←" para que los botones no se salgan de pantalla |
 | **Labels** | Terminología no técnica: "Tipo de artesanía", "Etiqueta especial", "Colección", etc. |
 | **Precio** | Validación numérica, normaliza a `XX.XX` al guardar |
 
@@ -297,6 +304,8 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 | `builder = "DOCKERFILE"` en `railway.toml` | Sin esta línea, Railway usa Nixpacks y sirve el sitio con nginx (muestra página por defecto) |
 | `GET /api/images` sin auth | Las imágenes son activos públicos; listarlas no expone información sensible |
 | `POST /api/upload` con Bearer token | Misma auth que `/api/products` |
+| Contador de visitas propio (no GA) | La app corre en Railway sin proxy de Cloudflare → sin headers de geo. `src/lib/analytics.ts` resuelve país/ciudad con la API gratuita `ip-api.com` (HTTP, timeout 2.5 s) usando la IP de `x-forwarded-for`, y guarda agregados en `data/analytics.json` (bucket o filesystem). Sin cuentas externas ni datos fuera del sitio |
+| Borrado de imágenes solo si están "sin usar" | El gestor de fotos deshabilita el 🗑 de las imágenes referenciadas por algún producto o por `clientImages`, para no romper el catálogo |
 | `security: { checkOrigin: false }` en `astro.config.mjs` | Safari no envía el header `Origin` en requests same-origin y el CSRF de Astro bloqueaba todos los uploads; la auth real es el Bearer token |
 | Slug preservado en edición | Cambiar el slug de un producto existente rompería URLs externas y SEO |
 | Grid de tarjetas 1:1 en admin | Thumbnails cuadrados compactos — más columnas visibles, simetría garantizada |

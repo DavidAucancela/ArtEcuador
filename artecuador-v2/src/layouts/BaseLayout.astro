@@ -53,5 +53,16 @@ const pageUrl = canonical ? `${siteUrl}${canonical}` : siteUrl;
   </head>
   <body>
     <slot />
+    <script>
+      // Contador de visitas — registra la visita una vez por carga de página.
+      try {
+        fetch('/api/track', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: location.pathname }),
+          keepalive: true,
+        }).catch(() => {});
+      } catch (_) { /* sin contador no se rompe nada */ }
+    </script>
   </body>
 </html>

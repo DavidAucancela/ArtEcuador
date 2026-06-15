@@ -16,6 +16,7 @@ import {
   PutObjectCommand,
   ListObjectsV2Command,
   HeadObjectCommand,
+  DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
 import type { Section } from '../data/products';
 
@@ -157,6 +158,19 @@ export async function imageExists(folder: MediaFolder, filename: string): Promis
   }
 }
 
+export async function deleteImage(folder: MediaFolder, filename: string): Promise<void> {
+  // Borra la copia local (dev) y/o la subida al bucket. Las imágenes "baked"
+  // del repo solo desaparecen del contenedor en ejecución (efímero).
+  try {
+    await fs.unlink(path.join(LOCAL_MEDIA, folder, filename));
+  } catch { /* puede no existir localmente */ }
+  if (s3Enabled) {
+    try {
+      await client().send(new DeleteObjectCommand({ Bucket: S3_BUCKET, Key: `media/${folder}/${filename}` }));
+    } catch { /* puede no existir en el bucket */ }
+  }
+}
+
 export async function saveImage(folder: MediaFolder, filename: string, buffer: Buffer): Promise<void> {
   if (s3Enabled) {
     await client().send(new PutObjectCommand({
@@ -169,6 +183,42 @@ export async function saveImage(folder: MediaFolder, filename: string, buffer: B
     const dir = path.join(LOCAL_MEDIA, folder);
     await fs.mkdir(dir, { recursive: true });
     await fs.writeFile(path.join(dir, filename), buffer);
+  }
+}
+
+/* ── Analítica (contador de visitas) ──────────────────────────── */
+
+const ANALYTICS_KEY = 'data/analytics.json';
+const LOCAL_ANALYTICS = path.join(process.cwd(), 'src/data/analytics.json');
+
+/** Lee el blob de analítica. Devuelve null si aún no existe. */
+export async function getAnalyticsRaw(): Promise<any | null> {
+  if (s3Enabled) {
+    try {
+      const res = await client().send(new GetObjectCommand({ Bucket: S3_BUCKET, Key: ANALYTICS_KEY }));
+      return JSON.parse(await res.Body!.transformToString());
+    } catch (e: any) {
+      if (e?.name === 'NoSuchKey') return null;
+      throw e;
+    }
+  }
+  try {
+    return JSON.parse(await fs.readFile(LOCAL_ANALYTICS, 'utf-8'));
+  } catch {
+    return null;
+  }
+}
+
+export async function saveAnalyticsRaw(data: any): Promise<void> {
+  if (s3Enabled) {
+    await client().send(new PutObjectCommand({
+      Bucket: S3_BUCKET,
+      Key: ANALYTICS_KEY,
+      Body: JSON.stringify(data),
+      ContentType: 'application/json',
+    }));
+  } else {
+    await fs.writeFile(LOCAL_ANALYTICS, JSON.stringify(data, null, 2), 'utf-8');
   }
 }
 

@@ -473,6 +473,24 @@ export const prerender = false;
     }
     #btnSave:hover:not(:disabled) { background: var(--red-dark); }
     #btnSave:disabled { background: #ccc; cursor: not-allowed; }
+    #btnSave .btn-save-short { display: none; }
+    .btn-back .back-arrow { display: none; }
+
+    /* ── HEADER RESPONSIVE ── */
+    @media (max-width: 640px) {
+      header { padding: 0 12px; gap: 8px; }
+      header .logo { font-size: 16px; }
+      header .logo .admin-tag { display: none; }
+      .save-status #statusText { display: none; }
+      #btnSave { padding: 7px 12px; }
+      #btnSave .btn-save-full { display: none; }
+      #btnSave .btn-save-short { display: inline; }
+      .btn-back { padding: 6px 10px; font-size: 15px; }
+      .btn-back .back-arrow { display: inline; }
+      .btn-back .back-text { display: none; }
+      .main-header { padding: 12px 14px; }
+      .main-header h2 { font-size: 16px; }
+    }
 
     /* Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
@@ -595,6 +613,88 @@ export const prerender = false;
       font-size: 16px; padding: 4px; border-radius: 4px; line-height: 1;
     }
     .client-img-row .ci-del:hover { color: #ef4444; background: #fef2f2; }
+
+    /* ── PHOTO MANAGER ── */
+    .pm-tabs { display: flex; gap: 4px; }
+    .pm-tab {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+      padding: 6px 12px; font-size: 12px; font-weight: 600; cursor: pointer;
+      color: var(--muted); font-family: inherit; transition: all 0.15s;
+    }
+    .pm-tab:hover { color: var(--text); }
+    .pm-tab.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+    .pm-legend {
+      display: flex; align-items: center; gap: 16px; flex-shrink: 0;
+      padding: 8px 20px; border-bottom: 1px solid var(--border);
+      font-size: 12px; color: var(--text);
+    }
+    .pm-legend > span { display: flex; align-items: center; gap: 6px; }
+    .pm-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+    .pm-dot.used { background: var(--green); }
+    .pm-dot.unused { background: var(--orange); }
+    .pm-item {
+      border: 2px solid transparent; border-radius: 8px; overflow: hidden;
+      aspect-ratio: 1; position: relative; background: var(--bg);
+    }
+    .pm-item.unused { border-color: var(--orange); }
+    .pm-item.used { border-color: #d7e8d9; }
+    .pm-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .pm-item .pm-badge {
+      position: absolute; top: 4px; left: 4px; font-size: 9px; font-weight: 700;
+      padding: 2px 6px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .pm-item .pm-badge.used { background: #F0FDF4; color: #15803D; }
+    .pm-item .pm-badge.unused { background: #FFF7ED; color: #C2410C; }
+    .pm-item .pm-name {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.62); color: #fff; font-size: 9px;
+      padding: 3px 4px; text-align: center; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+    }
+    .pm-item .pm-del {
+      position: absolute; top: 4px; right: 4px; width: 24px; height: 24px;
+      border: none; border-radius: 50%; background: rgba(0,0,0,0.55); color: #fff;
+      cursor: pointer; font-size: 13px; line-height: 1; opacity: 0;
+      display: flex; align-items: center; justify-content: center; transition: opacity 0.15s, background 0.15s;
+    }
+    .pm-item:hover .pm-del { opacity: 1; }
+    .pm-item .pm-del:hover { background: #ef4444; }
+    .pm-item .pm-del:disabled { cursor: not-allowed; }
+
+    /* ── STATS ── */
+    .stats-total {
+      background: var(--navy); color: #fff; border-radius: 10px;
+      padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: baseline; gap: 10px;
+    }
+    .stats-total .big { font-size: 32px; font-weight: 700; line-height: 1; }
+    .stats-total .lbl { font-size: 13px; color: rgba(255,255,255,0.7); }
+    .stats-section { margin-bottom: 18px; }
+    .stats-section h4 {
+      font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .stats-bar-row {
+      display: grid; grid-template-columns: 1fr auto; align-items: center;
+      gap: 8px; margin-bottom: 5px; font-size: 13px;
+    }
+    .stats-bar-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .stats-bar-track {
+      grid-column: 1 / -1; height: 6px; background: var(--bg);
+      border-radius: 4px; overflow: hidden; margin-bottom: 4px;
+    }
+    .stats-bar-fill { height: 100%; background: var(--red); border-radius: 4px; }
+    .stats-bar-count { font-weight: 700; color: var(--text); }
+    .stats-recent { font-size: 12px; }
+    .stats-recent-row {
+      display: flex; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border);
+      align-items: center;
+    }
+    .stats-recent-row .r-loc { flex: 1; font-weight: 500; }
+    .stats-recent-row .r-path { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px; }
+    .stats-recent-row .r-time { color: var(--muted); font-size: 11px; flex-shrink: 0; }
+    .stats-empty { color: var(--muted); font-size: 13px; padding: 8px 0; }
+    .stats-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    @media (max-width: 560px) { .stats-cols { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -603,14 +703,14 @@ export const prerender = false;
   <!-- HEADER -->
   <header>
     <button class="sidebar-toggle" id="sidebarToggle" title="Colapsar menú">☰</button>
-    <div class="logo">Art<span>Ecuador</span> <span style="font-size:12px;font-weight:400;color:var(--muted);margin-left:4px;">Admin</span></div>
+    <div class="logo">Art<span>Ecuador</span> <span class="admin-tag" style="font-size:12px;font-weight:400;color:var(--muted);margin-left:4px;">Admin</span></div>
     <div class="spacer"></div>
     <div class="save-status" id="saveStatus">
       <span class="dot" id="statusDot"></span>
       <span id="statusText">Guardado</span>
     </div>
-    <button id="btnSave" disabled>Guardar cambios</button>
-    <a href="/" class="btn-back">← Volver al sitio</a>
+    <button id="btnSave" disabled><span class="btn-save-full">Guardar cambios</span><span class="btn-save-short">Guardar</span></button>
+    <a href="/" class="btn-back" title="Volver al sitio"><span class="back-arrow">←</span><span class="back-text">Volver al sitio</span></a>
   </header>
 
   <div class="body">
@@ -638,6 +738,14 @@ export const prerender = false;
         <ul class="section-list" id="sectionList"></ul>
       </div>
       <div class="sidebar-bottom">
+        <button class="btn-add-section" id="btnStats" style="margin-bottom:8px;" title="Contador de visitas">
+          <span style="font-size:15px;line-height:1;flex-shrink:0;">📊</span>
+          <span class="btn-label">Visitas</span>
+        </button>
+        <button class="btn-add-section" id="btnManagePhotos" style="margin-bottom:8px;" title="Gestionar todas las fotos">
+          <span style="font-size:15px;line-height:1;flex-shrink:0;">🗂</span>
+          <span class="btn-label">Todas las fotos</span>
+        </button>
         <button class="btn-add-section" id="btnManageClients" style="margin-bottom:8px;">
           <span style="font-size:15px;line-height:1;flex-shrink:0;">🖼</span>
           <span class="btn-label" id="btnManageClientsLabel">Fotos del mosaico</span>
@@ -840,6 +948,50 @@ export const prerender = false;
     <div class="modal-footer">
       <button class="btn-secondary" id="btnCancelClients">Cancelar</button>
       <button class="btn-primary" id="btnSaveClients">Guardar mosaico</button>
+    </div>
+  </div>
+</div>
+
+<!-- PHOTO MANAGER MODAL -->
+<div class="img-gallery-modal hidden" id="photoManagerModal">
+  <div class="img-gallery-box">
+    <div class="img-gallery-header">
+      <h4>Todas las fotos</h4>
+      <div class="pm-tabs">
+        <button class="pm-tab active" data-folder="products">Productos</button>
+        <button class="pm-tab" data-folder="clients">Mosaico</button>
+      </div>
+      <input class="img-gallery-search" id="pmSearch" type="text" placeholder="Buscar..." />
+      <button class="modal-close" id="btnClosePhotoManager" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="pm-legend">
+      <span><span class="pm-dot used"></span> En uso</span>
+      <span><span class="pm-dot unused"></span> Sin usar</span>
+      <span id="pmCounts" style="margin-left:auto;color:var(--muted);"></span>
+    </div>
+    <div class="img-gallery-grid" id="photoManagerGrid"></div>
+    <div class="img-gallery-footer">
+      <button class="btn-secondary" id="btnPmUpload" style="display:flex;align-items:center;gap:6px;">
+        📱 Subir foto
+      </button>
+      <input type="file" id="pmFileInput" accept="image/*" style="display:none;" />
+      <div style="flex:1;"></div>
+      <button class="btn-primary" id="btnClosePhotoManager2">Listo</button>
+    </div>
+  </div>
+</div>
+
+<!-- STATS MODAL -->
+<div class="modal-overlay hidden" id="statsModal">
+  <div class="modal-box" style="max-width:680px;">
+    <div class="modal-header">
+      <h3>📊 Visitas</h3>
+      <span id="statsUpdated" style="font-size:11px;color:var(--muted);margin-left:10px;flex:1;"></span>
+      <button class="icon-btn" id="btnRefreshStats" title="Actualizar" style="font-size:16px;">⟳</button>
+      <button class="modal-close" id="btnCloseStats" aria-label="Cerrar">&times;</button>
+    </div>
+    <div class="modal-body" id="statsBody">
+      <div style="text-align:center;padding:40px;color:var(--muted);">Cargando…</div>
     </div>
   </div>
 </div>
@@ -1538,6 +1690,213 @@ function renderClientImgList() {
   });
 }
 
+// ── PHOTO MANAGER ─────────────────────────────────────────────────────────
+let pmFolder = 'products';
+
+function usedImageSet(folder) {
+  const set = new Set();
+  if (folder === 'products') {
+    state.sections.forEach(s => s.products.forEach(p => { if (p.img) set.add(p.img); }));
+  } else {
+    (state.clientImages || []).forEach(f => set.add(f));
+  }
+  return set;
+}
+
+function openPhotoManager() {
+  pmFolder = 'products';
+  document.querySelectorAll('.pm-tab').forEach(t => t.classList.toggle('active', t.dataset.folder === pmFolder));
+  document.getElementById('pmSearch').value = '';
+  renderPhotoManager('');
+  document.getElementById('photoManagerModal').classList.remove('hidden');
+}
+
+function closePhotoManager() {
+  document.getElementById('photoManagerModal').classList.add('hidden');
+}
+
+function renderPhotoManager(filter) {
+  const imgs = availableImages[pmFolder] || [];
+  const used = usedImageSet(pmFolder);
+  const grid = document.getElementById('photoManagerGrid');
+  const f = (filter || '').toLowerCase();
+  const filtered = f ? imgs.filter(n => n.toLowerCase().includes(f)) : imgs;
+
+  const usedCount = imgs.filter(n => used.has(n)).length;
+  document.getElementById('pmCounts').textContent =
+    `${imgs.length} fotos · ${usedCount} en uso · ${imgs.length - usedCount} sin usar`;
+
+  grid.innerHTML = '';
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="img-gallery-empty">No hay fotos${f ? ' para "' + esc(filter) + '"' : ''}.</div>`;
+    return;
+  }
+
+  const prefix = pmFolder === 'clients' ? '/media/clients/' : '/media/products/';
+  filtered.forEach(filename => {
+    const isUsed = used.has(filename);
+    const item = document.createElement('div');
+    item.className = 'pm-item ' + (isUsed ? 'used' : 'unused');
+    item.innerHTML = `
+      <span class="pm-badge ${isUsed ? 'used' : 'unused'}">${isUsed ? 'En uso' : 'Sin usar'}</span>
+      <button class="pm-del" title="${isUsed ? 'Está en uso — no se puede borrar' : 'Eliminar foto'}" ${isUsed ? 'disabled' : ''}>🗑</button>
+      <img src="${prefix}${encodeURIComponent(filename)}" alt="${esc(filename)}" loading="lazy" />
+      <span class="pm-name" title="${esc(filename)}">${esc(filename)}</span>
+    `;
+    if (!isUsed) {
+      item.querySelector('.pm-del').addEventListener('click', () => confirmDeletePhoto(filename));
+    }
+    grid.appendChild(item);
+  });
+}
+
+function confirmDeletePhoto(filename) {
+  if (!confirm(`¿Eliminar la foto "${filename}"?\nEsta acción no se puede deshacer.`)) return;
+  deletePhoto(filename);
+}
+
+async function deletePhoto(filename) {
+  const token = sessionStorage.getItem('adminToken') || '';
+  try {
+    const res = await fetch('/api/images', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ folder: pmFolder, filename }),
+    });
+    if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || ('Error ' + res.status)); }
+    const imgRes = await fetch('/api/images');
+    if (imgRes.ok) availableImages = await imgRes.json();
+    renderPhotoManager(document.getElementById('pmSearch').value.trim());
+    showToast('✓ Foto eliminada');
+  } catch (e) {
+    showToast('⚠ ' + e.message, true);
+  }
+}
+
+async function pmUploadFile(file) {
+  const token = sessionStorage.getItem('adminToken') || '';
+  const btn = document.getElementById('btnPmUpload');
+  const original = btn.innerHTML;
+  btn.innerHTML = '<span class="upload-spinner"></span> Subiendo...';
+  btn.disabled = true;
+  try {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('folder', pmFolder);
+    const res = await fetch('/api/upload', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, body: fd });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || ('Error ' + res.status));
+    const imgRes = await fetch('/api/images');
+    if (imgRes.ok) availableImages = await imgRes.json();
+    renderPhotoManager(document.getElementById('pmSearch').value.trim());
+    showToast('✓ Foto subida: ' + data.filename);
+  } catch (e) {
+    showToast('⚠ ' + e.message, true);
+  } finally {
+    btn.innerHTML = original; btn.disabled = false;
+  }
+}
+
+// ── STATS (contador de visitas) ───────────────────────────────────────────
+function openStats() {
+  document.getElementById('statsModal').classList.remove('hidden');
+  document.getElementById('statsBody').innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);">Cargando…</div>';
+  loadStats();
+}
+function closeStats() { document.getElementById('statsModal').classList.add('hidden'); }
+
+async function loadStats() {
+  const token = sessionStorage.getItem('adminToken') || '';
+  try {
+    const res = await fetch('/api/stats', { headers: { 'Authorization': 'Bearer ' + token } });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    renderStats(await res.json());
+  } catch (e) {
+    document.getElementById('statsBody').innerHTML = `<div class="stats-empty">No se pudieron cargar las visitas: ${esc(e.message)}</div>`;
+  }
+}
+
+function topEntries(obj, n) {
+  return Object.entries(obj || {}).sort((a, b) => b[1] - a[1]).slice(0, n);
+}
+
+function statsBarList(entries, labelFn) {
+  if (!entries.length) return '<div class="stats-empty">Sin datos aún.</div>';
+  const max = entries[0][1] || 1;
+  return entries.map(([k, v]) => `
+    <div class="stats-bar-row">
+      <span class="stats-bar-label">${labelFn(k)}</span>
+      <span class="stats-bar-count">${v}</span>
+    </div>
+    <div class="stats-bar-track"><div class="stats-bar-fill" style="width:${Math.round(v / max * 100)}%"></div></div>
+  `).join('');
+}
+
+function timeAgo(iso) {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'ahora';
+  if (m < 60) return `hace ${m} min`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `hace ${h} h`;
+  return `hace ${Math.floor(h / 24)} d`;
+}
+
+function renderStats(s) {
+  const updated = s.updatedAt ? new Date(s.updatedAt).toLocaleString('es-EC') : '';
+  document.getElementById('statsUpdated').textContent = updated ? 'Actualizado: ' + updated : '';
+
+  const countryLabel = (cc) => esc((s.countryNames && s.countryNames[cc]) || cc);
+
+  const last14 = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    last14.push([key, (s.byDay && s.byDay[key]) || 0]);
+  }
+  const maxDay = Math.max(1, ...last14.map(d => d[1]));
+
+  const recentHtml = (s.recent || []).slice(0, 12).map(r => `
+    <div class="stats-recent-row">
+      <span class="r-loc">${esc((r.city && r.city !== 'Desconocida' ? r.city + ', ' : '') + (r.country || ''))}</span>
+      <span class="r-path">${esc(r.path)}</span>
+      <span class="r-time">${timeAgo(r.at)}</span>
+    </div>
+  `).join('') || '<div class="stats-empty">Sin visitas registradas aún.</div>';
+
+  document.getElementById('statsBody').innerHTML = `
+    <div class="stats-total"><span class="big">${s.total || 0}</span><span class="lbl">visitas en total</span></div>
+
+    <div class="stats-section">
+      <h4>Últimos 14 días</h4>
+      <div style="display:flex;align-items:flex-end;gap:3px;height:60px;">
+        ${last14.map(([k, v]) => `<div title="${k}: ${v}" style="flex:1;background:var(--red);border-radius:2px 2px 0 0;height:${Math.round(v / maxDay * 100)}%;min-height:2px;opacity:${v ? 1 : 0.25};"></div>`).join('')}
+      </div>
+    </div>
+
+    <div class="stats-cols">
+      <div class="stats-section">
+        <h4>Países (alcance)</h4>
+        ${statsBarList(topEntries(s.byCountry, 6), countryLabel)}
+      </div>
+      <div class="stats-section">
+        <h4>Ciudades</h4>
+        ${statsBarList(topEntries(s.byCity, 6), esc)}
+      </div>
+    </div>
+
+    <div class="stats-section">
+      <h4>Páginas más visitadas</h4>
+      ${statsBarList(topEntries(s.byPath, 6), esc)}
+    </div>
+
+    <div class="stats-section">
+      <h4>Visitas recientes</h4>
+      <div class="stats-recent">${recentHtml}</div>
+    </div>
+  `;
+}
+
 // ── UPLOAD ────────────────────────────────────────────────────────────────
 async function uploadFile(file) {
   const token = sessionStorage.getItem('adminToken') || '';
@@ -1597,8 +1956,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // header / global
   document.getElementById('btnSave').addEventListener('click', saveData);
+
+  // Avisar antes de recargar/cerrar si hay cambios sin guardar
+  window.addEventListener('beforeunload', (e) => {
+    if (dirty) { e.preventDefault(); e.returnValue = ''; }
+  });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+      if (!document.getElementById('photoManagerModal').classList.contains('hidden')) { closePhotoManager(); return; }
+      if (!document.getElementById('statsModal').classList.contains('hidden')) { closeStats(); return; }
       if (!document.getElementById('imgGalleryModal').classList.contains('hidden')) { closeGallery(); return; }
       if (!document.getElementById('clientImagesModal').classList.contains('hidden')) { closeClientsModal(); return; }
       if (document.getElementById('sidePanel').classList.contains('open')) { closeProductModal(); return; }
@@ -1688,6 +2054,34 @@ document.addEventListener('DOMContentLoaded', () => {
       uploadFile(this.files[0]);
       this.value = ''; // reset so same file can be uploaded again
     }
+  });
+
+  // photo manager modal
+  document.getElementById('btnManagePhotos').addEventListener('click', openPhotoManager);
+  document.getElementById('btnClosePhotoManager').addEventListener('click', closePhotoManager);
+  document.getElementById('btnClosePhotoManager2').addEventListener('click', closePhotoManager);
+  document.getElementById('photoManagerModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closePhotoManager();
+  });
+  document.getElementById('pmSearch').addEventListener('input', function() { renderPhotoManager(this.value.trim()); });
+  document.querySelectorAll('.pm-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      pmFolder = tab.dataset.folder;
+      document.querySelectorAll('.pm-tab').forEach(t => t.classList.toggle('active', t === tab));
+      renderPhotoManager(document.getElementById('pmSearch').value.trim());
+    });
+  });
+  document.getElementById('btnPmUpload').addEventListener('click', () => document.getElementById('pmFileInput').click());
+  document.getElementById('pmFileInput').addEventListener('change', function() {
+    if (this.files && this.files[0]) { pmUploadFile(this.files[0]); this.value = ''; }
+  });
+
+  // stats modal
+  document.getElementById('btnStats').addEventListener('click', openStats);
+  document.getElementById('btnCloseStats').addEventListener('click', closeStats);
+  document.getElementById('btnRefreshStats').addEventListener('click', loadStats);
+  document.getElementById('statsModal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeStats();
   });
 
   // client images modal
