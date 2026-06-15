@@ -31,19 +31,23 @@ ArtEcuador/
 │       │   └── Footer.astro
 │       ├── data/
 │       │   ├── products.json    # Datos iniciales / seed (en S3 el bucket es la fuente de verdad)
+│       │   ├── analytics.json   # Contador de visitas (dev: filesystem; prod: bucket). Gitignored
 │       │   └── products.ts      # Tipos + loaders async (getSections, getClientImages, allProducts)
 │       ├── lib/
-│       │   └── storage.ts       # Capa de almacenamiento: S3/R2 si hay env vars, filesystem si no
+│       │   ├── storage.ts       # Capa de almacenamiento: S3/R2 si hay env vars, filesystem si no
+│       │   └── analytics.ts     # Contador de visitas: geolocaliza IP (ip-api.com) + agrega stats
 │       ├── layouts/
-│       │   └── BaseLayout.astro # HTML base, meta OG, fuentes
+│       │   └── BaseLayout.astro # HTML base, meta OG, fuentes + beacon a /api/track
 │       └── pages/
 │           ├── index.astro      # Página principal (catálogo) — server-rendered
 │           ├── admin.astro      # Panel de administración (protegido)
 │           ├── sitemap.xml.ts   # Sitemap auto-generado — server-rendered
 │           ├── api/
 │           │   ├── products.ts  # GET/POST — lee/escribe el catálogo vía storage.ts
-│           │   ├── images.ts    # GET — lista imágenes locales + del bucket
-│           │   └── upload.ts    # POST — sube imágenes al bucket o filesystem (requiere token)
+│           │   ├── images.ts    # GET lista · DELETE borra imagen (requiere token)
+│           │   ├── upload.ts    # POST — sube imágenes al bucket o filesystem (requiere token)
+│           │   ├── track.ts     # POST — registra una visita (público)
+│           │   └── stats.ts     # GET — estadísticas de visitas (requiere token)
 │           ├── media/
 │           │   └── [...path].ts # Proxy: sirve imágenes del bucket que no existen como estáticas
 │           └── productos/
@@ -236,6 +240,30 @@ Cambios guardados en el admin se reflejan automáticamente en el dev server (hot
 | **Header móvil** | El header del admin es responsive (`@media ≤640px`): oculta el texto de estado, acorta "Guardar" y deja solo la flecha "←" para que los botones no se salgan de pantalla |
 | **Labels** | Terminología no técnica: "Tipo de artesanía", "Etiqueta especial", "Colección", etc. |
 | **Precio** | Validación numérica, normaliza a `XX.XX` al guardar |
+
+---
+
+## Contador de visitas
+
+Contador propio, sin Google Analytics ni cuentas externas. Los datos viven en `data/analytics.json` (bucket R2 en producción, `src/data/analytics.json` en dev — gitignored).
+
+**Flujo:**
+1. `BaseLayout.astro` dispara un `fetch('/api/track', { keepalive: true })` con `{ path }` en cada carga de página pública (no en `/admin`, que tiene su propio HTML).
+2. `POST /api/track` (público) toma la IP de `x-forwarded-for` y llama a `recordVisit()` en `src/lib/analytics.ts`.
+3. `analytics.ts` geolocaliza la IP con `ip-api.com` (HTTP gratis, timeout 2.5 s; las IP privadas se marcan "Desconocida") e incrementa los agregados: `total`, `byDay`, `byCountry`, `byCity`, `byPath` y una lista `recent` (últimas 50).
+4. `GET /api/stats` (requiere token) devuelve el blob; el panel **📊 Visitas** lo renderiza: total, gráfico de 14 días, países, ciudades, páginas top y visitas recientes.
+
+**Notas:**
+- La IP real depende de `x-forwarded-for` (Railway lo provee). Si el sitio se pone detrás del proxy de Cloudflare, conviene usar sus headers de geo y evitar la llamada a `ip-api.com`.
+- Hay cache en memoria del mismo proceso (`cache` en `analytics.ts`) para no leer el bucket en cada visita; se actualiza en cada escritura.
+
+## Gestor de fotos ("Todas las fotos")
+
+Botón **🗂 Todas las fotos** en la sidebar → modal con todas las fotos subidas:
+- Pestañas **Productos / Mosaico**, búsqueda en vivo y contador "en uso / sin usar".
+- Cada foto marca **En uso** (referenciada por algún `product.img` o por `clientImages`) o **Sin usar**.
+- Subir foto y borrar desde el mismo modal. **Solo se pueden borrar las fotos sin usar** (el 🗑 de las en uso está deshabilitado) para no romper el catálogo.
+- El borrado usa `DELETE /api/images` (`{folder, filename}`, requiere token, valida path traversal) y elimina la copia local y/o la del bucket. Las imágenes "baked" del repo solo desaparecen del contenedor en ejecución (efímero).
 
 ---
 

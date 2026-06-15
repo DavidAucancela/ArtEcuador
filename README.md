@@ -23,6 +23,8 @@ npm run dev        # Sitio + admin + API en http://localhost:4321
 
 El panel de administración corre en el mismo servidor: mantener presionado el logo del nav 5 segundos abre el login, o visitar `/admin` con sesión activa.
 
+Desde `/admin` se gestionan productos y colecciones, el mosaico de clientes, **todas las fotos subidas** (gestor con búsqueda y borrado de las no usadas) y un **contador de visitas** propio con país/ciudad (panel "📊 Visitas"). Detalles en `CLAUDE.md`.
+
 ## Docker local
 
 Desde la **raíz del repo** (el build context debe ser la raíz para resolver `media/`):
@@ -39,4 +41,4 @@ Push a `main` en GitHub → Railway construye `artecuador-v2/Dockerfile` (config
 
 ### Persistencia (bucket S3/R2)
 
-Con las variables de entorno `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` y `S3_BUCKET` configuradas en Railway, el catálogo y las imágenes subidas desde el admin se guardan en el bucket y persisten entre redeploys. Sin ellas, los cambios en producción son efímeros (el filesystem de Railway no persiste). Ver detalles en `CLAUDE.md`.
+Con las variables de entorno `S3_ENDPOINT`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` y `S3_BUCKET` configuradas en Railway, el catálogo, las imágenes subidas desde el admin y el contador de visitas (`data/analytics.json`) se guardan en el bucket y persisten entre redeploys. Sin ellas, los cambios en producción son efímeros (el filesystem de Railway no persiste). Ver detalles en `CLAUDE.md`.
