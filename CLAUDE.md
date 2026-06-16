@@ -174,13 +174,28 @@ Es la **única fuente de verdad** para el catálogo. Estructura:
 | Componente | Descripción |
 |---|---|
 | `Nav.astro` | Nav sticky con dropdown de categorías + hamburger móvil. Hold 5 s en el logo abre el login del admin. `-webkit-touch-callout:none` + `contextmenu preventDefault` para que el hold funcione en iOS |
-| `FilterBar.astro` | Barra sticky con búsqueda en tiempo real + filtros por categoría + contador de resultados |
+| `FilterBar.astro` | Barra sticky con búsqueda en tiempo real + filtros por categoría + contador de resultados. **Única autoridad de visibilidad del catálogo**: `applyFilters()` combina filtro de texto, filtro de categoría y paginación (8 productos por página, por sección) e inyecta los controles `‹ 1 2 3 ›`. Pagina sobre los resultados filtrados y reinicia a la página 1 al cambiar búsqueda o categoría |
 | `FeaturedStrip.astro` | Franja "Hecho a mano, con alma andina" — mosaico 3×3 con imágenes de `clientImages` ciclando (fade cada 4.5 s, máx 3 visibles) |
 | `ProductCard.astro` | Tarjeta de producto: imagen `4:5` portrait, badge, nombre, precio, link a detalle. Sin overlay "Ver detalle" |
-| `ProductSection.astro` | Sección de categoría: header + cat-strip + grid de tarjetas |
+| `ProductSection.astro` | Sección de categoría: header + cat-strip + grid de tarjetas + `<nav class="pagination">` (vacío y `hidden`; lo llena `FilterBar` por JS) |
 | `ContactForm.astro` | Formulario con validación JS → WhatsApp pre-formateado (`wa.me/593999006925`), incluye país y tipo de consulta |
 | `Footer.astro` | Logo + columnas Colecciones y Contacto |
 | `BaseLayout.astro` | HTML base, meta OG/Twitter, canonical, Google Fonts |
+
+---
+
+## Catálogo público — búsqueda, filtros y paginación
+
+Toda la lógica de visibilidad del catálogo vive en el `<script>` de `FilterBar.astro`. La función `applyFilters()` es la **única autoridad**: recorre cada `.product-grid`, aplica los tres criterios en orden y vuelve a renderizar la paginación.
+
+1. **Filtro de categoría** — `activeCat` (`all` o el `id` de una sección). Si no coincide, la sección entera se oculta.
+2. **Filtro de texto** — `query` (búsqueda en vivo) contra `data-name` y `data-category` de cada tarjeta. Los que pasan son los "elegibles".
+3. **Paginación** — `PAGE_SIZE = 8` productos por página, estado por sección en `pageBySection`. Pagina **sobre los elegibles** (los resultados ya filtrados), no sobre el total.
+
+- Los controles `‹ 1 2 3 ›` se inyectan por JS en el `<nav class="pagination">` que `ProductSection.astro` deja vacío; solo aparecen si la sección tiene **más de 8** productos elegibles (`pageCount > 1`).
+- `resetPages()` reinicia todas las secciones a la página 1 al cambiar la búsqueda o la categoría.
+- Cambiar de página o de categoría hace scroll suave al inicio de la sección (offset de nav 72 + filter-bar 56 + 16).
+- Estilos de los botones (`.pagination`, `.pg-btn`, `.pg-num`, `.pg-arrow`) en `public/styles/global.css` — el HTML lo crea el JS.
 
 ---
 
@@ -342,6 +357,7 @@ Botón **🗂 Todas las fotos** en la sidebar → modal con todas las fotos subi
 | `-webkit-touch-callout:none` en logo hold | iOS dispara `touchcancel` en long-press si no se bloquea el callout, cancelando el timer |
 | `<style is:global>` en `admin.astro` | El CSS del admin vive en un `<style>` sin scope para que aplique a elementos creados por JavaScript. Astro scoped CSS añade `[data-astro-cid-*]` a los selectores; los elementos dinámicos (grid, cards, imagen) no reciben ese atributo y el CSS es ignorado por el browser |
 | `padding-bottom:100%` para thumbnails cuadrados | `aspect-ratio:1/1` + `height:100%` en el img hijo crea dependencia circular — el browser usa las dimensiones naturales del archivo. `padding-bottom:100%` (relativo al ancho del contenedor) + hijos `position:absolute;inset:0` rompe la circularidad sin importar el tamaño original de la imagen |
+| Paginación client-side por sección (8/pág) | Todas las tarjetas se renderizan en el servidor (SEO, sin redeploy) y `FilterBar` solo muestra/oculta con `display`. Pagina sobre los resultados filtrados para que búsqueda y paginación nunca se contradigan; una sola función (`applyFilters()`) evita estados inconsistentes entre filtro y página |
 
 ---
 
