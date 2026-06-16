@@ -21,6 +21,8 @@ npm install
 npm run dev        # Sitio + admin + API en http://localhost:4321
 ```
 
+El catálogo público (`/`) ofrece búsqueda en vivo, filtros por colección y paginación por sección (8 productos por página), todo client-side sobre las tarjetas renderizadas en el servidor.
+
 El panel de administración corre en el mismo servidor: mantener presionado el logo del nav 5 segundos abre el login, o visitar `/admin` con sesión activa.
 
 Desde `/admin` se gestionan productos y colecciones, el mosaico de clientes, **todas las fotos subidas** (gestor con búsqueda y borrado de las no usadas) y un **contador de visitas** propio con país/ciudad (panel "📊 Visitas"). Detalles en `CLAUDE.md`.
