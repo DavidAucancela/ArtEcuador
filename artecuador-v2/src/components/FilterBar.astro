@@ -151,48 +151,87 @@ const sections = await getSections();
     let activeCat = 'all';
     let query     = '';
 
+    // Paginación: N productos por página, por sección. Se reinicia a la página 1
+    // cuando cambia la búsqueda o la categoría.
+    const PAGE_SIZE = 8;
+    const pageBySection: Record<string, number> = {};
+    function resetPages() { for (const k in pageBySection) delete pageBySection[k]; }
+
     function applyFilters() {
-      const cards    = document.querySelectorAll<HTMLElement>('.product-card');
-      const sections = document.querySelectorAll<HTMLElement>('section[id]');
-      let visible    = 0;
+      const grids = document.querySelectorAll<HTMLElement>('.product-grid');
+      const total = document.querySelectorAll('.product-card').length;
+      let visible = 0;
 
-      // Show/hide cards
-      cards.forEach((card) => {
-        const name     = card.dataset.name ?? '';
-        const category = card.dataset.category ?? '';
-        const sectionEl= card.closest('section') as HTMLElement | null;
-        const sectionId= sectionEl?.id ?? '';
-
+      grids.forEach((grid) => {
+        const sec = grid.closest('section') as HTMLElement | null;
+        if (!sec) return;
+        const sectionId = sec.id;
+        const cards     = [...grid.querySelectorAll<HTMLElement>('.product-card')];
         const matchCat  = activeCat === 'all' || sectionId === activeCat;
-        const matchText = !query || name.includes(query) || category.includes(query);
-        const show = matchCat && matchText;
 
-        card.style.display = show ? '' : 'none';
-        if (show) visible++;
+        if (!matchCat) {
+          cards.forEach((c) => (c.style.display = 'none'));
+          sec.style.display = 'none';
+          renderPagination(sec, 0, 1);
+          return;
+        }
+
+        // Productos que pasan el filtro de texto
+        const eligible = cards.filter((card) => {
+          const name     = card.dataset.name ?? '';
+          const category = card.dataset.category ?? '';
+          return !query || name.includes(query) || category.includes(query);
+        });
+        const eligibleSet = new Set(eligible);
+
+        // Página actual acotada al rango válido
+        const pageCount = Math.max(1, Math.ceil(eligible.length / PAGE_SIZE));
+        let page = pageBySection[sectionId] || 1;
+        if (page > pageCount) page = pageCount;
+        pageBySection[sectionId] = page;
+        const start = (page - 1) * PAGE_SIZE;
+        const end   = start + PAGE_SIZE;
+
+        // Solo se muestran los productos elegibles de la página actual
+        let idx = 0;
+        cards.forEach((card) => {
+          if (!eligibleSet.has(card)) { card.style.display = 'none'; return; }
+          card.style.display = (idx >= start && idx < end) ? '' : 'none';
+          idx++;
+        });
+
+        sec.style.display = eligible.length ? '' : 'none';
+        visible += eligible.length;
+        renderPagination(sec, eligible.length, page);
       });
 
-      // Show/hide section headers when all cards in section are hidden
-      sections.forEach((sec) => {
-        const secCards   = sec.querySelectorAll<HTMLElement>('.product-card');
-        const anyVisible = [...secCards].some((c) => c.style.display !== 'none');
-        sec.style.display = anyVisible ? '' : 'none';
-      });
-
-      // Count label
-      const total = cards.length;
       countEl.textContent = query || activeCat !== 'all'
         ? `${visible} de ${total} productos`
         : '';
 
-      // No results message
       noResults.style.display = visible === 0 ? '' : 'none';
       noResultsTerm.textContent = query;
+    }
+
+    function renderPagination(sec: HTMLElement, count: number, page: number) {
+      const nav = sec.querySelector<HTMLElement>('.pagination');
+      if (!nav) return;
+      const pageCount = Math.ceil(count / PAGE_SIZE);
+      if (pageCount <= 1) { nav.hidden = true; nav.innerHTML = ''; return; }
+      nav.hidden = false;
+      let html = `<button class="pg-btn pg-arrow" data-go="${page - 1}"${page <= 1 ? ' disabled' : ''} aria-label="Página anterior">‹</button>`;
+      for (let i = 1; i <= pageCount; i++) {
+        html += `<button class="pg-btn pg-num${i === page ? ' active' : ''}" data-go="${i}"${i === page ? ' aria-current="page"' : ''} aria-label="Página ${i}">${i}</button>`;
+      }
+      html += `<button class="pg-btn pg-arrow" data-go="${page + 1}"${page >= pageCount ? ' disabled' : ''} aria-label="Página siguiente">›</button>`;
+      nav.innerHTML = html;
     }
 
     // Search input
     searchInput.addEventListener('input', () => {
       query = searchInput.value.toLowerCase().trim();
       clearBtn.style.display = query ? '' : 'none';
+      resetPages();
       applyFilters();
     });
 
@@ -200,6 +239,7 @@ const sections = await getSections();
       searchInput.value = '';
       query = '';
       clearBtn.style.display = 'none';
+      resetPages();
       applyFilters();
     });
 
@@ -208,6 +248,7 @@ const sections = await getSections();
       btn.addEventListener('click', () => {
         activeCat = btn.dataset.cat ?? 'all';
         catBtns.forEach((b) => b.classList.toggle('active', b === btn));
+        resetPages();
 
         if (activeCat === 'all') {
           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -230,9 +271,30 @@ const sections = await getSections();
       activeCat = 'all';
       clearBtn.style.display = 'none';
       catBtns.forEach((b) => b.classList.toggle('active', b.dataset.cat === 'all'));
+      resetPages();
       window.scrollTo({ top: 0, behavior: 'smooth' });
       applyFilters();
     });
+
+    // Clics de paginación (botones inyectados dinámicamente)
+    document.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.pg-btn') as HTMLButtonElement | null;
+      if (!btn || btn.disabled) return;
+      const nav = btn.closest('.pagination') as HTMLElement | null;
+      if (!nav) return;
+      const sectionId = nav.dataset.section ?? '';
+      pageBySection[sectionId] = parseInt(btn.dataset.go ?? '1', 10);
+      applyFilters();
+      const target = document.getElementById(sectionId);
+      if (target) {
+        const offset = 72 + 56 + 16;
+        const y = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    });
+
+    // Estado inicial: aplica la paginación al cargar (página 1 por sección)
+    applyFilters();
 
     // Highlight active category on scroll
     const observer = new IntersectionObserver(
