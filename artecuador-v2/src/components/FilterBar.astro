@@ -133,8 +133,20 @@ const sections = await getSections();
   }
   @media (max-width: 560px) {
     .filter-bar-inner { height: auto; padding: 10px 0; flex-wrap: wrap; gap: 10px; }
-    .filter-search { width: 100%; }
+    .filter-search-wrap { width: 100%; }
+    .filter-search,
     .filter-search:focus { width: 100%; }
+    /* Los chips de categoría tienen su propio scroll horizontal para que
+       ninguna categoría quede fuera de pantalla cuando la barra se envuelve. */
+    .filter-cats {
+      width: 100%;
+      overflow-x: auto;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .filter-cats::-webkit-scrollbar { display: none; }
+    .filter-count { margin-left: 0; }
   }
 </style>
 
@@ -302,7 +314,11 @@ const sections = await getSections();
         entries.forEach((entry) => {
           if (entry.isIntersecting && activeCat === 'all') {
             const id = (entry.target as HTMLElement).id;
-            catBtns.forEach((b) => b.classList.toggle('active', b.dataset.cat === id));
+            // Solo resaltar cuando la sección visible es una colección con chip
+            // propio; las secciones sin chip (portada, contacto…) no deben
+            // apagar el resaltado actual.
+            const isCat = [...catBtns].some((b) => b.dataset.cat === id);
+            if (isCat) catBtns.forEach((b) => b.classList.toggle('active', b.dataset.cat === id));
           }
         });
       },
