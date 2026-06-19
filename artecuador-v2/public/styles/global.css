@@ -595,11 +595,15 @@
       .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .cover-left { padding: 48px 20px; }
       .cover-right { height: 240px; }
+      .cover-logo-overlay { padding: 24px 28px; border-radius: 16px; }
       .section { padding: 44px 16px; }
       .section-header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 28px; }
       .product-info { padding: 10px 12px 12px; }
       .product-name { font-size: 0.85rem; }
       .featured-strip { padding: 40px 20px; }
+      .feat-stat-lbl { font-size: clamp(0.6rem, 1.2vw, 0.65rem); }
+      .filter-cat { padding: 10px 16px; }
+      .pg-btn { min-width: 44px; height: 44px; }
       footer { padding: 40px 20px 0; }
       .footer-grid {
         grid-template-columns: 1fr 1fr;
@@ -873,6 +877,7 @@
       letter-spacing: 0.04em; transition: color 0.2s;
     }
     .mobile-nav a:hover { color: var(--red); }
+    .mobile-nav a.active { color: var(--red); }
     .mobile-nav .nav-cta {
       font-family: 'Montserrat', sans-serif;
       font-size: 0.8rem; font-weight: 700;
