@@ -383,6 +383,7 @@ export const prerender = false;
     .side-panel-backdrop {
       position: fixed; inset: 0;
       background: rgba(0,0,0,0.28); z-index: 850;
+      overscroll-behavior: contain;
     }
     .side-panel-backdrop.hidden { display: none; }
     .side-panel-header {
@@ -490,6 +491,9 @@ export const prerender = false;
       .btn-back .back-text { display: none; }
       .main-header { padding: 12px 14px; }
       .main-header h2 { font-size: 16px; }
+      .side-panel { width: 100%; }
+      .img-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .img-gallery-item .img-label { font-size: 10px; opacity: 1; }
     }
 
     /* Scrollbar */
@@ -543,6 +547,7 @@ export const prerender = false;
       position: fixed; inset: 0; background: rgba(0,0,0,0.6);
       z-index: 1100; display: flex; align-items: center; justify-content: center;
       padding: 20px; animation: fadeIn 0.15s ease;
+      overscroll-behavior: contain;
     }
     .img-gallery-modal.hidden { display: none; }
     .img-gallery-box {
