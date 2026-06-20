@@ -264,10 +264,22 @@ const sections = await getSections();
       return navH + filterH + 16;
     }
 
+    // Desplaza el carrusel de chips para que el chip activo quede visible
+    // (en mobile los chips tienen scroll horizontal propio y los últimos
+    // quedaban fuera de pantalla al cambiar de categoría con el scroll).
+    const catsWrap = document.querySelector<HTMLElement>('.filter-cats');
+    function scrollChipIntoView(btn: HTMLElement | null) {
+      if (!catsWrap || !btn) return;
+      if (catsWrap.scrollWidth <= catsWrap.clientWidth) return; // sin overflow, nada que hacer
+      const target = btn.offsetLeft - (catsWrap.clientWidth - btn.offsetWidth) / 2;
+      catsWrap.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+    }
+
     catBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
         activeCat = btn.dataset.cat ?? 'all';
         catBtns.forEach((b) => b.classList.toggle('active', b === btn));
+        scrollChipIntoView(btn);
         resetPages();
 
         if (activeCat === 'all') {
@@ -329,10 +341,11 @@ const sections = await getSections();
             // Solo resaltar cuando la sección visible es una colección con chip
             // propio; las secciones sin chip (portada, contacto…) no deben
             // apagar el resaltado actual.
-            const isCat = [...catBtns].some((b) => b.dataset.cat === id);
-            if (isCat) {
-              catBtns.forEach((b) => b.classList.toggle('active', b.dataset.cat === id));
+            const activeBtn = [...catBtns].find((b) => b.dataset.cat === id);
+            if (activeBtn) {
+              catBtns.forEach((b) => b.classList.toggle('active', b === activeBtn));
               updateMobileNav(id);
+              scrollChipIntoView(activeBtn);
             }
           }
         });
@@ -348,6 +361,7 @@ const sections = await getSections();
         if (entry.isIntersecting && activeCat === 'all') {
           catBtns.forEach((b) => b.classList.toggle('active', b.dataset.cat === 'all'));
           updateMobileNav(null);
+          scrollChipIntoView([...catBtns].find((b) => b.dataset.cat === 'all') ?? null);
         }
       },
       { threshold: 0.1 }
