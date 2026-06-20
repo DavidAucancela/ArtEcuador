@@ -45,7 +45,7 @@
     }
 
     /* ── Nav ────────────────────────────────────────────────────── */
-    nav {
+    nav:not(.pagination) {
       position: sticky; top: 0; z-index: 100;
       background: rgba(255,255,255,0.97);
       backdrop-filter: blur(12px);
@@ -169,6 +169,15 @@
       text-decoration: none; display: inline-block;
     }
     .nav-cta:hover { background: #b81e25; transform: translateY(-1px); }
+    .nav-admin-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px;
+      background: none; border: 1.5px solid var(--gray-m);
+      border-radius: 8px; color: var(--gray-d);
+      cursor: pointer; transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .nav-admin-btn svg { width: 16px; height: 16px; }
+    .nav-admin-btn:hover { color: var(--red); border-color: var(--red); background: rgba(215,38,46,0.06); }
 
     /* ── Cover / Hero ───────────────────────────────────────────── */
     .cover {
@@ -886,6 +895,15 @@
       letter-spacing: 0.1em; text-transform: uppercase;
       margin-top: 8px; padding: 14px 40px;
     }
+    .mobile-nav-admin {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.7rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gray-m); background: none; border: none;
+      cursor: pointer; margin-top: 18px; padding: 6px;
+      transition: color 0.2s;
+    }
+    .mobile-nav-admin:hover { color: var(--red); }
     .mobile-nav-close {
       position: absolute; top: 24px; right: 24px;
       background: none; border: none; cursor: pointer;
@@ -1031,8 +1049,8 @@
 
     /* ── Footer logo ────────────────────────────────────────────── */
     .footer-logo-img {
-      height: 56px; width: auto; margin-bottom: 16px;
-      filter: brightness(0) invert(1) drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+      height: 165px; width: auto; margin-bottom: 16px;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
     }
 
     /* ── Nav dropdown (Categorías) ──────────────────────────────── */
