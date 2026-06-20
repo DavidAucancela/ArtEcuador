@@ -44,11 +44,11 @@ const sections = await getSections();
   <!-- ── Color band ──────────────────────────────────────────── -->
   <div class="color-band"></div>
 
-  <!-- ── Filter bar ─────────────────────────────────────────── -->
-  <FilterBar />
-
   <!-- ── Featured strip ─────────────────────────────────────── -->
   <FeaturedStrip />
+
+  <!-- ── Filter bar ─────────────────────────────────────────── -->
+  <FilterBar />
 
   <!-- ── Product sections ────────────────────────────────────── -->
   {sections.map((s) => <ProductSection section={s} />)}

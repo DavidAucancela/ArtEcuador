@@ -8,7 +8,8 @@ Catálogo web de artesanías ecuatorianas. **El proyecto es `artecuador-v2/`**, 
 
 ```
 ArtEcuador/
-├── CLAUDE.md                    # Esta guía de desarrollo
+├── CLAUDE.md                    # Esta guía de desarrollo (fuente de verdad, en español)
+├── AGENTS.md                    # Resumen equivalente en inglés — mantener sincronizado con CLAUDE.md
 ├── README.md                    # Resumen del proyecto y comandos básicos
 ├── railway.toml                 # builder = DOCKERFILE + dockerfilePath = artecuador-v2/Dockerfile
 ├── artecuador-v2/               # ← TODO el código vive aquí
