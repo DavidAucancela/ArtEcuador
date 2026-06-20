@@ -51,7 +51,8 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(0,0,0,0.07);
-      padding: 0 48px;
+      padding-left: max(48px, env(safe-area-inset-left));
+      padding-right: max(48px, env(safe-area-inset-right));
       display: flex; align-items: center; justify-content: space-between;
       height: 72px;
     }
@@ -523,6 +524,7 @@
     footer {
       background: #111111;
       padding: 72px 80px 0;
+      padding-bottom: env(safe-area-inset-bottom);
     }
     .footer-grid {
       display: grid;
@@ -589,7 +591,7 @@
       .featured-content { padding: 0 0 40px; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .footer-brand { grid-column: 1 / -1; }
-      footer { padding: 48px 32px 0; }
+      footer { padding: 48px 32px env(safe-area-inset-bottom); }
     }
     @media (max-width: 560px) {
       .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -604,7 +606,7 @@
       .feat-stat-lbl { font-size: clamp(0.6rem, 1.2vw, 0.65rem); }
       .filter-cat { padding: 10px 16px; }
       .pg-btn { min-width: 44px; height: 44px; }
-      footer { padding: 40px 20px 0; }
+      footer { padding: 40px 20px env(safe-area-inset-bottom); }
       .footer-grid {
         grid-template-columns: 1fr 1fr;
         gap: 28px 20px;
