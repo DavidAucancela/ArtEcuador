@@ -56,15 +56,33 @@ const sections = await getSections();
       <path d="M1 1l12 12M13 1L1 13" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
     </svg>
   </button>
-  <ul class="mobile-nav-links">
-    <li><a href="#portada">Inicio</a></li>
-    <li><a href="#origen">Origen</a></li>
-    {sections.map((s) => (
-      <li><a href={`#${s.id}`}>{s.title} {s.titleEm}</a></li>
-    ))}
-    <li><a href="#contactar" class="mobile-nav-cta">Contáctanos</a></li>
-    <li><button class="mobile-nav-admin" id="mobileAdminBtn" type="button">Acceso administrador</button></li>
-  </ul>
+  <div class="mobile-nav-inner">
+    <ul class="mobile-nav-links">
+      <li style="--i:0"><a href="#portada">Inicio</a></li>
+      <li style="--i:1"><a href="#origen">Origen</a></li>
+    </ul>
+
+    <p class="mobile-nav-grouplabel" style="--i:2">Colecciones</p>
+    <ul class="mobile-nav-cats">
+      {sections.map((s, i) => (
+        <li style={`--i:${3 + i}`}>
+          <a href={`#${s.id}`} class="mcat">
+            <span class={`mcat-tile cat-${s.id}`}></span>
+            <span class="mcat-text">{s.title} {s.titleEm}</span>
+            <span class="mcat-count">{s.products.length}</span>
+            <svg class="mcat-chevron" viewBox="0 0 8 14" fill="none" aria-hidden="true">
+              <path d="M1 1l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="mobile-nav-footer" style={`--i:${3 + sections.length}`}>
+      <a href="#contactar" class="nav-cta mobile-nav-cta">Contáctanos</a>
+      <button class="mobile-nav-admin" id="mobileAdminBtn" type="button">Acceso administrador</button>
+    </div>
+  </div>
 </div>
 
 <!-- Admin login modal -->
